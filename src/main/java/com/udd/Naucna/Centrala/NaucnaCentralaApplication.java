@@ -7,7 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class NaucnaCentralaApplication {
 
 	public static void main(String[] args) {
-		System.setProperty("javax.net.ssl.trustStore", "C:\\Program Files\\Java\\jdk-11.0.1\\lib\\security\\cacerts");
+		//System.setProperty("javax.net.ssl.trustStore", "C:\\Program Files\\Java\\jdk-11.0.1\\lib\\security\\cacerts");
 		SpringApplication.run(NaucnaCentralaApplication.class, args);
 	}
 
