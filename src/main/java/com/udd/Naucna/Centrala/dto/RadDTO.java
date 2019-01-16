@@ -1,19 +1,14 @@
 package com.udd.Naucna.Centrala.dto;
 
-import java.util.List;
+import javax.persistence.Id;
 
-import javax.persistence.Column;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+import org.springframework.data.elasticsearch.annotations.Document;
 
-import com.udd.Naucna.Centrala.model.Autor;
-import com.udd.Naucna.Centrala.model.NaucnaOblast;
-import com.udd.Naucna.Centrala.model.Recenzent;
 import com.udd.Naucna.Centrala.model.enums.StatusRada;
 
+@Document(indexName = "rad", type = "radovi")
 public class RadDTO {
+	@Id
 	private Long id;
 	private String naslov;
 	private String autoriRada;

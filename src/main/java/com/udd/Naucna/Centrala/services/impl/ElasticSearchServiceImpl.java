@@ -11,7 +11,6 @@ import org.apache.tika.parser.ParseContext;
 import org.apache.tika.parser.pdf.PDFParser;
 import org.apache.tika.sax.BodyContentHandler;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
 import org.springframework.stereotype.Service;
 import org.xml.sax.SAXException;
 
@@ -21,15 +20,14 @@ import com.udd.Naucna.Centrala.services.ElasticSearchService;
 
 @Service
 public class ElasticSearchServiceImpl implements ElasticSearchService {
+	
 	@Autowired
 	ElasticSearchRepository elasticSearchRepository;
 	
-	@Autowired
-	ElasticsearchTemplate elasticsearchTemplate;
 
 	@Override
 	public RadDTO uploadRad(RadDTO rad) {
-		File pdf = new File("C:\\Users\\nina.miladinovic\\Desktop\\NaucnaCentralaCirilica.pdf");
+		File pdf = new File("D:\\Users\\Nina\\Desktop\\NaucnaCentralaCirilica.pdf");
 		BodyContentHandler handler = new BodyContentHandler();
 		Metadata metadata = new Metadata();
 		ParseContext pcontext = new ParseContext();
