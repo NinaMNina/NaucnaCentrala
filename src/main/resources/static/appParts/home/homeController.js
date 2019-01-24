@@ -1,7 +1,13 @@
-(function() { "use strict";
+(function () {
+    'use strict';
 
-    homeModule.controller('homeController', [ '$scope','$window','$localStorage','$location', '$stateParams',
-        function($scope, $window, $localStorage, $location, $stateParams) {
+    angular
+		.module('app')
+		.controller('homeController', homeController);
+
+    homeController.$inject = ['$scope','$window','$localStorage','$location', '$stateParams'];
+        function homeController( $scope, $window, $localStorage, $location, $stateParams) {
+        	var hc=this;
             $scope.token = $stateParams.token;
 
             $scope.init = function(){
@@ -11,5 +17,4 @@
 
 
         }
-    ]);
 })();

@@ -1,11 +1,9 @@
-(function () {
-    'use strict';
+const ROOT_PATH = "/naucnaCentrala/rest/";
+var app = angular.module('app', [ 'ui.router', 'ngStorage', 'angular-jwt' ]);
 
-    angular
-		.module('app')
-        .config(['$stateProvider', '$urlRouterProvider', '$locationProvider', function($stateProvider, $urlRouterProvider, $locationProvider) {
+app.config(function($stateProvider, $urlRouterProvider) {
 
-      $urlRouterProvider.otherwise("/home/{token}");
+    $urlRouterProvider.otherwise("/home/{token}");
 
     $stateProvider
 	.state('home', {
@@ -18,5 +16,4 @@
         templateUrl : 'appParts/login/login.html',
         controller : 'loginController'
     })
-
-});
+  });
