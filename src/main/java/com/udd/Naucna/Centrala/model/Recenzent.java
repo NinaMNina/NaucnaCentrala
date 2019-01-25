@@ -41,9 +41,6 @@ public class Recenzent extends Korisnik{
 	@OneToMany
 	private List<NaucnaOblast> pokrivaNaucneOblasti;
 
-	@OneToOne(optional=true)
-	@PrimaryKeyJoinColumn
-	private Korisnik korisnik;
 	
 	public long getId() {
 		return id;
@@ -102,7 +99,7 @@ public class Recenzent extends Korisnik{
 	}
 
 	public Recenzent(Long id, TipKorisnika tipKorisnika, ArrayList<Casopis> angazovanje, String grad, String drzava,
-			String titula, ArrayList<NaucnaOblast> pokrivaNaucneOblasti, Korisnik korisnik) {
+			String titula, ArrayList<NaucnaOblast> pokrivaNaucneOblasti) {
 		super();
 		this.id = id;
 		this.tipKorisnika = tipKorisnika;
@@ -111,7 +108,6 @@ public class Recenzent extends Korisnik{
 		this.drzava = drzava;
 		this.titula = titula;
 		this.pokrivaNaucneOblasti = pokrivaNaucneOblasti;
-		this.korisnik = korisnik;
 	}
 
 	public Recenzent() {

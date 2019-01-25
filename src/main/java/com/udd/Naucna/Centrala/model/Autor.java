@@ -22,10 +22,6 @@ public class Autor {
 
 	@Column(nullable = false, length = 80)
 	private String drzava;
-	
-	@OneToOne(optional=true)
-	@PrimaryKeyJoinColumn
-	private Korisnik korisnik;
 
 	public Long getId() {
 		return id;
@@ -75,23 +71,14 @@ public class Autor {
 		this.drzava = drzava;
 	}
 
-	public Korisnik getKorisnik() {
-		return korisnik;
-	}
 
-	public void setKorisnik(Korisnik korisnik) {
-		this.korisnik = korisnik;
-	}
-
-	public Autor(Long id, String ime, String prezime, String email, String grad, String drzava, Korisnik korisnik) {
+	public Autor(String ime, String prezime, String email, String grad, String drzava) {
 		super();
-		this.id = id;
 		this.ime = ime;
 		this.prezime = prezime;
 		this.email = email;
 		this.grad = grad;
 		this.drzava = drzava;
-		this.korisnik = korisnik;
 	}
 
 	public Autor() {

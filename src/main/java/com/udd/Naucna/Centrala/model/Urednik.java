@@ -34,9 +34,6 @@ public class Urednik {
 	@Column(nullable = false, length = 80)
 	private String titula;
 	
-	@OneToOne(optional=true)
-	@PrimaryKeyJoinColumn
-	private Korisnik korisnik;
 
 	public Long getId() {
 		return id;
@@ -86,7 +83,7 @@ public class Urednik {
 		this.titula = titula;
 	}
 
-	public Urednik(Long id, TipKorisnika tipKorisnika, Casopis casopis, String grad, String drzava, String titula, Korisnik korisnik) {
+	public Urednik(Long id, TipKorisnika tipKorisnika, Casopis casopis, String grad, String drzava, String titula) {
 		super();
 		this.id = id;
 		this.tipKorisnika = tipKorisnika;
@@ -94,7 +91,6 @@ public class Urednik {
 		this.grad = grad;
 		this.drzava = drzava;
 		this.titula = titula;
-		this.korisnik = korisnik;
 	}
 
 	public Urednik() {

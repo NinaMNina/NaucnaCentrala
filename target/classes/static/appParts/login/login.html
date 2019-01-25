@@ -1,40 +1,37 @@
-<!-- 
-<div class="container" style="background-color:#f1f1f1"><br/><br/>
-    <label><b>Korisničko ime</b></label>
-    <input type="text" placeholder="Unesite korisničko ime" name="uname" required>
-    <br/>
-
-    <label><b>Lozinka</b></label>
-    <input type="password" placeholder="Unesite lozinku" name="psw" required>
-<br/>
-    <button type="submit">Uloguj se</button>
-  </div>
-
-  <div class="container" style="background-color:#f1f1f1">
-    <button type="button" class="cancelbtn">Cancel</button>
-  </div> -->
- <div class="p-4 bg-white">
- 	<img src='./assets/logo-cover.png'>
- </div> 
+<div class="p-4 bg-white">
+	<img src='./assets/logo-cover.png'/>
+</div> 
   
 <div class="vertical-center">
-	<div class="row justify-content-center"">
+	<div class="row" ng-repeat="ff in formFields">
 		<div class="col-3"></div>
 		<div class="col-2">
-			<label><b>Korisničko ime</b></label>
+			<label><b>{{ff.label}}</b></label>
 		</div>
-		<div class="col-4">
-			<input type="text" placeholder="Unesite korisničko ime" name="uname" required>
+		<div class="col-4" ng-if="ff.id=='ps_korisnickoIme'">
+			<input type="text" placeholder="Unesite korisničko ime" name="" ng-model="korisnik.ime" required>
+		</div>
+		<div class="col-4" ng-if="ff.id=='ps_lozinka'">
+	   		<input type="password" placeholder="Unesite lozinku" name="psw" ng-model="korisnik.lozinka" required>
+		</div>
+		<div class="col-4" ng-if="ff.id!='ps_lozinka' && ff.id!='ps_korisnickoIme'">
+	   		 <input type="text" ng-if="ff.type.name=='string'" ng-model="korisnik.{{ff.id}}"/>
+    		 <input type="checkbox" ng-if="ff.type.name=='boolean'" ng-model="korisnik.{{ff.id}}"/>
+  		     <input type="number" ng-if="ff.type.name=='long'" ng-model="korisnik.{{ff.id}}"/>
+     		 <select ng-if="ff.type.name=='enum'" ng-model="korisnik.{{ff.id}}">
+	     		 <option ng-for="let val of enumValues" value={{val}}>
+			          {{ff.type.values[val]}}
+			     </option>
+		     </select>
 		</div>
 		<div class="col-3"></div>
 	</div>
-	<div class="row">
+</div>
+<div class="vertical-center">
+	<div class="row" style="height: 5px">
 		<div class="col-3"></div>
-		<div class="col-2">
-			<label><b>Lozinka</b></label>
-		</div>
+		<div class="col-2"></div>
 		<div class="col-4">
-	   		<input type="password" placeholder="Unesite lozinku" name="psw" required>
 		</div>
 		<div class="col-3"></div>
 	</div>
@@ -42,16 +39,22 @@
 		<div class="col-3"></div>
 		<div class="col-2"></div>
 		<div class="col-4">
-			<button class="btn btn-outline-secondary" type="submit">Uloguj se</button>
+			<span></span><button class="btn btn-outline-secondary" type="submit" ng-click="ulogujSe()">Uloguj se</button></span>
 		</div>
 		<div class="col-3"></div>
 	</div>
-	<div class="row">
+	<div class="row" style="height: 20px">
 		<div class="col-3"></div>
 		<div class="col-2"></div>
 		<div class="col-4">
-			<button class="btn btn-outline-warning">Registruj se</button>
 		</div>
 		<div class="col-3"></div>
+	</div>
+	<div class="row" >
+		<div class="col-4"></div>
+		<div class="col-2" style="align-items: center">
+			<button class="btn btn-outline-warning" ng-click="registrujSe()">Registruj se</button>
+		</div>
+		<div class="col-6"></div>
 	</div>
 </div>
