@@ -8,7 +8,8 @@
     loginController.$inject = ['$scope','$window','$localStorage','$location', '$stateParams', '$http'];
         function loginController( $scope, $window, $localStorage, $location, $stateParams, $http) {
             $scope.token = $stateParams.token;
-
+            var processInstanceId = "";
+            var taskId="";
             var init = function(){
             	$scope.korisnik={};
             	$http({
@@ -17,6 +18,8 @@
                   }).then(function successCallback(response){
                 	  if(response.data!="")
                 		  $scope.formFields = response.data.formFields;
+                	  	  processInstanceId = response.data.processInstanceId;
+                	  	  taskId = response.data.taskId;
                   },
                     function errorCallback(response){
                         alert("Greska");
@@ -34,7 +37,11 @@
                 	  if(response.data!=""){
                 		  $window.localStorage.setItem('token', response.data); 
                 		  var tokenData = jwtHelper.decodeToken($window.localStorage.getItem('token'));
-                		  var tempUser = {id: tokenData.id, korisnickoIme : tokenData.sub, uloga : tokenData.uloga[0].authority}
+                		  var tempUser = {id: tokenData.id, 
+                				  korisnickoIme : tokenData.sub, 
+                				  uloga : tokenData.uloga[0].authority,
+                				  procesId: $scope.formFields
+                		  		}
                 		  $location.path('/home/'+tokenData.id);
                 	  }          	  
                   },
@@ -44,6 +51,15 @@
             }
             
             $scope.registrujSe = function(){
+            	$http({
+                    method: 'GET',
+                    url: 'https://localhost:8087/NaucnaCentrala/login/registracija/'+taskId
+                  }).then(function successCallback(response){
+                		 $location.path('/registracija');
+                  },
+                    function errorCallback(response){
+                        alert("Greska");
+                    });
             	
             }
         }

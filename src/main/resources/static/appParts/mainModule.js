@@ -16,4 +16,9 @@ app.config(function($stateProvider, $urlRouterProvider) {
         templateUrl : 'appParts/login/login.html',
         controller : 'loginController'
     })
+    .state('registracija', {
+        url: '/registracija',
+        templateUrl : 'appParts/registracija/registracija.html',
+        controller : 'registracijaController'
+    })
   });
