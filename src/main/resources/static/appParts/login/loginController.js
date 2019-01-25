@@ -40,7 +40,7 @@
                 		  var tempUser = {id: tokenData.id, 
                 				  korisnickoIme : tokenData.sub, 
                 				  uloga : tokenData.uloga[0].authority,
-                				  procesId: $scope.formFields
+                				  processId: processInstanceId
                 		  		}
                 		  $location.path('/home/'+tokenData.id);
                 	  }          	  
@@ -56,6 +56,7 @@
                     url: 'https://localhost:8087/NaucnaCentrala/login/registracija/'+taskId
                   }).then(function successCallback(response){
                 		 $location.path('/registracija');
+                		 $window.localStorage.setItem('processInstanceId', processInstanceId); 
                   },
                     function errorCallback(response){
                         alert("Greska");

@@ -1,1 +1,87 @@
-REGISTRACIJA
+<div class="p-4 bg-white">
+	<img src='./assets/logo-cover.png'/>
+</div> 
+<div class="vertical-center">
+	<div class="row" style="height: 10px">
+		<div class="col-3"></div>
+		<div class="col-2"></div>
+		<div class="col-4">
+		</div>
+		<div class="col-3"></div>
+	</div>
+	<div class="row">
+		<div class="col-3"></div>
+		<div class="col-2"><label><b>Korisničko ime</b></label></div>
+		<div class="col-4" >
+			<input type="text" name="" ng-model="korisnik.ime" required>
+		</div>
+		<div class="col-3"></div>
+	</div>
+	<div class="row">
+		<div class="col-3"></div>
+		<div class="col-2"><label><b>Lozinka</b></label></div>
+		<div class="col-4">
+	   		<input type="password" name="psw" ng-model="korisnik.lozinka" required>
+		</div>
+		<div class="col-3"></div>
+	</div>
+	<div class="row">
+		<div class="col-3"></div>
+		<div class="col-2"><label><b>Ponovite lozinku</b></label></div>
+		<div class="col-4">
+	   		<input type="password" name="psw" ng-model="korisnik.lozinka2" required>
+		</div>
+		<div class="col-3"></div>
+	</div>
+</div>
+<div class="row" ng-repeat="ff in formFields">
+		<div class="col-3"></div>
+		<div class="col-2">
+			<label><b>{{ff.label}}</b></label>
+		</div>
+		
+		<div class="col-4">
+	   		 <input type="text" ng-if="ff.type.name=='string'" ng-model="ff.value.value"/>
+    		 <input type="checkbox" ng-if="ff.type.name=='boolean'"/>
+  		     <input type="number" ng-if="ff.type.name=='long'"/>
+     		 <select ng-if="ff.type.name=='enum'">
+	     		 <option ng-for="let val of enumValues" value={{val}}>
+			          {{ff.type.values[val]}}
+			     </option>
+		     </select> 
+		</div>
+		<div class="col-3"></div>
+	</div>
+</div>
+<div class="vertical-center">
+	<div class="row" style="height: 5px">
+		<div class="col-3"></div>
+		<div class="col-2"></div>
+		<div class="col-4">
+		</div>
+		<div class="col-3"></div>
+	</div>
+	<div class="row">
+		<div class="col-3"></div>
+		<div class="col-2"></div>
+		<div class="col-4">
+			<span></span><button class="btn btn-outline-warning" type="submit" ng-click="registrujSe()">Registruj se</button></span>
+		</div>
+		<div class="col-3"></div>
+	</div>
+	<div class="row" style="height: 10px">
+		<div class="col-3"></div>
+		<div class="col-2"></div>
+		<div class="col-4">
+		</div>
+		<div class="col-3"></div>
+	</div>
+	<div class="row">
+		<div class="col-3"></div>
+		<div class="col-2"></div>
+		<div class="col-4">
+			<p class="text-danger">{{secretMessage}}</p>
+		</div>
+		<div class="col-3"></div>
+	</div>
+</div>
