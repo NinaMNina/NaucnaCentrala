@@ -1,3 +1,51 @@
 <div ng-init="init()">
-home
+	<div class="p-4 bg-white row" style="height: 29vh;">
+		<div class="col float-top"><img src='./assets/logo-cover.png'/></div>
+		<div class="col">
+			<button button type="button" class="btn btn-outline-warning float-right">Odjavi se</button><br/><br/>
+			<button button type="button" class="btn btn-outline-secondary float-right">Kupljeno</button><br/><br/>
+			<button button type="button" class="btn btn-outline-secondary float-right">Pogledaj zadatke</button>
+		</div>
+	</div> 
+	<div class="p-4 row" style="height: 171vh">
+		<div class="col-5 container" style="background-color: #ffe272">
+			<h3>Pretraga</h3>
+			<div class="row">
+				<div class="col-2"><button button type="button" class="btn btn-outline-dark center-block" ng-click="dodajParametar()">+</button></div>
+				<div class="col-6 float-left"> Dodaj parametar pretrage</div>
+				<div  class="col-4 float-right">
+					<button button type="button" class="btn btn-outline-secondary float-right" style="width: 100%" ng-click="pretrazi()">Pretraži</button><br/><br/>				
+				</div><br/><br/>
+			</div>
+			<div class="row" ng-repeat="param in params">
+				<div class="col-2" ng-hide="params.indexOf(param)==0">
+					<select class="form-control" ng-model="param.operacija">
+					  <option value="and">AND</option>
+					  <option value="or">OR</option>
+					</select>
+				</div>
+				<div class="col-2" ng-show="params.indexOf(param)==0">
+					
+				</div>
+				<div class="col-4">
+					<select class="form-control" ng-model="param.polje">
+					  <option value="naziv">naziv časopisa</option>
+					  <option value="naslov">naslov rada</option>
+					  <option value="autor">ime autora</option>
+					  <option value="pojam">ključni pojam</option>
+					  <option value="tekst">tekst rada</option>
+					  <option value="oblast">naučna oblast</option>
+					</select>
+				</div>
+				<div class="col-4 form-group">
+					<input type="text" ng-model="param.vrednost"/>
+				</div>
+				<div class="col-1">
+					<button button type="button" class="btn btn-outline-dark center-block addMore" title="obriši parametar" ng-click="obrisiParametar(params.indexOf(param))">-</button>
+				</div>
+				<div class="col-1"></div>
+			</div>
+		</div>
+		<div class="col"></div>
+	</div> 
 </div>

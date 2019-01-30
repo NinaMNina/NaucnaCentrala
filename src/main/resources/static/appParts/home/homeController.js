@@ -9,12 +9,13 @@
         function homeController( $scope, $window, $localStorage, $location, $stateParams, $http) {
         	var hc=this;
             $scope.token = $stateParams.token;
+            $scope.params = [];
 
             $scope.init = function(){
-            	if($stateParams.token=="")
+            	if($stateParams.token=="" || $stateParams.token=="{token}")
             		$window.location.href = 'https://localhost:8087/NaucnaCentrala/#!/login';
             	else{
-            		$http({
+            	/*	$http({
                         method: 'GET',
                         url: 'https://localhost:8087/NaucnaCentrala/login/checkValidity/'+$stateParams.token
                       }).then(function successCallback(response){
@@ -23,10 +24,22 @@
                       },
                         function errorCallback(response){
                             alert("Greska u zahtevu");
-                        });
+                        });*/
             	}
             }
-
+            $scope.dodajParametar = function(){
+                $scope.params.push({"operacija": "",
+                	"polje": "",
+                	"vrednost": ""});
+            }
+            
+            $scope.pretrazi = function(){
+            	var data = $scope.params;
+            }
+            $scope.obrisiParametar = function(parametar){
+            	if($scope.params.length>=parametar)
+            		$scope.params.splice(parametar, 1);
+            }
 
         }
 })();
