@@ -13,7 +13,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import com.udd.Naucna.Centrala.model.enums.StatusTransakcije;
+import com.udd.Naucna.Centrala.model.enums.TransakcijaStatus;
 
 @Entity
 public class KupljenRad {
@@ -33,7 +33,7 @@ public class KupljenRad {
 	
 	@Column(nullable = false)
     @Enumerated(EnumType.STRING)
-	private StatusTransakcije status;
+	private TransakcijaStatus status;
 
 	public long getId() {
 		return id;
@@ -67,15 +67,15 @@ public class KupljenRad {
 		this.datum = datum;
 	}
 
-	public StatusTransakcije getStatus() {
+	public TransakcijaStatus getStatus() {
 		return status;
 	}
 
-	public void setStatus(StatusTransakcije status) {
+	public void setStatus(TransakcijaStatus status) {
 		this.status = status;
 	}
 
-	public KupljenRad(long id, Rad rad, Long identifikacioniKod, Date datum, StatusTransakcije status) {
+	public KupljenRad(long id, Rad rad, Long identifikacioniKod, Date datum, TransakcijaStatus status) {
 		super();
 		this.id = id;
 		this.rad = rad;

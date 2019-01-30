@@ -92,4 +92,15 @@ public class LoginController {
 		
         return null;
     }
+	@GetMapping(path = "/checkValidity/{token}")
+    public @ResponseBody ResponseEntity<Boolean> checkValidity(@PathVariable String token) {
+		if(token.isEmpty() || token==null)
+			return new ResponseEntity(HttpStatus.BAD_REQUEST);
+		if(tokenUtils.getUsernameFromToken(token)==null)
+			return new ResponseEntity(HttpStatus.BAD_REQUEST);
+		Boolean retVal = tokenUtils.isTokenExpired(token);
+		if(retVal==null)
+			return new ResponseEntity(HttpStatus.BAD_REQUEST);
+		return new ResponseEntity(retVal, HttpStatus.OK);
+		}
 }

@@ -78,7 +78,7 @@ public class TokenUtils
     }
 
     
-    private boolean isTokenExpired(String token) 
+    public boolean isTokenExpired(String token) 
     {
         final Date expiration = this.getExpirationDateFromToken(token);
         return expiration.before(new Date(System.currentTimeMillis()));

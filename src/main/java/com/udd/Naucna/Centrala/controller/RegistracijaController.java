@@ -80,7 +80,8 @@ public class RegistracijaController {
 		String user = (String) runtimeService.getVariable(processInstanceId, "username");
 		taskService.claim(id, user);
 		taskService.complete(id);
-		return new ResponseEntity(token, HttpStatus.OK);		
+		return new ResponseEntity(token, HttpStatus.OK);	
+		//ovo nije dobro, jer postoji service task koji resava klasa "com.udd.Naucna.Centrala.services.ProcesiranjePodataka"
     }
 
 }

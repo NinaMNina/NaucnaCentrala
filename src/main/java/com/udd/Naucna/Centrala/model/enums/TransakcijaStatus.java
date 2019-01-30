@@ -1,5 +1,5 @@
 package com.udd.Naucna.Centrala.model.enums;
 
-public enum StatusTransakcije {
+public enum TransakcijaStatus {
 	C, U, N, E
 }
