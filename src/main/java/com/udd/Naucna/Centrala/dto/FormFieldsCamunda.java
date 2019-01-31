@@ -1,11 +1,7 @@
 package com.udd.Naucna.Centrala.dto;
 
-import java.util.List;
-
-import org.camunda.bpm.engine.form.FormField;
-
 public class FormFieldsCamunda {
-	
+	/*
 	String taskId;
 	List<FormField> formFields;
 	String processInstanceId;
@@ -44,6 +40,6 @@ public class FormFieldsCamunda {
 	public void setProcessInstanceId(String processInstanceId) {
 		this.processInstanceId = processInstanceId;
 	}
-	
+	*/
 	
 }

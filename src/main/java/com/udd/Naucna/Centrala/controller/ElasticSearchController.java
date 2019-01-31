@@ -1,5 +1,8 @@
 package com.udd.Naucna.Centrala.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -9,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.udd.Naucna.Centrala.dto.ParametriDTO;
 import com.udd.Naucna.Centrala.dto.RadDTO;
 import com.udd.Naucna.Centrala.services.ElasticSearchService;
 
@@ -19,8 +23,14 @@ public class ElasticSearchController {
 	private ElasticSearchService elasticSearchServices;
 	
 	@RequestMapping(value = "indexing", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<RadDTO> completePayment(@RequestBody RadDTO rad){		
+	public ResponseEntity<RadDTO> indexing(@RequestBody RadDTO rad){		
 		RadDTO retVal = elasticSearchServices.uploadRad(rad);
+		return new ResponseEntity<>(retVal, HttpStatus.OK);
+    }
+	
+	@RequestMapping(value = "search", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<RadDTO>> search(@RequestBody ParametriDTO parametri){		
+		ArrayList<RadDTO> retVal = elasticSearchServices.search(parametri);
 		return new ResponseEntity<>(retVal, HttpStatus.OK);
     }
 }

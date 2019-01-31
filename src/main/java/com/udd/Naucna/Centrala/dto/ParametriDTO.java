@@ -21,6 +21,14 @@ public class ParametriDTO {
 	public ParametriDTO() {
 		super();
 	}
+
+	public String getByKey(String string) {
+		for(Parametar p : this.getParametri()){
+			if(p.getPolje().equals(string))
+				return p.getVrednost();
+		}
+		return "";
+	}
 	
 	
 

@@ -1,15 +1,11 @@
 package com.udd.Naucna.Centrala.services.impl;
 
-import java.util.ArrayList;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.udd.Naucna.Centrala.dto.FormFieldsCamunda;
 import com.udd.Naucna.Centrala.dto.KorisnikDTO;
-import com.udd.Naucna.Centrala.model.Autor;
 import com.udd.Naucna.Centrala.model.Korisnik;
-import com.udd.Naucna.Centrala.model.enums.TipKorisnika;
 import com.udd.Naucna.Centrala.repository.AutorRepository;
 import com.udd.Naucna.Centrala.repository.KorisnikRepository;
 import com.udd.Naucna.Centrala.services.KorisnikService;
@@ -37,6 +33,13 @@ public class KorisnikServiceImpl implements KorisnikService{
 
 	@Override
 	public Korisnik registruj(FormFieldsCamunda ffc, KorisnikDTO korisnik) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+//CAMUNDA
+	/*@Override
+	public Korisnik registruj(FormFieldsCamunda ffc, KorisnikDTO korisnik) {
 		Autor a = new Autor(ffc.getFormFields().get(0).getValue().toString(),
 				ffc.getFormFields().get(1).getValue().toString(),
 				ffc.getFormFields().get(2).getValue().toString(),
@@ -46,7 +49,7 @@ public class KorisnikServiceImpl implements KorisnikService{
 		Korisnik k = new Korisnik(korisnik.getIme(), korisnik.getLozinka(), TipKorisnika.OBICAN, new ArrayList<>(), new ArrayList<>(),
 				a, null, null, null);
 		return korisnikRepository.save(k);
-	}
+	}*/
 	
 
 }
