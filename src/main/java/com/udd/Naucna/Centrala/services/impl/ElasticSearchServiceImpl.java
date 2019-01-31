@@ -27,7 +27,7 @@ public class ElasticSearchServiceImpl implements ElasticSearchService {
 
 	@Override
 	public RadDTO uploadRad(RadDTO rad) {
-		File pdf = new File("D:\\Users\\Nina\\Desktop\\NaucnaCentralaCirilica.pdf");
+		File pdf = new File("D:\\Users\\Nina\\Desktop\\udd\\rad1.pdf");
 		BodyContentHandler handler = new BodyContentHandler();
 		Metadata metadata = new Metadata();
 		ParseContext pcontext = new ParseContext();
@@ -36,7 +36,7 @@ public class ElasticSearchServiceImpl implements ElasticSearchService {
 			FileInputStream inputstream = new FileInputStream(pdf);
 			try {
 				pdfparser.parse(inputstream, handler, metadata,pcontext);
-				System.out.println("Contents of the PDF :" + handler.toString());
+			//	System.out.println("Contents of the PDF :" + handler.toString());
 				rad.setTekstRada(handler.toString());
 			} catch (IOException | SAXException | TikaException e) {
 				e.printStackTrace();

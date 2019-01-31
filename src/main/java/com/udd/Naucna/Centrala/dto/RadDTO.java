@@ -2,20 +2,36 @@ package com.udd.Naucna.Centrala.dto;
 
 import javax.persistence.Id;
 
+import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.Document;
+import org.springframework.data.elasticsearch.annotations.FieldType;
 
 import com.udd.Naucna.Centrala.model.enums.StatusRada;
 
-@Document(indexName = "rad", type = "radovi")
+@Document(indexName = "radovi", type = "rad", shards = 1, replicas = 0)
 public class RadDTO {
 	@Id
 	private Long id;
+	
+	@Field(type = FieldType.text, store = true)
 	private String naslov;
+
+	@Field(type = FieldType.text, store = true)
 	private String autoriRada;
+	
+	@Field(type = FieldType.text, store = true)
 	private String kljucniPojmovi;
+
+	@Field(type = FieldType.text, store = true)
 	private String tekstRada;
+
+	@Field(type = FieldType.text, store = true)
 	private String naucnaOblast;
+
+	@Field(type = FieldType.text, store = true)
     private StatusRada status;
+	
+	
 	public Long getId() {
 		return id;
 	}
