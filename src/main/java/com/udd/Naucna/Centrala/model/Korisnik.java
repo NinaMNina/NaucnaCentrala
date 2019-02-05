@@ -31,7 +31,7 @@ public class Korisnik {
 	private TipKorisnika tip;
 
 	@OneToMany
-	private List<KupljenRad> kupljeniRadovi;
+	private List<Kupljeno> kupljeno;
 	
 	@OneToMany
 	private List<PretplataNaCasopis> pretplate;
@@ -84,12 +84,12 @@ public class Korisnik {
 		this.tip = tip;
 	}
 
-	public List<KupljenRad> getKupljeniRadovi() {
-		return kupljeniRadovi;
+	public List<Kupljeno> getKupljeno() {
+		return kupljeno;
 	}
 
-	public void setKupljeniRadovi(List<KupljenRad> kupljeniRadovi) {
-		this.kupljeniRadovi = kupljeniRadovi;
+	public void setKupljeniRadovi(List<Kupljeno> kupljeno) {
+		this.kupljeno = kupljeno;
 	}
 
 	public List<PretplataNaCasopis> getPretplate() {
@@ -132,14 +132,14 @@ public class Korisnik {
 		this.urednikNO = urednikNO;
 	}
 	
-	public Korisnik(String korisnickoIme, String lozinka, TipKorisnika tip, List<KupljenRad> kupljeniRadovi,
+	public Korisnik(String korisnickoIme, String lozinka, TipKorisnika tip, List<Kupljeno> kupljeno,
 			List<PretplataNaCasopis> pretplate, Autor autor, Recenzent recenzent, Urednik udernik,
 			UrednikNO urednikNO) {
 		super();
 		this.korisnickoIme = korisnickoIme;
 		this.lozinka = lozinka;
 		this.tip = tip;
-		this.kupljeniRadovi = kupljeniRadovi;
+		this.kupljeno = kupljeno;
 		this.pretplate = pretplate;
 		this.autor = autor;
 		this.recenzent = recenzent;

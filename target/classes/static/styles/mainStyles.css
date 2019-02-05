@@ -46,3 +46,7 @@ img.resize {
     max-width: 250px; 
     max-height: 120px;
 }
+.imgSize{
+	heigth: 40px;
+	width: 40px
+}

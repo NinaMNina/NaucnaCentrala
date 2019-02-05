@@ -16,13 +16,16 @@ import javax.persistence.TemporalType;
 import com.udd.Naucna.Centrala.model.enums.TransakcijaStatus;
 
 @Entity
-public class KupljenRad {
+public class Kupljeno {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
 	
-	@ManyToOne
+	@ManyToOne(optional = true)
 	private Rad rad;
+	
+	@ManyToOne(optional = true)
+	private Izdanje izdanje;
 	
 	@Column(nullable = false)
 	private Long identifikacioniKod;
@@ -74,8 +77,16 @@ public class KupljenRad {
 	public void setStatus(TransakcijaStatus status) {
 		this.status = status;
 	}
+	
+	public Izdanje getIzdanje() {
+		return izdanje;
+	}
 
-	public KupljenRad(long id, Rad rad, Long identifikacioniKod, Date datum, TransakcijaStatus status) {
+	public void setIzdanje(Izdanje izdanje) {
+		this.izdanje = izdanje;
+	}
+
+	public Kupljeno(long id, Rad rad, Long identifikacioniKod, Date datum, TransakcijaStatus status) {
 		super();
 		this.id = id;
 		this.rad = rad;
@@ -84,7 +95,7 @@ public class KupljenRad {
 		this.status = status;
 	}
 
-	public KupljenRad() {
+	public Kupljeno() {
 		super();
 	}
 	

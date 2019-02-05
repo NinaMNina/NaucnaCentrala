@@ -11,4 +11,6 @@ public interface ElasticSearchService {
 
 	ArrayList<RadDTO> search(ParametriDTO p);
 
+	ArrayList<RadDTO> searchObican(String tekst);
+
 }

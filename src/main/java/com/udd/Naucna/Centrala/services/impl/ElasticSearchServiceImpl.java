@@ -13,6 +13,7 @@ import org.apache.tika.metadata.Metadata;
 import org.apache.tika.parser.ParseContext;
 import org.apache.tika.parser.pdf.PDFParser;
 import org.apache.tika.sax.BodyContentHandler;
+import org.elasticsearch.index.query.QueryBuilders;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.xml.sax.SAXException;
@@ -104,6 +105,19 @@ public class ElasticSearchServiceImpl implements ElasticSearchService {
 		query = q1+q2+q3;
 		System.out.println(query);
 		ArrayList<RadDTO> retVal = (ArrayList<RadDTO>) elasticSearchRepository.search(queryStringQuery(query));
+		return retVal;
+	}
+
+
+	@Override
+	public ArrayList<RadDTO> searchObican(String tekst) {
+		Iterable<RadDTO> result = elasticSearchRepository.search(QueryBuilders.boolQuery()
+			    .must(queryStringQuery(tekst)));
+		ArrayList<RadDTO> retVal = new ArrayList<>();
+		if(result!=null){
+			for(RadDTO r0 : result)
+				retVal.add(r0);
+		}
 		return retVal;
 	}
 	

@@ -1,20 +1,34 @@
-<div ng-init="init()">
+<div ng-init="init()" class="wrapper">
 	<div class="p-4 bg-white row" style="height: 29vh;">
-		<div class="col float-top"><img src='./assets/logo-cover.png'/></div>
-		<div class="col">
-			<button button type="button" class="btn btn-outline-warning float-right">Odjavi se</button><br/><br/>
-			<button button type="button" class="btn btn-outline-secondary float-right">Kupljeno</button><br/><br/>
-			<button button type="button" class="btn btn-outline-secondary float-right">Pogledaj zadatke</button>
+		<div class="col-2 float-top"><img src='./assets/logo-cover.png'/></div>
+		<div class="col-8 input-group mb-3">
+			<form class="form-inline ">
+			  <input class="form-control form-control-sm mr-3 w-75" type="text" placeholder="unesite reči za pretragu..." aria-label="Search" size='100' ng-model="pretragaReci">
+			  <div class="input-group-append">
+			    <button class="btn btn-outline-light" type="button" ng-click="pretraziPoRecima()"><img class="imgSize" src="./assets/search.png" ></button>
+			  </div>
+			  <div class="input-group-append">
+			    <button class="btn btn-outline-light" type="button"><img class="imgSize" src="./assets/params.png" data-toggle="collapse" data-target="#collapseExample" ></button>
+			  </div>
+			  <div class="input-group-append">
+			    <button class="btn btn-outline-light" type="button"><img class="imgSize" src="./assets/delete.png"></button>
+			  </div>
+			</form>
+		</div>
+		<div class="col-2">
+			<button type="button" class="btn btn-outline-info float-right">Odjavi se</button><br/><br/>
+			<button type="button" class="btn btn-outline-secondary float-right">Kupljeno</button><br/><br/>
+			<button type="button" class="btn btn-outline-secondary float-right">Pogledaj zadatke</button>
 		</div>
 	</div> 
-	<div class="p-4 row" style="height: 171vh">
-		<div class="col-5 container" style="background-color: #ffe272">
-			<h3>Pretraga</h3>
+	 <div class="p-4 row collapse" style="height: 171vh" id="collapseExample">
+		<div class="container" style="background-color: #ccebff">
+			<h3>Pretraga po parametrima</h3>
 			<div class="row">
 				<div class="col-2"><button button type="button" class="btn btn-outline-dark center-block" ng-click="dodajParametar()">+</button></div>
 				<div class="col-6 float-left"> Dodaj parametar pretrage</div>
 				<div  class="col-4 float-right">
-					<button button type="button" class="btn btn-outline-secondary float-right" style="width: 100%" ng-click="pretrazi()">Pretraži</button><br/><br/>				
+					<button button type="button" class="btn btn-outline-secondary float-right" style="width: 100%" ng-click="pretrazi()" data-toggle="collapse" data-target="#collapseExample">Pretraži</button><br/><br/>				
 				</div><br/><br/>
 			</div>
 			<div class="row" ng-repeat="param in params">
@@ -46,6 +60,7 @@
 				<div class="col-1"></div>
 			</div>
 		</div>
-		<div class="col"></div>
-	</div> 
+	</div>  
+	
+	
 </div>

@@ -41,7 +41,7 @@ public class Casopis {
 	private List<Recenzent> recenzenti;
 	
 	@OneToMany
-	private List<Rad> radovi;
+	private List<Izdanje> izdanja;
 
 	public Long getId() {
 		return id;
@@ -107,17 +107,17 @@ public class Casopis {
 		this.recenzenti = recenzenti;
 	}
 
-	public List<Rad> getRadovi() {
-		return radovi;
+	public List<Izdanje> getIzdanja() {
+		return izdanja;
 	}
 
-	public void setRadovi(List<Rad> radovi) {
-		this.radovi = radovi;
+	public void setIzdanja(List<Izdanje> izdanja) {
+		this.izdanja = izdanja;
 	}
 
 	public Casopis(Long id, String naziv, boolean openAccess, @Size(min = 0, max = 99999999) int iSSN,
 			ArrayList<NaucnaOblast> naucneOblasti, Urednik urednik, ArrayList<UrednikNO> uredniciNO,
-			ArrayList<Recenzent> recenzenti, ArrayList<Rad> radovi) {
+			ArrayList<Recenzent> recenzenti, ArrayList<Izdanje> izdanja) {
 		super();
 		this.id = id;
 		this.naziv = naziv;
@@ -127,7 +127,7 @@ public class Casopis {
 		this.urednik = urednik;
 		this.uredniciNO = uredniciNO;
 		this.recenzenti = recenzenti;
-		this.radovi = radovi;
+		this.izdanja = izdanja;
 	}
 
 	public Casopis() {

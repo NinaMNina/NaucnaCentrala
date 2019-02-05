@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -29,8 +30,13 @@ public class ElasticSearchController {
     }
 	
 	@RequestMapping(value = "search", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<List<RadDTO>> search(@RequestBody ParametriDTO parametri){		
+	public ResponseEntity<List<RadDTO>> searchParametri(@RequestBody ParametriDTO parametri){		
 		ArrayList<RadDTO> retVal = elasticSearchServices.search(parametri);
+		return new ResponseEntity<>(retVal, HttpStatus.OK);
+    }
+	@RequestMapping(value = "search/{tekst}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<RadDTO>> searchObican(@PathVariable String tekst){	
+		ArrayList<RadDTO> retVal = elasticSearchServices.searchObican(tekst);
 		return new ResponseEntity<>(retVal, HttpStatus.OK);
     }
 }

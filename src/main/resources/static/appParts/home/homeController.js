@@ -10,6 +10,7 @@
         	var hc=this;
             $scope.token = $stateParams.token;
             $scope.params = [];
+            $scope.pretragaReci = "";
 
             $scope.init = function(){
             	if($stateParams.token=="" || $stateParams.token=="{token}")
@@ -39,6 +40,21 @@
             $scope.obrisiParametar = function(parametar){
             	if($scope.params.length>=parametar)
             		$scope.params.splice(parametar, 1);
+            }
+            
+            $scope.pretraziPoRecima = function(){
+            	var data = $scope.pretragaReci;
+            	if(data=="")
+            		return;
+            	$http({
+                    method: 'GET',
+                    url: 'https://localhost:8087/NaucnaCentrala/rest/search/'+data
+                  }).then(function successCallback(response){
+                	  alert("dobio odgovor na pretragu")
+                  },
+                    function errorCallback(response){
+                        alert("Greska u zahtevu za pretragu");
+                    });
             }
 
         }
