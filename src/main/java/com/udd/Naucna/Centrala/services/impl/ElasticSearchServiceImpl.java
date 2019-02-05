@@ -14,7 +14,10 @@ import org.apache.tika.parser.ParseContext;
 import org.apache.tika.parser.pdf.PDFParser;
 import org.apache.tika.sax.BodyContentHandler;
 import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
+import org.springframework.data.elasticsearch.core.query.SearchQuery;
 import org.springframework.stereotype.Service;
 import org.xml.sax.SAXException;
 
@@ -111,8 +114,13 @@ public class ElasticSearchServiceImpl implements ElasticSearchService {
 
 	@Override
 	public ArrayList<RadDTO> searchObican(String tekst) {
-		Iterable<RadDTO> result = elasticSearchRepository.search(QueryBuilders.boolQuery()
-			    .must(queryStringQuery(tekst)));
+		NativeSearchQueryBuilder  searchQueryBuilder = new NativeSearchQueryBuilder();
+		searchQueryBuilder.withQuery(QueryBuilders.boolQuery()
+			    .must(queryStringQuery(tekst)))
+				.withHighlightFields(new HighlightBuilder.Field("tekstRada").fragmentSize(200)) ;
+		SearchQuery searchQuery = searchQueryBuilder.build() ;
+		Iterable<RadDTO> result = elasticSearchRepository.search(searchQuery);
+		
 		ArrayList<RadDTO> retVal = new ArrayList<>();
 		if(result!=null){
 			for(RadDTO r0 : result)

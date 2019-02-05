@@ -15,28 +15,28 @@ public class RadDTO {
 	@Id
 	private Long id;
 	
-	@Field(type = FieldType.text, store = true, index=true)
+	@Field(type = FieldType.Text, store = true, index=true, analyzer = "serbian-analyzer", searchAnalyzer = "serbian-analyzer")
 	private String casopis;
 	
-	@Field(type = FieldType.text, store = true, index=true)
+	@Field(type = FieldType.Text, store = true, index=true, analyzer = "serbian-analyzer", searchAnalyzer = "serbian-analyzer")
 	private String naslov;
 
-	@Field(type = FieldType.Nested, store = true, index=true)
+	@Field(type = FieldType.Nested, store = true, index=true, analyzer = "serbian-analyzer", searchAnalyzer = "serbian-analyzer")
 	private List<Autor> autoriRada;
 	
-	@Field(type = FieldType.text, store = true, index=true)
+	@Field(type = FieldType.Text, store = true, index=true, analyzer = "serbian-analyzer", searchAnalyzer = "serbian-analyzer")
 	private String kljucniPojmovi;
 
-	@Field(type = FieldType.text, store = true, index=true)
+	@Field(type = FieldType.Text, store = true, index=true, analyzer = "serbian-analyzer", searchAnalyzer = "serbian-analyzer")
 	private String tekstRada;
 
-	@Field(type = FieldType.text, store = true, index=true)
+	@Field(type = FieldType.Text, store = true, index=true, analyzer = "serbian-analyzer", searchAnalyzer = "serbian-analyzer")
 	private String naucnaOblast;
 	
-	@Field(type = FieldType.text, store = true, index=false)
+	@Field(type = FieldType.Text, store = true, index=false, analyzer = "serbian-analyzer", searchAnalyzer = "serbian-analyzer")
     private String cistTekst;
 	
-	@Field(type = FieldType.text, store = true, index=false)
+	@Field(type = FieldType.Text, store = true, index=false)
     private String file;
 	
 	public Long getId() {
