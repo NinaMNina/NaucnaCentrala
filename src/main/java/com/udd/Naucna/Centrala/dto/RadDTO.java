@@ -33,9 +33,6 @@ public class RadDTO {
 	@Field(type = FieldType.Text, store = true, index=true, analyzer = "serbian-analyzer", searchAnalyzer = "serbian-analyzer")
 	private String naucnaOblast;
 	
-	@Field(type = FieldType.Text, store = true, index=false, analyzer = "serbian-analyzer", searchAnalyzer = "serbian-analyzer")
-    private String cistTekst;
-	
 	@Field(type = FieldType.Text, store = true, index=false)
     private String file;
 	
@@ -111,10 +108,6 @@ public class RadDTO {
 		this.naucnaOblast = naucnaOblast;
 	}
 
-
-	public String getCistTekst() {
-		return cistTekst;
-	}
 	
 
 	public String getFile() {
@@ -126,11 +119,6 @@ public class RadDTO {
 		this.file = file;
 	}
 
-
-	public void setCistTekst(String cistTekst) {
-		this.cistTekst = cistTekst;
-	}
-	
 
 	public Boolean getFree() {
 		return free;
@@ -148,7 +136,7 @@ public class RadDTO {
 
 
 	public RadDTO(Long id, String casopis, String naslov, List<Autor> autoriRada, String kljucniPojmovi, String tekstRada,
-			String naucnaOblast, String cistTekst, String file, Boolean free) {
+			String naucnaOblast, String file, Boolean free) {
 		super();
 		this.id = id;
 		this.casopis =casopis;
@@ -157,9 +145,16 @@ public class RadDTO {
 		this.kljucniPojmovi = kljucniPojmovi;
 		this.tekstRada = tekstRada;
 		this.naucnaOblast = naucnaOblast;
-		this.cistTekst = cistTekst;
 		this.file = file;
 		this.free = free;
+	}
+
+
+	@Override
+	public String toString() {
+		return "RadDTO [id=" + id + ", casopis=" + casopis + ", naslov=" + naslov + ", autoriRada=" + autoriRada
+				+ ", kljucniPojmovi=" + kljucniPojmovi + ", tekstRada=" + tekstRada + ", naucnaOblast=" + naucnaOblast
+				+ ", file=" + file + ", free=" + free + "]";
 	}
 	
 	

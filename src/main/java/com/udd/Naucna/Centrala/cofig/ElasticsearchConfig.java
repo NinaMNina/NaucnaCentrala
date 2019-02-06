@@ -18,11 +18,11 @@ import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
 import org.springframework.data.elasticsearch.repository.config.EnableElasticsearchRepositories;
 
-@Configuration
+/*@Configuration
 @EnableElasticsearchRepositories(basePackages = "com.udd.Naucna.Centrala.repository")
-@ComponentScan(basePackages = {"ccom.udd.Naucna.Centrala.dto"})
+@ComponentScan(basePackages = {"ccom.udd.Naucna.Centrala.dto"})*/
 public class ElasticsearchConfig {
-
+/*
 	@Value("${elasticsearch.home:C:\\Program Files\\Java\\elasticsearch-6.4.2}")
     private String elasticsearchHome;
 
@@ -50,5 +50,5 @@ public class ElasticsearchConfig {
     public ElasticsearchOperations elasticsearchTemplate() {
         return new ElasticsearchTemplate(client());
     }
-
+*/
 }

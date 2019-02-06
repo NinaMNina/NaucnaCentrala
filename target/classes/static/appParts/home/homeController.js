@@ -5,8 +5,8 @@
 		.module('app')
 		.controller('homeController', homeController);
 
-    homeController.$inject = ['$scope','$window','$localStorage','$location', '$stateParams', '$http'];
-        function homeController( $scope, $window, $localStorage, $location, $stateParams, $http) {
+    homeController.$inject = ['$scope','$window','$localStorage','$location', '$stateParams', '$http', '$sce'];
+        function homeController( $scope, $window, $localStorage, $location, $stateParams, $http, $sce) {
         	var hc=this;
             $scope.token = $stateParams.token;
             $scope.params = [];
@@ -73,6 +73,8 @@
                         alert("Greska u zahtevu za slične radove");
                     });
             }
-
+            $scope.trustDangerousSnippet = function(tekstRada){
+            	return $sce.trustAsHtml(tekstRada);
+            }
         }
 })();

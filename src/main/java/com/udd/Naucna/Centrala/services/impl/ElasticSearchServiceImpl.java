@@ -7,24 +7,34 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Map;
 import java.util.Optional;
 
+import org.apache.commons.httpclient.HttpStatus;
 import org.apache.tika.exception.TikaException;
 import org.apache.tika.metadata.Metadata;
 import org.apache.tika.parser.ParseContext;
 import org.apache.tika.parser.pdf.PDFParser;
 import org.apache.tika.sax.BodyContentHandler;
+import org.elasticsearch.action.search.SearchRequestBuilder;
+import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.action.search.SearchType;
+import org.elasticsearch.client.Client;
 import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
+import org.elasticsearch.search.fetch.subphase.highlight.HighlightField;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties.Pageable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
-import org.springframework.data.elasticsearch.core.query.SearchQuery;
+import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.xml.sax.SAXException;
 
+import com.google.gson.Gson;
 import com.udd.Naucna.Centrala.dto.Parametar;
 import com.udd.Naucna.Centrala.dto.ParametriDTO;
 import com.udd.Naucna.Centrala.dto.RadDTO;
@@ -36,8 +46,13 @@ public class ElasticSearchServiceImpl implements ElasticSearchService {
 	
 	@Autowired
 	ElasticSearchRepository elasticSearchRepository;
-	
 
+    @Autowired
+    private ElasticsearchTemplate elasticsearchTemplate;
+    
+    @Autowired
+    private Client nodeClient;
+    
 	@Override
 	public RadDTO uploadRad(RadDTO rad) {
 		File pdf = new File(rad.getFile());
@@ -57,7 +72,6 @@ public class ElasticSearchServiceImpl implements ElasticSearchService {
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
-		rad.setCistTekst(handler.toString());
 		rad = elasticSearchRepository.index(rad);
 		RadDTO retVal = elasticSearchRepository.save(rad);
 		return retVal;
@@ -118,21 +132,40 @@ public class ElasticSearchServiceImpl implements ElasticSearchService {
 
 	@Override
 	public ArrayList<RadDTO> searchObican(String tekst) {
-		NativeSearchQueryBuilder  searchQueryBuilder = new NativeSearchQueryBuilder();
-		searchQueryBuilder.withQuery(QueryBuilders.boolQuery()
-			    .must(queryStringQuery(tekst)))
-				.withHighlightFields(new HighlightBuilder.Field("cistTekst").fragmentSize(200)) ;
-		SearchQuery searchQuery = searchQueryBuilder.build() ;
-		Iterable<RadDTO> result = elasticSearchRepository.search(searchQuery);
-		
-		ArrayList<RadDTO> retVal = new ArrayList<>();
-		if(result!=null){
-			for(RadDTO r0 : result)
-				retVal.add(r0);
-		}
-		return retVal;
-	}
+        ArrayList<RadDTO> retVal = new ArrayList<>();
+        HighlightBuilder highlightBuilder = new HighlightBuilder()
+                .field("tekstRada", 100)
+                .highlightQuery(QueryBuilders.queryStringQuery(tekst));
+        SearchRequestBuilder request = nodeClient.prepareSearch("radovi")
+                .setQuery(QueryBuilders.queryStringQuery(tekst))
+                .setSearchType(SearchType.DEFAULT)
+                .highlighter(highlightBuilder);
+        SearchResponse response = request.get();
+        for(SearchHit hit : response.getHits().getHits()) {
+            Gson gson = new Gson();
+            RadDTO radDTO = new RadDTO();
+            radDTO = gson.fromJson(hit.getSourceAsString(), RadDTO.class);
+            
+            String highlights = "...";
 
+            Map<String, HighlightField> polja = hit.getHighlightFields();
+            for (Map.Entry<String, HighlightField> polje : polja.entrySet()){
+                String vrednost = Arrays.toString(polje.getValue().fragments());
+                highlights+=vrednost.substring(1, vrednost.length()-1);
+                highlights+="...";
+
+            }
+
+            highlights = highlights.replace("<em>", "<b>");
+            highlights = highlights.replace("</em>", "</b>");
+            radDTO.setTekstRada(highlights);
+            retVal.add(radDTO);
+        }
+
+        return retVal;
+	}
+	
+	
 
 	@Override
 	public ArrayList<RadDTO> moreLikeThis(Long id) {

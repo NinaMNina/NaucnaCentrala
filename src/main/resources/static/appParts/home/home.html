@@ -64,22 +64,24 @@
 	<div style="height: 10px">
 		
 	</div>
-	<div class="p-4 row container">
-		<div class="card-deck mb-3 text-center" ng-repeat="result in searchResult">
-			<div class="card mb-4 box-shadow" style="width: 33vw">
+	<div class="row" ng-repeat="result in searchResult">
+		<div class="col-1"></div>
+		<div class="col-10 card text-justify" >
+			<div class="card box-shadow" style="width: 85vw">
 	          <div class="card-header">
 	            <h6 class="my-0 font-weight-normal">"{{result.casopis}}"<small class="text-muted"> časopis</small></h6>
 	          </div>
 	          <div class="card-body">
 	            <h4 class="card-title pricing-card-title">{{result.naslov}}</h4>
-	            <span>
-<!-- 	            	{{result.tekstRada}} -->
-	            </span><br/>
+	            <span class="font-weight-light" ng-bind-html="trustDangerousSnippet(result.tekstRada)">
+ 	            	{{result.tekstRada}}
+	            </span><br/><br/>
 	            <button type="button" class="btn btn-lg btn-outline-info" ng-hide="result.free">Kupi</button>
-	            <button type="button" class="btn btn-lg btn-outline-info" ng-show="result.free">Preuzmi</button><br/><br/>
+	            <button type="button" class="btn btn-lg btn-outline-info" ng-show="result.free">Preuzmi</button>
 	            <button type="button" class="btn btn-link float-right text-info" ng-click="pronadjiSlicne(result.id)">...pronađi slične radove</button>
 	          </div>
-	        </div>			
+	        </div>
 		</div>	
+		<div class="col-1"></div>	
 	</div>	
 </div>
