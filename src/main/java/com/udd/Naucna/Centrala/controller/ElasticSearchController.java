@@ -16,12 +16,16 @@ import org.springframework.web.bind.annotation.RestController;
 import com.udd.Naucna.Centrala.dto.ParametriDTO;
 import com.udd.Naucna.Centrala.dto.RadDTO;
 import com.udd.Naucna.Centrala.services.ElasticSearchService;
+import com.udd.Naucna.Centrala.services.RadService;
 
 @RestController
 @RequestMapping(value = "/rest/")
 public class ElasticSearchController {
 	@Autowired
 	private ElasticSearchService elasticSearchServices;
+	
+	@Autowired
+	private RadService radService;
 	
 	@RequestMapping(value = "indexing", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<RadDTO> indexing(@RequestBody RadDTO rad){		
@@ -37,6 +41,14 @@ public class ElasticSearchController {
 	@RequestMapping(value = "search/{tekst}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<RadDTO>> searchObican(@PathVariable String tekst){	
 		ArrayList<RadDTO> retVal = elasticSearchServices.searchObican(tekst);
+		return new ResponseEntity<>(retVal, HttpStatus.OK);
+    }
+	@RequestMapping(value = "moreLikeThis/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<RadDTO>> moreLikeThis(@PathVariable Long id){
+		if(!radService.exists(id)){
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+		ArrayList<RadDTO> retVal = elasticSearchServices.moreLikeThis(id);
 		return new ResponseEntity<>(retVal, HttpStatus.OK);
     }
 }

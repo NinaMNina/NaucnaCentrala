@@ -11,6 +11,7 @@
             $scope.token = $stateParams.token;
             $scope.params = [];
             $scope.pretragaReci = "";
+            $scope.searchResult = [];
 
             $scope.init = function(){
             	if($stateParams.token=="" || $stateParams.token=="{token}")
@@ -50,10 +51,26 @@
                     method: 'GET',
                     url: 'https://localhost:8087/NaucnaCentrala/rest/search/'+data
                   }).then(function successCallback(response){
-                	  alert("dobio odgovor na pretragu")
+                	  $scope.searchResult = response.data;
                   },
                     function errorCallback(response){
                         alert("Greska u zahtevu za pretragu");
+                    });
+            }
+            $scope.obrisiSve = function(){
+            	$scope.searchResult = [];
+                $scope.params = [];
+                $scope.pretragaReci = "";
+            }
+            $scope.pronadjiSlicne = function(result){
+            	$http({
+                    method: 'GET',
+                    url: 'https://localhost:8087/NaucnaCentrala/rest/moreLikeThis/'+result
+                  }).then(function successCallback(response){
+                	  $scope.searchResult = response.data;
+                  },
+                    function errorCallback(response){
+                        alert("Greska u zahtevu za slične radove");
                     });
             }
 

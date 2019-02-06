@@ -1,5 +1,5 @@
 <div ng-init="init()" class="wrapper">
-	<div class="p-4 bg-white row" style="height: 29vh;">
+	<div class="p-4 bg-white row" style="height: 207px">
 		<div class="col-2 float-top"><img src='./assets/logo-cover.png'/></div>
 		<div class="col-8 input-group mb-3">
 			<form class="form-inline ">
@@ -11,7 +11,7 @@
 			    <button class="btn btn-outline-light" type="button"><img class="imgSize" src="./assets/params.png" data-toggle="collapse" data-target="#collapseExample" ></button>
 			  </div>
 			  <div class="input-group-append">
-			    <button class="btn btn-outline-light" type="button"><img class="imgSize" src="./assets/delete.png"></button>
+			    <button class="btn btn-outline-light" type="button" ng-click="obrisiSve()"><img class="imgSize" src="./assets/delete.png"></button>
 			  </div>
 			</form>
 		</div>
@@ -61,6 +61,25 @@
 			</div>
 		</div>
 	</div>  
-	
-	
+	<div style="height: 10px">
+		
+	</div>
+	<div class="p-4 row container">
+		<div class="card-deck mb-3 text-center" ng-repeat="result in searchResult">
+			<div class="card mb-4 box-shadow" style="width: 33vw">
+	          <div class="card-header">
+	            <h6 class="my-0 font-weight-normal">"{{result.casopis}}"<small class="text-muted"> časopis</small></h6>
+	          </div>
+	          <div class="card-body">
+	            <h4 class="card-title pricing-card-title">{{result.naslov}}</h4>
+	            <span>
+<!-- 	            	{{result.tekstRada}} -->
+	            </span><br/>
+	            <button type="button" class="btn btn-lg btn-outline-info" ng-hide="result.free">Kupi</button>
+	            <button type="button" class="btn btn-lg btn-outline-info" ng-show="result.free">Preuzmi</button><br/><br/>
+	            <button type="button" class="btn btn-link float-right text-info" ng-click="pronadjiSlicne(result.id)">...pronađi slične radove</button>
+	          </div>
+	        </div>			
+		</div>	
+	</div>	
 </div>

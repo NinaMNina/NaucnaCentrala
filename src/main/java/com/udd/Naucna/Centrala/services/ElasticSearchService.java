@@ -13,4 +13,6 @@ public interface ElasticSearchService {
 
 	ArrayList<RadDTO> searchObican(String tekst);
 
+	ArrayList<RadDTO> moreLikeThis(Long id);
+
 }

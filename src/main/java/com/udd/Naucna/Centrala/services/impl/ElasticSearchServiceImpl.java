@@ -7,6 +7,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Optional;
 
 import org.apache.tika.exception.TikaException;
 import org.apache.tika.metadata.Metadata;
@@ -16,6 +17,9 @@ import org.apache.tika.sax.BodyContentHandler;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties.Pageable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import org.springframework.data.elasticsearch.core.query.SearchQuery;
 import org.springframework.stereotype.Service;
@@ -117,10 +121,28 @@ public class ElasticSearchServiceImpl implements ElasticSearchService {
 		NativeSearchQueryBuilder  searchQueryBuilder = new NativeSearchQueryBuilder();
 		searchQueryBuilder.withQuery(QueryBuilders.boolQuery()
 			    .must(queryStringQuery(tekst)))
-				.withHighlightFields(new HighlightBuilder.Field("tekstRada").fragmentSize(200)) ;
+				.withHighlightFields(new HighlightBuilder.Field("cistTekst").fragmentSize(200)) ;
 		SearchQuery searchQuery = searchQueryBuilder.build() ;
 		Iterable<RadDTO> result = elasticSearchRepository.search(searchQuery);
 		
+		ArrayList<RadDTO> retVal = new ArrayList<>();
+		if(result!=null){
+			for(RadDTO r0 : result)
+				retVal.add(r0);
+		}
+		return retVal;
+	}
+
+
+	@Override
+	public ArrayList<RadDTO> moreLikeThis(Long id) {
+		Optional<RadDTO> retRad = elasticSearchRepository.findById(id);
+		if(!retRad.isPresent()){
+			return null;
+		}
+		RadDTO rad = retRad.get();
+		Pageable p = new Pageable();
+		Page<RadDTO> result = elasticSearchRepository.searchSimilar(rad, new String[] { "naslov", "autori", "kljucniPojmovi", "naucnaOblast",  "tekstRada" }, new PageRequest(0, 10));		
 		ArrayList<RadDTO> retVal = new ArrayList<>();
 		if(result!=null){
 			for(RadDTO r0 : result)

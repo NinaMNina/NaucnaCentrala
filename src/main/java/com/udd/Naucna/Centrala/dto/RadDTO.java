@@ -39,6 +39,9 @@ public class RadDTO {
 	@Field(type = FieldType.Text, store = true, index=false)
     private String file;
 	
+	@Field(type = FieldType.Boolean, store = true, index=false)
+    private Boolean free;
+	
 	public Long getId() {
 		return id;
 	}
@@ -129,13 +132,23 @@ public class RadDTO {
 	}
 	
 
+	public Boolean getFree() {
+		return free;
+	}
+
+
+	public void setFree(Boolean free) {
+		this.free = free;
+	}
+
+
 	public RadDTO() {
 		super();
 	}
 
 
 	public RadDTO(Long id, String casopis, String naslov, List<Autor> autoriRada, String kljucniPojmovi, String tekstRada,
-			String naucnaOblast, String cistTekst, String file) {
+			String naucnaOblast, String cistTekst, String file, Boolean free) {
 		super();
 		this.id = id;
 		this.casopis =casopis;
@@ -146,6 +159,7 @@ public class RadDTO {
 		this.naucnaOblast = naucnaOblast;
 		this.cistTekst = cistTekst;
 		this.file = file;
+		this.free = free;
 	}
 	
 	
