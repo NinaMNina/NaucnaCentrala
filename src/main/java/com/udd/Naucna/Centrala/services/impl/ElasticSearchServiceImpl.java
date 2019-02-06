@@ -21,6 +21,7 @@ import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.search.SearchType;
 import org.elasticsearch.client.Client;
+import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
@@ -79,54 +80,52 @@ public class ElasticSearchServiceImpl implements ElasticSearchService {
 
 
 	@Override
-	public ArrayList<RadDTO> search(ParametriDTO p) {		
-		String naslov = p.getByKey("naslov");
-		String autor = p.getByKey("autor");
-		String kljucniPojmovi = p.getByKey("pojam");
-		String tekstRada = p.getByKey("tekst");
-		String naucnaOblast = p.getByKey("oblast");
-		String casopis = p.getByKey("naziv");
-		
-		String query = "{\"query\": {\"bool\" : {\"must\" : [{\"field\" : {\"naslov\" : \""+naslov+"\"}},"
-				+ "{{\"field\" : {\"autori\" : {\"query\" : \"*?*\",\""+autor+"\" : true}}} \""
-						+ "{\"field\" : {\"kljucniPojmovi\" : \""+kljucniPojmovi+"\"}},"
-								+ "{\"field\" : {\"tekstRada\" : \""+tekstRada+"\"}},"
-										+ "{\"field\" : {\"naucnaOblast\" : \""+naucnaOblast+"\"}},"
-												+ "{\"field\" : {\"casopis\" : \""+casopis+"\"}}]}}}";
-		String q1 = "{\"query\": {\"bool\" : {\"must\" : [";
-		String q2 = "]}, {\"should\" : [";
-		String q3 = "]}}}";
-		int i_and=0;
-		int i_or=0;
-		
+	public ArrayList<RadDTO> search(ParametriDTO p) {
+		BoolQueryBuilder query = QueryBuilders.boolQuery();
+        ArrayList<RadDTO> retVal = new ArrayList<>();				
 		for(int i=0; i<p.getParametri().size(); i++){
 			Parametar p0 = p.getParametri().get(i);
-			if(p0.getOperacija().equals("AND")){
-				if(i_and>0)
-					q1+=", ";
-				if(p0.getPolje().equals("autor")){
-					q1+="{\"match\": {\"field\" : {\"autoriRada\" : {\"query\" : \"*"+p0.getVrednost()+"*\",\""+autor+"\" : true}}}}";
-				}
-				else{
-					q1+="{\"match\": {\"field\" : {\""+p0.getPolje()+"\" : \""+p0.getVrednost()+"\"}}}";
-				}
-				i_and++;
-			}
-			if(p0.getOperacija().equals("OR")){
-				if(i_or>0)
-					q2+=", ";
-				if(p0.getPolje().equals("autor"))
-					q2+="{\"match\": {\"field\" : {\"autoriRada\" : {\"query\" : \"*"+p0.getVrednost()+"*\",\""+autor+"\" : true}}}}";
-				else{
-					q2+="{\"match\": {\"field\" : {\""+p0.getPolje()+"\" : \""+p0.getVrednost()+"\"}}}";
-				}
-				i_or++;
-			}
+			if(p0.getOperacija().equals("AND"))
+				query.must(QueryBuilders.termQuery(p0.getPolje(), p0.getVrednost()));
+			else if(p0.getOperacija().equals("OR"))
+				query.should(QueryBuilders.termQuery(p0.getPolje(), p0.getVrednost()));
 		}
-		query = q1+q2+q3;
-		System.out.println(query);
-		ArrayList<RadDTO> retVal = (ArrayList<RadDTO>) elasticSearchRepository.search(queryStringQuery(query));
-		return retVal;
+		System.out.println("QUERY:    "+query.toString());
+		HighlightBuilder highlightBuilder = new HighlightBuilder()
+                .field("tekstRada", 100)
+                .field("casopis", 10)
+                .field("naslov", 10)
+                .field("autoriRada", 10)
+                .field("kljucniPojmovi", 10)
+                .field("naucnaOblast", 10)
+                .highlightQuery(query);
+		SearchRequestBuilder request = nodeClient.prepareSearch("radovi")
+                .setQuery(query)
+                .setSearchType(SearchType.DEFAULT)
+                .highlighter(highlightBuilder);
+		 SearchResponse response = request.get();
+	        for(SearchHit hit : response.getHits().getHits()) {
+	            Gson gson = new Gson();
+	            RadDTO radDTO = new RadDTO();
+	            radDTO = gson.fromJson(hit.getSourceAsString(), RadDTO.class);
+	            
+	            String highlights = "...";
+
+	            Map<String, HighlightField> polja = hit.getHighlightFields();
+	            for (Map.Entry<String, HighlightField> polje : polja.entrySet()){
+	                String vrednost = Arrays.toString(polje.getValue().fragments());
+	                highlights+=vrednost.substring(1, vrednost.length()-1);
+	                highlights+="...";
+
+	            }
+
+	            highlights = highlights.replace("<em>", "<b>");
+	            highlights = highlights.replace("</em>", "</b>");
+	            radDTO.setTekstRada(highlights);
+	            retVal.add(radDTO);
+	        }
+
+	        return retVal;
 	}
 
 

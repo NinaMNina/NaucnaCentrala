@@ -36,7 +36,33 @@
             }
             
             $scope.pretrazi = function(){
-            	var data = $scope.params;
+            	var p = $scope.params;
+            	if(p=="" || p==undefined)
+            		return;
+            	var parametri = [];
+            	for(var i=0; i<p.length; i++){
+            		if(p[i].operacija=="" || p[i].operacija==undefined
+            				|| p[i].polje=="" || p[i].polje==undefined
+            				|| p[i].vrednost=="" || p[i].vrednost==undefined){
+            			alert("Svi parametri pretrage moraju biti uneseni");
+            			return;
+            		}
+            		var p0={"operacija": p[i].operacija,
+                        	"polje": p[i].polje,
+                        	"vrednost": p[i].vrednost}
+            		parametri.push(p0);
+            	}
+            	var data = {"parametri": parametri}
+            	$http({
+                    method: 'POST',
+                    url: 'https://localhost:8087/NaucnaCentrala/rest/search',
+                    data: data
+                  }).then(function successCallback(response){
+                	  $scope.searchResult = response.data;
+                  },
+                    function errorCallback(response){
+                        alert("Greska u zahtevu za pretragu");
+                    });
             }
             $scope.obrisiParametar = function(parametar){
             	if($scope.params.length>=parametar)

@@ -32,14 +32,11 @@
 				</div><br/><br/>
 			</div>
 			<div class="row" ng-repeat="param in params">
-				<div class="col-2" ng-hide="params.indexOf(param)==0">
+				<div class="col-2" >
 					<select class="form-control" ng-model="param.operacija">
-					  <option value="and">AND</option>
-					  <option value="or">OR</option>
+					  <option value="AND">AND</option>
+					  <option value="OR">OR</option>
 					</select>
-				</div>
-				<div class="col-2" ng-show="params.indexOf(param)==0">
-					
 				</div>
 				<div class="col-4">
 					<select class="form-control" ng-model="param.polje">
