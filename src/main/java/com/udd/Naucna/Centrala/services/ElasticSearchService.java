@@ -14,6 +14,6 @@ public interface ElasticSearchService {
 
 	ArrayList<RadDTO> moreLikeThis(Long id);
 
-	ArrayList<RadDTO> searchParams(ParametriDTO p);
+	ArrayList<HighlightedRadDTO> searchParams(ParametriDTO p);
 
 }

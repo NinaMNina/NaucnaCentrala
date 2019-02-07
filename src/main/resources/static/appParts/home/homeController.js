@@ -32,7 +32,8 @@
             $scope.dodajParametar = function(){
                 $scope.params.push({"operacija": "",
                 	"polje": "",
-                	"vrednost": ""});
+                	"vrednost": "",
+                	"fraza": false});
             }
             
             $scope.pretrazi = function(){
@@ -49,7 +50,8 @@
             		}
             		var p0={"operacija": p[i].operacija,
                         	"polje": p[i].polje,
-                        	"vrednost": p[i].vrednost}
+                        	"vrednost": p[i].vrednost,
+                        	"fraza": p[i].fraza}
             		parametri.push(p0);
             	}
             	var data = {"parametri": parametri}
@@ -58,8 +60,7 @@
                     url: 'https://localhost:8087/NaucnaCentrala/rest/search',
                     data: data
                   }).then(function successCallback(response){
-                	  $scope.paramsResult = response.data;
-                	  $scope.searchResult = [];
+                	  $scope.searchResult = namestiRezultat(response.data);
                   },
                     function errorCallback(response){
                         alert("Greska u zahtevu za pretragu");
@@ -124,7 +125,6 @@
             	$scope.searchResult = [];
                 $scope.params = [];
                 $scope.pretragaReci = "";
-                $scope.paramsResult = [];
             }
             $scope.pronadjiSlicne = function(result){
             	$http({

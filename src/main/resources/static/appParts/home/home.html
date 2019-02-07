@@ -48,8 +48,11 @@
 					  <option value="naucnaOblast">naučna oblast</option>
 					</select>
 				</div>
-				<div class="col-4 form-group">
-					<input type="text" ng-model="param.vrednost"/>
+				<div class="col-3 form-group">
+					<input type="text" size=30 ng-model="param.vrednost"/>
+				</div>
+				<div class="col-1 form-group">
+					<input class="form-check-input" type="checkbox" ng-model="param.fraza"/>fraza?
 				</div>
 				<div class="col-1">
 					<button button type="button" class="btn btn-outline-dark center-block addMore" title="obriši parametar" ng-click="obrisiParametar(params.indexOf(param))">-</button>
@@ -69,15 +72,20 @@
 	            <h6 class="my-0 font-weight-normal" ng-bind-html="trustDangerousSnippet(result.casopis)"><small class="text-muted"> časopis</small></h6>
 	          </div>
 	          <div class="card-body">
-	            <h5 class="card-title pricing-card-title" ng-bind-html="trustDangerousSnippet(result.naslov)"></h5>
+	            <h5 class="card-title pricing-card-title"><span ng-bind-html="trustDangerousSnippet(result.naslov)"></span></h5>
 	          	<div class='row'>
 	          		<div class="col-7">
 		            	<span style="font-size: 13px" ng-bind-html="trustDangerousSnippet(result.tekstRada)"></span><br/><br/>
 		            </div>
 	          		<div class="col-5 text-right">
-	           			<h6 class="my-0 font-weight-normal" style="font-size: 13px" ng-bind-html="trustDangerousSnippet(result.kljucniPojmovi)"><div class="text-muted">ključni pojmovi: </div>{{result.kljucniPojmovi}}</h6>
-	           			<h6 class="my-0 font-weight-normal" style="font-size: 13px" ng-bind-html="trustDangerousSnippet(result.naucnaOblast)"><div class="text-muted">naučna oblast:   </div>{{result.naucnaOblast}}</h6>
-	           			<h6 class="my-0 font-weight-normal" style="font-size: 13px"><div class="text-muted">autori rada:     </div><span ng-repeat="autor in result.autoriRada">{{autor.ime}} {{autor.prezime}}, {{autor.email}}</span></h6>
+	           			<h6 class="my-0 font-weight-normal" style="font-size: 13px" ><div class="text-muted">ključni pojmovi: </div><span ng-bind-html="trustDangerousSnippet(result.kljucniPojmovi)"></span></h6>
+	           			<h6 class="my-0 font-weight-normal" style="font-size: 13px"><div class="text-muted">naučna oblast:   </div><span ng-bind-html="trustDangerousSnippet(result.naucnaOblast)"></span></h6>
+	           			<h6 class="my-0 font-weight-normal" style="font-size: 13px"><div class="text-muted">autori rada:     </div>
+	           			<span ng-repeat="autor in result.autoriRada">
+	           				<span ng-bind-html="trustDangerousSnippet(autor.ime)"></span>
+	           				<span ng-bind-html="trustDangerousSnippet(autor.prezime)"></span>
+	           				<span ng-bind-html="trustDangerousSnippet(autor.email)"></span>
+	           			</span></h6>
 	           		</div>
 	          	</div>            	
 	            <button type="button" class="btn btn-lg btn-outline-info" ng-hide="result.free">Kupi</button>

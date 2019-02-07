@@ -35,8 +35,8 @@ public class ElasticSearchController {
     }
 	
 	@RequestMapping(value = "search", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<List<RadDTO>> searchParametri(@RequestBody ParametriDTO parametri){		
-		ArrayList<RadDTO> retVal = elasticSearchServices.searchParams(parametri);
+	public ResponseEntity<List<HighlightedRadDTO>> searchParametri(@RequestBody ParametriDTO parametri){		
+		ArrayList<HighlightedRadDTO> retVal = elasticSearchServices.searchParams(parametri);
 		return new ResponseEntity<>(retVal, HttpStatus.OK);
     }
 	@RequestMapping(value = "search/{tekst}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)

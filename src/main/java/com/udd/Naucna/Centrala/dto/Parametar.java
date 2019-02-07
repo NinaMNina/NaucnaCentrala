@@ -4,6 +4,7 @@ public class Parametar {
 	private String polje;
 	private String vrednost;
 	private String operacija;
+	private Boolean fraza;
 	public String getPolje() {
 		return polje;
 	}
@@ -22,11 +23,18 @@ public class Parametar {
 	public void setOperacija(String operacija) {
 		this.operacija = operacija;
 	}
-	public Parametar(String polje, String vrednost, String operacija) {
+	public Boolean getFraza() {
+		return fraza;
+	}
+	public void setFraza(Boolean fraza) {
+		this.fraza = fraza;
+	}
+	public Parametar(String polje, String vrednost, String operacija, Boolean fraza) {
 		super();
 		this.polje = polje;
 		this.vrednost = vrednost;
 		this.operacija = operacija;
+		this.fraza = fraza;
 	}
 	public Parametar() {
 		super();
