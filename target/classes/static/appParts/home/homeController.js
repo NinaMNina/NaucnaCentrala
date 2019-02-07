@@ -12,7 +12,7 @@
             $scope.params = [];
             $scope.pretragaReci = "";
             $scope.searchResult = [];
-
+            $scope.paramsResult = [];
             $scope.init = function(){
             	if($stateParams.token=="" || $stateParams.token=="{token}")
             		$window.location.href = 'https://localhost:8087/NaucnaCentrala/#!/login';
@@ -58,7 +58,8 @@
                     url: 'https://localhost:8087/NaucnaCentrala/rest/search',
                     data: data
                   }).then(function successCallback(response){
-                	  $scope.searchResult = response.data;
+                	  $scope.paramsResult = response.data;
+                	  $scope.searchResult = [];
                   },
                     function errorCallback(response){
                         alert("Greska u zahtevu za pretragu");
@@ -77,16 +78,53 @@
                     method: 'GET',
                     url: 'https://localhost:8087/NaucnaCentrala/rest/search/'+data
                   }).then(function successCallback(response){
-                	  $scope.searchResult = response.data;
+                	  $scope.paramsResult = [];
+                	  $scope.searchResult = namestiRezultat(response.data);
                   },
                     function errorCallback(response){
                         alert("Greska u zahtevu za pretragu");
                     });
             }
+            var namestiRezultat = function(data){
+            	var result = [];
+            	var obj = {};
+            	for (var i=0; i<data.length; i++){
+					var res = data[i];
+            		if(res.highlights.casopis==null)
+            			obj.casopis=res.rad.casopis;
+            		else
+            			obj.casopis=res.highlights.casopis;
+            		
+            		if(res.highlights.naslov==null)
+            			obj.naslov=res.rad.naslov;
+            		else
+            			obj.naslov=res.highlights.naslov;
+            		
+            		if(res.highlights.kljucniPojmovi==null)
+            			obj.kljucniPojmovi=res.rad.kljucniPojmovi;
+            		else
+            			obj.kljucniPojmovi=res.highlights.kljucniPojmovi;
+            		
+            		if(res.highlights.tekstRada==null)
+            			obj.tekstRada=res.rad.tekstRada;
+            		else
+            			obj.tekstRada=res.highlights.tekstRada;
+            		
+            		if(res.highlights.naucnaOblast==null)
+            			obj.naucnaOblast=res.rad.naucnaOblast;
+            		else
+            			obj.naucnaOblast=res.highlights.naucnaOblast;
+            		obj.autoriRada = res.rad.autoriRada;
+            		result.push(obj);
+            		obj = {};
+            	}
+            	return result;
+            }
             $scope.obrisiSve = function(){
             	$scope.searchResult = [];
                 $scope.params = [];
                 $scope.pretragaReci = "";
+                $scope.paramsResult = [];
             }
             $scope.pronadjiSlicne = function(result){
             	$http({

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.udd.Naucna.Centrala.dto.HighlightedRadDTO;
 import com.udd.Naucna.Centrala.dto.ParametriDTO;
 import com.udd.Naucna.Centrala.dto.RadDTO;
 import com.udd.Naucna.Centrala.services.ElasticSearchService;
@@ -35,12 +36,12 @@ public class ElasticSearchController {
 	
 	@RequestMapping(value = "search", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<RadDTO>> searchParametri(@RequestBody ParametriDTO parametri){		
-		ArrayList<RadDTO> retVal = elasticSearchServices.search(parametri);
+		ArrayList<RadDTO> retVal = elasticSearchServices.searchParams(parametri);
 		return new ResponseEntity<>(retVal, HttpStatus.OK);
     }
 	@RequestMapping(value = "search/{tekst}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<List<RadDTO>> searchObican(@PathVariable String tekst){	
-		ArrayList<RadDTO> retVal = elasticSearchServices.searchObican(tekst);
+	public ResponseEntity<List<HighlightedRadDTO>> searchObican(@PathVariable String tekst){	
+		ArrayList<HighlightedRadDTO> retVal = elasticSearchServices.searchObican(tekst);
 		return new ResponseEntity<>(retVal, HttpStatus.OK);
     }
 	@RequestMapping(value = "moreLikeThis/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)

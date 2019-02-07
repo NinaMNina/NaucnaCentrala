@@ -1,7 +1,5 @@
 package com.udd.Naucna.Centrala.services.impl;
 
-import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -11,7 +9,6 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.Optional;
 
-import org.apache.commons.httpclient.HttpStatus;
 import org.apache.tika.exception.TikaException;
 import org.apache.tika.metadata.Metadata;
 import org.apache.tika.parser.ParseContext;
@@ -31,11 +28,11 @@ import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties.P
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.xml.sax.SAXException;
 
 import com.google.gson.Gson;
+import com.udd.Naucna.Centrala.dto.HighlightedRadDTO;
 import com.udd.Naucna.Centrala.dto.Parametar;
 import com.udd.Naucna.Centrala.dto.ParametriDTO;
 import com.udd.Naucna.Centrala.dto.RadDTO;
@@ -80,24 +77,24 @@ public class ElasticSearchServiceImpl implements ElasticSearchService {
 
 
 	@Override
-	public ArrayList<RadDTO> search(ParametriDTO p) {
+	public ArrayList<RadDTO> searchParams(ParametriDTO p) {
 		BoolQueryBuilder query = QueryBuilders.boolQuery();
         ArrayList<RadDTO> retVal = new ArrayList<>();				
 		for(int i=0; i<p.getParametri().size(); i++){
 			Parametar p0 = p.getParametri().get(i);
 			if(p0.getOperacija().equals("AND"))
-				query.must(QueryBuilders.termQuery(p0.getPolje(), p0.getVrednost()));
+				query.must(QueryBuilders.matchQuery(p0.getPolje(), p0.getVrednost()));
 			else if(p0.getOperacija().equals("OR"))
-				query.should(QueryBuilders.termQuery(p0.getPolje(), p0.getVrednost()));
+				query.should(QueryBuilders.matchQuery(p0.getPolje(), p0.getVrednost()));
 		}
 		System.out.println("QUERY:    "+query.toString());
 		HighlightBuilder highlightBuilder = new HighlightBuilder()
                 .field("tekstRada", 100)
-                .field("casopis", 10)
-                .field("naslov", 10)
-                .field("autoriRada", 10)
-                .field("kljucniPojmovi", 10)
-                .field("naucnaOblast", 10)
+                .field("casopis", 100)
+                .field("naslov", 100)
+                .field("autoriRada", 100)
+                .field("kljucniPojmovi", 100)
+                .field("naucnaOblast", 100)
                 .highlightQuery(query);
 		SearchRequestBuilder request = nodeClient.prepareSearch("radovi")
                 .setQuery(query)
@@ -118,7 +115,7 @@ public class ElasticSearchServiceImpl implements ElasticSearchService {
 	                highlights+="...";
 
 	            }
-
+	            highlights+="...";
 	            highlights = highlights.replace("<em>", "<b>");
 	            highlights = highlights.replace("</em>", "</b>");
 	            radDTO.setTekstRada(highlights);
@@ -130,10 +127,15 @@ public class ElasticSearchServiceImpl implements ElasticSearchService {
 
 
 	@Override
-	public ArrayList<RadDTO> searchObican(String tekst) {
-        ArrayList<RadDTO> retVal = new ArrayList<>();
+	public ArrayList<HighlightedRadDTO> searchObican(String tekst) {
+        ArrayList<HighlightedRadDTO> retVal = new ArrayList<>();
         HighlightBuilder highlightBuilder = new HighlightBuilder()
                 .field("tekstRada", 100)
+                .field("casopis", 100)
+                .field("naslov", 100)
+                .field("autoriRada", 100)
+                .field("kljucniPojmovi", 100)
+                .field("naucnaOblast", 100)
                 .highlightQuery(QueryBuilders.queryStringQuery(tekst));
         SearchRequestBuilder request = nodeClient.prepareSearch("radovi")
                 .setQuery(QueryBuilders.queryStringQuery(tekst))
@@ -143,22 +145,54 @@ public class ElasticSearchServiceImpl implements ElasticSearchService {
         for(SearchHit hit : response.getHits().getHits()) {
             Gson gson = new Gson();
             RadDTO radDTO = new RadDTO();
+            RadDTO radHighlights = new RadDTO();
+            HighlightedRadDTO rad = new HighlightedRadDTO();
             radDTO = gson.fromJson(hit.getSourceAsString(), RadDTO.class);
             
             String highlights = "...";
 
             Map<String, HighlightField> polja = hit.getHighlightFields();
+            String vrednost = "";
             for (Map.Entry<String, HighlightField> polje : polja.entrySet()){
-                String vrednost = Arrays.toString(polje.getValue().fragments());
-                highlights+=vrednost.substring(1, vrednost.length()-1);
-                highlights+="...";
-
+            	if(polje.getKey().equals("tekstRada")){
+	                vrednost = Arrays.toString(polje.getValue().fragments());
+	                highlights+=vrednost.substring(1, vrednost.length()-1);
+	                highlights+="...";
+            	}
+            	else if(polje.getKey().equals("casopis")){            		
+	                String casopisH = Arrays.toString(polje.getValue().fragments());
+	                casopisH+=casopisH.substring(1, casopisH.length()-1);
+	                radHighlights.setCasopis(casopisH);
+            	}
+            	else if(polje.getKey().equals("naslov")){            		
+	                String naslovH = Arrays.toString(polje.getValue().fragments());
+	                naslovH+=naslovH.substring(1, naslovH.length()-1);
+	                radHighlights.setNaslov(naslovH);
+            	}
+           /* 	else if(polje.getKey().equals("autoriRada")){            		
+	                String autoriRadaH = Arrays.toString(polje.getValue().fragments());
+	                autoriRadaH+=vrednost.substring(1, vrednost.length()-1);
+	                radHighlights.setAutoriRada(autoriRadaH);
+            	}*/
+            	else if(polje.getKey().equals("kljucniPojmovi")){            		
+	                String kljucniPojmoviH = Arrays.toString(polje.getValue().fragments());
+	                kljucniPojmoviH+=kljucniPojmoviH.substring(1, kljucniPojmoviH.length()-1);
+	                radHighlights.setKljucniPojmovi(kljucniPojmoviH);
+            	}
+            	else if(polje.getKey().equals("naucnaOblast")){            		
+	                String naucnaOblastH = Arrays.toString(polje.getValue().fragments());
+	                naucnaOblastH+=naucnaOblastH.substring(1, naucnaOblastH.length()-1);
+	                radHighlights.setNaucnaOblast(naucnaOblastH);
+            	}
             }
-
+            highlights+="...";
             highlights = highlights.replace("<em>", "<b>");
             highlights = highlights.replace("</em>", "</b>");
-            radDTO.setTekstRada(highlights);
-            retVal.add(radDTO);
+            radDTO.setTekstRada("");
+            radHighlights.setTekstRada(highlights);
+            rad.setHighlights(radHighlights);
+            rad.setRad(radDTO);
+            retVal.add(rad);
         }
 
         return retVal;
