@@ -7,7 +7,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import com.udd.Naucna.Centrala.model.Korisnik;
-import com.udd.Naucna.Centrala.model.enums.TipKorisnika;
 
 public class CustomUserDetailsFactory {
 private CustomUserDetailsFactory() {}
@@ -17,14 +16,14 @@ private CustomUserDetailsFactory() {}
 		return new CustomUserDetails(
 				korisnik.getKorisnickoIme(),
 				korisnik.getId(),
-				mapToGrantedAuthorities(korisnik.getTip())
+				mapToGrantedAuthorities(korisnik)
 				);
 	}
 	
-	private static List<GrantedAuthority> mapToGrantedAuthorities(TipKorisnika role) {
-        
+	private static List<GrantedAuthority> mapToGrantedAuthorities(Korisnik k) {
+   //OVO JAKO NE VALJA     
 		List<GrantedAuthority> authorities = new ArrayList<>();
-		authorities.add(new SimpleGrantedAuthority(role.toString()));
+		authorities.add(new SimpleGrantedAuthority(k.toString()));
 		
 		return authorities;
     }
