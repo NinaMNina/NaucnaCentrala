@@ -6,7 +6,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -25,7 +24,6 @@ import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightField;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties.Pageable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
@@ -37,7 +35,6 @@ import com.udd.Naucna.Centrala.dto.HighlightedRadDTO;
 import com.udd.Naucna.Centrala.dto.Parametar;
 import com.udd.Naucna.Centrala.dto.ParametriDTO;
 import com.udd.Naucna.Centrala.dto.RadDTO;
-import com.udd.Naucna.Centrala.model.Autor;
 import com.udd.Naucna.Centrala.repository.elasticSearch.ElasticSearchRepository;
 import com.udd.Naucna.Centrala.services.ElasticSearchService;
 
@@ -80,8 +77,7 @@ public class ElasticSearchServiceImpl implements ElasticSearchService {
 
 	@Override
 	public ArrayList<HighlightedRadDTO> searchParams(ParametriDTO p) {
-		BoolQueryBuilder query = QueryBuilders.boolQuery();
-        ArrayList<RadDTO> retVal = new ArrayList<>();				
+		BoolQueryBuilder query = QueryBuilders.boolQuery();			
 		for(int i=0; i<p.getParametri().size(); i++){
 			Parametar p0 = p.getParametri().get(i);
 			if(p0.getFraza()){
@@ -116,7 +112,6 @@ public class ElasticSearchServiceImpl implements ElasticSearchService {
 
 	@Override
 	public ArrayList<HighlightedRadDTO> searchObican(String tekst) {
-        ArrayList<HighlightedRadDTO> retVal = new ArrayList<>();
         HighlightBuilder highlightBuilder = new HighlightBuilder()
                 .field("tekstRada", 100)
                 .field("casopis", 100)
@@ -187,7 +182,11 @@ public class ElasticSearchServiceImpl implements ElasticSearchService {
 	                radHighlights.setNaslov(naslovH);
             	}
             	else if(polje.getKey().equals("autoriRada")){            		
-	                radHighlights.setAutoriRada(getAutoriHighlights(Arrays.toString(polje.getValue().fragments())));
+	                String autoriH = Arrays.toString(polje.getValue().fragments());
+	                autoriH=autoriH.substring(1, autoriH.length()-1);
+	                autoriH = autoriH.replace("<em>", "<b>");
+	                autoriH = autoriH.replace("</em>", "</b>");
+	                radHighlights.setAutoriRada(autoriH);
             	}
             	else if(polje.getKey().equals("kljucniPojmovi")){            		
 	                String kljucniPojmoviH = Arrays.toString(polje.getValue().fragments());
@@ -220,13 +219,7 @@ public class ElasticSearchServiceImpl implements ElasticSearchService {
 	}
 
 
-	private List<Autor> getAutoriHighlights(String string) {
-		System.out.println(string);
-		ArrayList<Autor> retVal = new ArrayList<Autor>();
-		/*Gson gson = new Gson();
-        Autor a = gson.fromJson(string, Autor.class);*/
-		return retVal;
-	}
+
 	
 	
 }

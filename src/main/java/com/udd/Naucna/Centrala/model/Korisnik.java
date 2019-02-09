@@ -1,5 +1,7 @@
 package com.udd.Naucna.Centrala.model;
 
+
+import org.springframework.data.geo.Point;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -8,6 +10,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+
+import org.elasticsearch.common.geo.GeoPoint;
 
 @Entity
 public class Korisnik {
@@ -30,11 +34,9 @@ public class Korisnik {
 	@Column(nullable = false, length = 120, unique=true)
 	private String email;
 
-	@Column(nullable = true, length = 80)
-	private String grad;
+	@Column(nullable = true)
+	private Point lokacija;
 
-	@Column(nullable = true, length = 80)
-	private String drzava;
 
 	@OneToMany
 	private List<Kupljeno> kupljeno;
@@ -90,20 +92,12 @@ public class Korisnik {
 		this.email = email;
 	}
 
-	public String getGrad() {
-		return grad;
+	public Point getLokacija() {
+		return lokacija;
 	}
 
-	public void setGrad(String grad) {
-		this.grad = grad;
-	}
-
-	public String getDrzava() {
-		return drzava;
-	}
-
-	public void setDrzava(String drzava) {
-		this.drzava = drzava;
+	public void setLokacija(Point lokacija) {
+		this.lokacija = lokacija;
 	}
 
 	public List<Kupljeno> getKupljeno() {
@@ -123,7 +117,7 @@ public class Korisnik {
 	}
 
 	public Korisnik(Long id, String korisnickoIme, String lozinka, String ime, String prezime, String email,
-			String grad, String drzava, List<Kupljeno> kupljeno, List<PretplataNaCasopis> pretplate) {
+			Point lokacija, List<Kupljeno> kupljeno, List<PretplataNaCasopis> pretplate) {
 		super();
 		this.id = id;
 		this.korisnickoIme = korisnickoIme;
@@ -131,8 +125,7 @@ public class Korisnik {
 		this.ime = ime;
 		this.prezime = prezime;
 		this.email = email;
-		this.grad = grad;
-		this.drzava = drzava;
+		this.lokacija = lokacija;
 		this.kupljeno = kupljeno;
 		this.pretplate = pretplate;
 	}

@@ -1,5 +1,7 @@
 package com.udd.Naucna.Centrala.model;
 
+
+import org.springframework.data.geo.Point;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,10 +53,11 @@ public class Recenzent extends Korisnik{
 		this.pokrivaNaucneOblasti = pokrivaNaucneOblasti;
 	}
 
+
 	public Recenzent(Long id, String korisnickoIme, String lozinka, String ime, String prezime, String email,
-			String grad, String drzava, List<Kupljeno> kupljeno, List<PretplataNaCasopis> pretplate, ArrayList<Casopis> angazovanje,
-			String titula, ArrayList<NaucnaOblast> pokrivaNaucneOblasti) {
-		super(id, korisnickoIme, lozinka, ime, prezime, email, grad, drzava, kupljeno, pretplate);
+			Point lokacija, List<Kupljeno> kupljeno, List<PretplataNaCasopis> pretplate, List<Casopis> angazovanje,
+			String titula, List<NaucnaOblast> pokrivaNaucneOblasti) {
+		super(id, korisnickoIme, lozinka, ime, prezime, email, lokacija, kupljeno, pretplate);
 		this.angazovanje = angazovanje;
 		this.titula = titula;
 		this.pokrivaNaucneOblasti = pokrivaNaucneOblasti;

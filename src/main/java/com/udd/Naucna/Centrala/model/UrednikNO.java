@@ -1,5 +1,7 @@
 package com.udd.Naucna.Centrala.model;
 
+
+import org.springframework.data.geo.Point;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -41,11 +43,17 @@ public class UrednikNO extends Korisnik{
 		this.titula = titula;
 	}
 
-	
+
 	public UrednikNO(Long id, String korisnickoIme, String lozinka, String ime, String prezime, String email,
-			String grad, String drzava, List<Kupljeno> kupljeno, List<PretplataNaCasopis> pretplate, Casopis casopis,
+			Point lokacija, List<Kupljeno> kupljeno, List<PretplataNaCasopis> pretplate) {
+		super(id, korisnickoIme, lozinka, ime, prezime, email, lokacija, kupljeno, pretplate);
+		// TODO Auto-generated constructor stub
+	}
+
+	public UrednikNO(Long id, String korisnickoIme, String lozinka, String ime, String prezime, String email,
+			Point lokacija, List<Kupljeno> kupljeno, List<PretplataNaCasopis> pretplate, Casopis casopis,
 			NaucnaOblast naucnaOblast, String titula) {
-		super(id, korisnickoIme, lozinka, ime, prezime, email, grad, drzava, kupljeno, pretplate);
+		super(id, korisnickoIme, lozinka, ime, prezime, email, lokacija, kupljeno, pretplate);
 		this.casopis = casopis;
 		this.naucnaOblast = naucnaOblast;
 		this.titula = titula;
@@ -54,6 +62,8 @@ public class UrednikNO extends Korisnik{
 	public UrednikNO() {
 		super();
 	}
+	
+	
 	
 	
 }

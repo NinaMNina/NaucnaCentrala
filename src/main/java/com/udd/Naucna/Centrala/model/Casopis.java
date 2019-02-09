@@ -24,9 +24,8 @@ public class Casopis {
 	@Column
 	private boolean openAccess;
 	
-	@Column(nullable = false)
-	@Size(min=0, max=99999999)
-	private int ISSN;
+	@Column(nullable = false, length=8)
+	private String ISSN;
 	
 	@OneToMany
 	private List<NaucnaOblast> naucneOblasti;
@@ -67,11 +66,11 @@ public class Casopis {
 		this.openAccess = openAccess;
 	}
 
-	public int getISSN() {
+	public String getISSN() {
 		return ISSN;
 	}
 
-	public void setISSN(int iSSN) {
+	public void setISSN(String iSSN) {
 		ISSN = iSSN;
 	}
 
@@ -115,7 +114,7 @@ public class Casopis {
 		this.izdanja = izdanja;
 	}
 
-	public Casopis(Long id, String naziv, boolean openAccess, @Size(min = 0, max = 99999999) int iSSN,
+	public Casopis(Long id, String naziv, boolean openAccess, String iSSN,
 			ArrayList<NaucnaOblast> naucneOblasti, Urednik urednik, ArrayList<UrednikNO> uredniciNO,
 			ArrayList<Recenzent> recenzenti, ArrayList<Izdanje> izdanja) {
 		super();

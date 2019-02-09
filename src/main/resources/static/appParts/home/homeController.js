@@ -86,6 +86,21 @@
                         alert("Greska u zahtevu za pretragu");
                     });
             }
+            var convertAutori = function(str){
+            	var res = str.split(";");
+            	var retVal = [];
+            	for(var i=0; i<res.length; i++){
+            		var podaci = res.split(",");
+            		var ime = podaci[0].split(" ")[0];
+            		var prezime = podaci[0].split(" ")[0];
+            		var email = podaci[1];
+            		retVal.push({
+            			"ime": ime,
+            			"prezime": prezime,
+            			"email": email
+            		});
+            	}
+            }
             var namestiRezultat = function(data){
             	var result = [];
             	var obj = {};
@@ -115,12 +130,18 @@
             			obj.naucnaOblast=res.rad.naucnaOblast;
             		else
             			obj.naucnaOblast=res.highlights.naucnaOblast;
-            		obj.autoriRada = res.rad.autoriRada;
+            		
+            		if(res.highlights.autoriRada==null)
+                		obj.autoriRada = convertAutori(res.rad.autoriRada);
+            		else
+            			obj.autoriRada = convertAutori(res.highlights.naucnaOblast);
             		result.push(obj);
             		obj = {};
             	}
             	return result;
             }
+            
+            
             $scope.obrisiSve = function(){
             	$scope.searchResult = [];
                 $scope.params = [];
