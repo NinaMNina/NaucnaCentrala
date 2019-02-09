@@ -11,30 +11,28 @@ import javax.validation.constraints.Size;
 public class NaucnaOblast {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private long id;
+	private Long id;
 	
 	@Column(nullable = false, length = 120)
 	private String nazivOblasti;
 	
 	@Column(nullable = false)
-	@Size(min=1, max=6)
 	private int kodOblasti;
 	
 	@Column(nullable = false, length = 120)
 	private String nazivPodOblasti;
 	
 	@Column(nullable = false)
-	@Size(min=1, max=15)
 	private int kodPodOblasti;
 	
 	@Column(nullable = true, length = 240)
 	private String detalji;
 
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -78,7 +76,7 @@ public class NaucnaOblast {
 		this.detalji = detalji;
 	}
 
-	public NaucnaOblast(long id, String nazivOblasti, @Size(min = 1, max = 6) int kodOblasti, String nazivPodOblasti,
+	public NaucnaOblast(Long id, String nazivOblasti, @Size(min = 1, max = 6) int kodOblasti, String nazivPodOblasti,
 			@Size(min = 1, max = 15) int kodPodOblasti, String detalji) {
 		super();
 		this.id = id;

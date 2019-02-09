@@ -23,8 +23,11 @@ public class Rad {
 	@Column(nullable = false, length = 240)
 	private String naslov;
 	
-	@OneToMany
-	private List<Autor> autoriRada;
+	@Column(nullable = false, length = 600)
+	private String koautoriRada;
+	
+	@ManyToOne
+	private Autor odgovorniAutor;
 	
 	@Column(nullable = false, length = 1200)
 	private String kljucniPojmovi;
@@ -45,6 +48,24 @@ public class Rad {
 	@OneToMany
 	private List<Recenzent> recenzenti;
 
+	
+	
+	public String getKoautoriRada() {
+		return koautoriRada;
+	}
+
+	public void setKoautoriRada(String koautoriRada) {
+		this.koautoriRada = koautoriRada;
+	}
+
+	public Autor getOdgovorniAutor() {
+		return odgovorniAutor;
+	}
+
+	public void setOdgovorniAutor(Autor odgovorniAutor) {
+		this.odgovorniAutor = odgovorniAutor;
+	}
+
 	public Long getId() {
 		return id;
 	}
@@ -59,14 +80,6 @@ public class Rad {
 
 	public void setNaslov(String naslov) {
 		this.naslov = naslov;
-	}
-
-	public List<Autor> getAutoriRada() {
-		return autoriRada;
-	}
-
-	public void setAutoriRada(List<Autor> autoriRada) {
-		this.autoriRada = autoriRada;
 	}
 
 	public String getKljucniPojmovi() {
@@ -117,18 +130,19 @@ public class Rad {
 		this.recenzenti = recenzenti;
 	}
 
-	public Rad(Long id, String naslov, List<Autor> autoriRada, String kljucniPojmovi, String lokacijaProbnogRada,
+	public Rad(Long id, String naslov, String koautoriRada, Autor odgovorniAutor, String kljucniPojmovi, String lokacijaProbnogRada,
 			String lokacijaRada, NaucnaOblast naucnaOblast, StatusRada status, List<Recenzent> recenzenti) {
 		super();
 		this.id = id;
 		this.naslov = naslov;
-		this.autoriRada = autoriRada;
+		this.koautoriRada = koautoriRada;
 		this.kljucniPojmovi = kljucniPojmovi;
 		this.lokacijaProbnogRada = lokacijaProbnogRada;
 		this.lokacijaRada = lokacijaRada;
 		this.naucnaOblast = naucnaOblast;
 		this.status = status;
 		this.recenzenti = recenzenti;
+		this.odgovorniAutor = odgovorniAutor;
 	}
 
 	public Rad() {
