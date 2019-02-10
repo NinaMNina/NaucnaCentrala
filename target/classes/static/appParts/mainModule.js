@@ -21,4 +21,9 @@ app.config(function($stateProvider, $urlRouterProvider) {
         templateUrl : 'appParts/registracija/registracija.html',
         controller : 'registracijaController'
     })
+    .state('zadaci', {
+        url: '/zadaci/{token}',
+        templateUrl : 'appParts/zadaci/zadaci.html',
+        controller : 'zadaciController'
+    })
   });

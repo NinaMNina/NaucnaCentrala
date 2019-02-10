@@ -6,4 +6,6 @@ import com.udd.Naucna.Centrala.model.Casopis;
 
 public interface CasopisRepository extends JpaRepository<Casopis, Long>{
 
+	Casopis findByUrednikId(Long id);
+
 }

@@ -29,6 +29,7 @@ import com.udd.Naucna.Centrala.repository.CasopisRepository;
 import com.udd.Naucna.Centrala.repository.IzdanjeRepository;
 import com.udd.Naucna.Centrala.repository.NaucnaOblastRepository;
 import com.udd.Naucna.Centrala.repository.RadRepository;
+import com.udd.Naucna.Centrala.repository.RecenzentRepository;
 import com.udd.Naucna.Centrala.repository.UrednikRepository;
 
 @Component
@@ -45,11 +46,15 @@ public class StartData {
     private NaucnaOblastRepository naucnaOblastRepository;
 	@Autowired
     private RadRepository radRepository;
+	@Autowired
+    private RecenzentRepository recenzentRepository;
+	@Autowired
+    private UrednikNORepository urednikNORepository;
 	
 	@PostConstruct
     private void init(){
 //AUTORI
-		Autor autor0 = new Autor(null, "nina.m", "nina", "Nina", "Miladinovic", "n@n.com", new Point(new Double(45.25167), new Double(19.83694)), new ArrayList<>(),new ArrayList<>());
+		Autor autor0 = new Autor(null, "nina", "nina", "Nina", "Miladinovic", "n@n.com", new Point(new Double(45.25167), new Double(19.83694)), new ArrayList<>(),new ArrayList<>());
 		autor0 = autorRepository.save(autor0);
 		Autor autorrad1MU = new Autor(null, "radovan", "radovan", "Radovan", "Turović", "ispravi!!!radovan.turovic@uns.ac.rs", new Point(new Double(45.25167), new Double(19.83694)), new ArrayList<>(),new ArrayList<>());
 		autorrad1MU = autorRepository.save(autorrad1MU);		
@@ -71,17 +76,64 @@ public class StartData {
 		Casopis casMU = new Casopis(null, "Mašinsko Učenje 101", false, "87654321", new ArrayList<NaucnaOblast>(), null, new ArrayList<UrednikNO>(),
 				new ArrayList<Recenzent>(), new ArrayList<Izdanje>());
 		casMU = casopisRepository.save(casMU);
-		
+//RECENZENTI
+		ArrayList<Casopis> cas1 = new ArrayList<Casopis>();
+		cas1.add(casNG);
+		ArrayList<Casopis> cas2 = new ArrayList<Casopis>();
+		cas2.add(casMU);
+		ArrayList<Casopis> casOba = new ArrayList<Casopis>();
+		casOba.add(casNG);
+		casOba.add(casMU);
+		Recenzent rec1 = new Recenzent(null, "rec1", "rec1", "Pera", "Perić", "ispravi!!!pera.p@live.com", new Point(new Double(45.25167), new Double(19.83694)), new ArrayList<Kupljeno>(), new ArrayList<PretplataNaCasopis>(), cas1, "mr", new ArrayList<NaucnaOblast>());
+		rec1 = recenzentRepository.save(rec1);
+		Recenzent rec2 = new Recenzent(null, "rec2", "rec2", "Mika", "Mikić", "ispravi!!!mika.m@live.com", new Point(new Double(43.32472), new Double(21.90333)), new ArrayList<Kupljeno>(), new ArrayList<PretplataNaCasopis>(), cas2, "ms", new ArrayList<NaucnaOblast>());
+		rec2 = recenzentRepository.save(rec2);			
+		Recenzent rec3 = new Recenzent(null, "rec3", "rec3", "Jose", "Muchaco", "ispravi!!!ho.mu@live.com", new Point(new Double(40.4165), new Double(-3.70256)), new ArrayList<Kupljeno>(), new ArrayList<PretplataNaCasopis>(), casOba, "dr", new ArrayList<NaucnaOblast>());
+		rec3 = recenzentRepository.save(rec3);			
+		Recenzent rec4 = new Recenzent(null, "rec4", "rec4", "Koja", "Kojić", "ispravi!!!koja.kojic@live.com", new Point(new Double(46.05108), new Double(14.50513)), new ArrayList<Kupljeno>(), new ArrayList<PretplataNaCasopis>(), casOba, "dr", new ArrayList<NaucnaOblast>());
+		rec4 = recenzentRepository.save(rec4);			
+		Recenzent rec5 = new Recenzent(null, "rec5", "rec5", "Mujo", "Mujić", "ispravi!!!m.mujic@live.com", new Point(new Double(44.53842), new Double(18.66709)), new ArrayList<Kupljeno>(), new ArrayList<PretplataNaCasopis>(), casOba, "ms", new ArrayList<NaucnaOblast>());
+		rec5 = recenzentRepository.save(rec5);			
+		Recenzent rec6 = new Recenzent(null, "rec6", "rec6", "Ištvan", "Sabo", "ispravi!!!isabo@live.com", new Point(new Double(47.49801), new Double(19.03991)), new ArrayList<Kupljeno>(), new ArrayList<PretplataNaCasopis>(), cas1, "dr", new ArrayList<NaucnaOblast>());
+		rec6 = recenzentRepository.save(rec6);	
 //UREDNICI
-		Urednik urednikNG = new Urednik(null, "urednikNG", "urednikNG", "Mika", "Mikić", "mika@gmail.com", new Point(45.25167, 19.83694), new ArrayList<Kupljeno>(), new ArrayList<PretplataNaCasopis>(), casNG, "dr");
+		Urednik urednikNG = new Urednik(null, "urednikNG", "urednikNG", "Mika", "Mikić", "ispravi!!!mika@gmail.com", new Point(45.25167, 19.83694), new ArrayList<Kupljeno>(), new ArrayList<PretplataNaCasopis>(), casNG, "dr");
 		urednikNG = urednikRepository.save(urednikNG);
 		casNG.setUrednik(urednikNG);
-		
-		Urednik urednikMU = new Urednik(null, "urednikMU", "urednikMU", "Pera", "peric", "pera@gmail.com", new Point(new Double(43.32472), new Double(21.90333)), new ArrayList<Kupljeno>(), new ArrayList<PretplataNaCasopis>(), casMU, "dr");
+	
+		Urednik urednikMU = new Urednik(null, "urednikMU", "urednikMU", "Pera", "peric", "ispravi!!!pera@gmail.com", new Point(new Double(43.32472), new Double(21.90333)), new ArrayList<Kupljeno>(), new ArrayList<PretplataNaCasopis>(), casMU, "dr");
 		urednikMU = urednikRepository.save(urednikMU);
 		casMU.setUrednik(urednikMU);
 		casMU = casopisRepository.save(casMU);
+//NAUCNA OBLAST
+		NaucnaOblast naucnaOblast0 = new NaucnaOblast(null, "Inženjerstvo i Tehnologije", 2, "Ostalo", 11, "");
+		naucnaOblast0 = naucnaOblastRepository.save(naucnaOblast0);
+		NaucnaOblast naucnaOblast1 = new NaucnaOblast(null, "Prirodne Nauke", 1, "Biologija", 6, "");
+		naucnaOblast1 = naucnaOblastRepository.save(naucnaOblast1);
+		NaucnaOblast naucnaOblast2 = new NaucnaOblast(null, "Medicina i Zdravlje", 3, "Ostalo", 5, "");
+		naucnaOblast2 = naucnaOblastRepository.save(naucnaOblast2);
+		NaucnaOblast naucnaOblast3 = new NaucnaOblast(null, "Prirodne Nauke", 1, "Kompjuteri i Informacione Nauke", 2, "");
+		naucnaOblast3 = naucnaOblastRepository.save(naucnaOblast3);
 		
+		ArrayList<NaucnaOblast> nOblastNG = new ArrayList<NaucnaOblast>();
+		nOblastNG.add(naucnaOblast1);
+		nOblastNG.add(naucnaOblast2);
+		casNG.setNaucneOblasti(nOblastNG);
+		casNG = casopisRepository.save(casNG);
+		
+		ArrayList<NaucnaOblast> nOblastMU = new ArrayList<NaucnaOblast>();
+		nOblastMU.add(naucnaOblast0);
+		nOblastMU.add(naucnaOblast3);
+		casMU.setNaucneOblasti(nOblastMU);
+		casMU = casopisRepository.save(casMU);
+//UREDNIK_NO
+		
+		UrednikNO urednikNONG = new UrednikNO(null, "urednik1", "urednik1", "Bojan", "Bojanić", "ispravi!!!bbojanic@live.com", new Point(new Double(45.25167), new Double(19.83694)), new ArrayList<Kupljeno>(), new ArrayList<PretplataNaCasopis>(), new ArrayList<Casopis>(), "dr",  new ArrayList<NaucnaOblast>(), casNG, naucnaOblast1);
+		urednikNONG = urednikNORepository.save(urednikNONG);
+		UrednikNO urednik1NONG = new UrednikNO(null, "urednik2", "urednik2", "Mirko", "Mirkić", "ispravi!!!mmirko@live.com", new Point(new Double(43.32472), new Double(21.90333)), new ArrayList<Kupljeno>(), new ArrayList<PretplataNaCasopis>(), new ArrayList<Casopis>(), "dr",  new ArrayList<NaucnaOblast>(), casNG, naucnaOblast2);
+		urednik1NONG = urednikNORepository.save(urednik1NONG);
+		UrednikNO urednikNOMU = new UrednikNO(null, "urednik3", "urednik3", "Marko", "Marković", "ispravi!!!mmarko@live.com", new Point(new Double(44.786568), new Double(20.448922)), new ArrayList<Kupljeno>(), new ArrayList<PretplataNaCasopis>(), new ArrayList<Casopis>(), "prof dr",  new ArrayList<NaucnaOblast>(), casMU, naucnaOblast0);
+		urednikNOMU = urednikNORepository.save(urednikNOMU);
 //IZDANJA
 		String string4 = "January 1, 2018";
 		String string5 = "February 1, 2018";
@@ -119,37 +171,36 @@ public class StartData {
 		izdanjaNG.add(izd2MU);
 		casNG.setIzdanja(izdanjaMU);
 		casMU = casopisRepository.save(casMU);
-//NAUCNA OBLAST
-		NaucnaOblast naucnaOblast0 = new NaucnaOblast(null, "Inženjerstvo i Tehnologije", 2, "Ostalo", 11, "");
-		naucnaOblast0 = naucnaOblastRepository.save(naucnaOblast0);
-		NaucnaOblast naucnaOblast1 = new NaucnaOblast(null, "Prirodne Nauke", 1, "Biologija", 6, "");
-		naucnaOblast1 = naucnaOblastRepository.save(naucnaOblast1);
-		NaucnaOblast naucnaOblast2 = new NaucnaOblast(null, "Medicina i Zdravlje", 3, "Ostalo", 5, "");
-		naucnaOblast2 = naucnaOblastRepository.save(naucnaOblast2);
-		NaucnaOblast naucnaOblast3 = new NaucnaOblast(null, "Prirodne Nauke", 1, "Kompjuteri i Informacione Nauke", 2, "");
-		naucnaOblast3 = naucnaOblastRepository.save(naucnaOblast3);
-		
-		ArrayList<NaucnaOblast> nOblastNG = new ArrayList<NaucnaOblast>();
-		nOblastNG.add(naucnaOblast1);
-		nOblastNG.add(naucnaOblast2);
-		casNG.setNaucneOblasti(nOblastNG);
-		casNG = casopisRepository.save(casNG);
-		
-		ArrayList<NaucnaOblast> nOblastMU = new ArrayList<NaucnaOblast>();
-		nOblastMU.add(naucnaOblast0);
-		nOblastMU.add(naucnaOblast3);
-		casMU.setNaucneOblasti(nOblastMU);
-		casMU = casopisRepository.save(casMU);
 		
 //RADOVI
-		Rad radMU1 = new Rad(null, "Оцена популарности станице према објектима у околини", "Горана Гојић, gorana.gojic@uns.ac.rs; Ангелина Вујановић, avujanovic@uns.ac.rs", autorrad1MU, "рударење подaтака, стабло одлучивања, корелација, статистика, Capital Bikeshare, станице бицикaла, промет, модел систем", "nema", "", naucnaOblast0, StatusRada.PRIHVACEN, new ArrayList<Recenzent>());
+		ArrayList<Recenzent> recenzenti1NG = new ArrayList<Recenzent>();
+		recenzenti1NG.add(rec3);
+		recenzenti1NG.add(rec4);
+		ArrayList<Recenzent> recenzenti2NG = new ArrayList<Recenzent>();
+		recenzenti2NG.add(rec3);
+		recenzenti2NG.add(rec2);
+		ArrayList<Recenzent> recenzenti3NG = new ArrayList<Recenzent>();
+		recenzenti3NG.add(rec4);
+		recenzenti3NG.add(rec2);
+		
+		ArrayList<Recenzent> recenzenti1MU = new ArrayList<Recenzent>();
+		recenzenti1MU.add(rec2);
+		recenzenti1MU.add(rec3);
+		ArrayList<Recenzent> recenzenti2MU = new ArrayList<Recenzent>();
+		recenzenti2MU.add(rec4);
+		recenzenti2MU.add(rec5);
+		ArrayList<Recenzent> recenzenti3MU = new ArrayList<Recenzent>();
+		recenzenti3MU.add(rec4);
+		recenzenti3MU.add(rec2);
+		
+		Rad radMU1 = new Rad(null, "Оцена популарности станице према објектима у околини", "Горана Гојић, gorana.gojic@uns.ac.rs; Ангелина Вујановић, avujanovic@uns.ac.rs", autorrad1MU, "рударење подaтака, стабло одлучивања, корелација, статистика, Capital Bikeshare, станице бицикaла, промет, модел систем", "nema", "", naucnaOblast0, StatusRada.PRIHVACEN, recenzenti1NG);
 		radMU1 = radRepository.save(radMU1);//rad1
-		Rad radMU2 = new Rad(null, "Predikcija cene nekretnine na osnovu teksta oglasa, slika i geografske lokacije nekretnine", "Mladen Vidović, mladenvidovic@uns.ac.rs; Ivan Radosavljević, ivanradosavljevic@uns.ac.rs", autorrad2MU, "stanovi, cene, predikcija, slike, nekretnine, regresija", "nema", "", naucnaOblast0, StatusRada.PRIHVACEN, new ArrayList<Recenzent>());
+		Rad radMU2 = new Rad(null, "Predikcija cene nekretnine na osnovu teksta oglasa, slika i geografske lokacije nekretnine", "Mladen Vidović, mladenvidovic@uns.ac.rs; Ivan Radosavljević, ivanradosavljevic@uns.ac.rs", autorrad2MU, "stanovi, cene, predikcija, slike, nekretnine, regresija", "nema", "", naucnaOblast0, StatusRada.PRIHVACEN, recenzenti2NG);
 		radMU2 = radRepository.save(radMU2);//rad2
 		Rad radMU3 = new Rad(null, "Одређивање степена конзумације алкохола код средњошколаца на основу социјалних фактора", "Милош Марић, milososig@gmail.com; Дражен Ђанић, djanic.home@gmail.com", autorrad3MU, "конзумација алкохола, млади, фактори, предвиђање, Support vector machines, Наивни Бајес, рударење податак ", "nema", "", naucnaOblast0, StatusRada.PRIHVACEN, new ArrayList<Recenzent>());
 		radMU3 = radRepository.save(radMU3);//rad3
-		Rad radMU4 = new Rad(null, "Uticaj Microsoft-a na razvoj kompjutera i kompjuterskog softvera", "Filip Jerenić", autorrad3MU, "", "nema", "Microsoft, uticaj, kompjuteri, razvoj", naucnaOblast3, StatusRada.PRIHVACEN, new ArrayList<Recenzent>());
-		radMU3 = radRepository.save(radMU3);//rad8
+		Rad radMU4 = new Rad(null, "Uticaj Microsoft-a na razvoj kompjutera i kompjuterskog softvera", "Filip Jerenić", autorrad3MU, "", "nema", "Microsoft, uticaj, kompjuteri, razvoj", naucnaOblast3, StatusRada.PRIHVACEN, recenzenti3NG);
+		radMU4 = radRepository.save(radMU4);//rad8
 		
 		ArrayList<Rad> radoviMU = new ArrayList<Rad>();
 		radoviMU.add(radMU1);
@@ -159,13 +210,13 @@ public class StartData {
 		izd2MU.setRadovi(radoviMU);
 		izd2MU = izdanjeRepository.save(izd2MU);
 		
-		Rad radNG1 = new Rad(null, "Izolacija bakterija rezistentnih na metale iz zemljišta", "", autorrad1NG, "zagađenje zemljišta, teški metali, bioremedijacija, izolacija bakterija", "nema", "", naucnaOblast1, StatusRada.PRIHVACEN, new ArrayList<Recenzent>());
+		Rad radNG1 = new Rad(null, "Izolacija bakterija rezistentnih na metale iz zemljišta", "", autorrad1NG, "zagađenje zemljišta, teški metali, bioremedijacija, izolacija bakterija", "nema", "", naucnaOblast1, StatusRada.PRIHVACEN, recenzenti1MU);
 		radNG1 = radRepository.save(radNG1);//rad6
-		Rad radNG2 = new Rad(null, "Anatomsko-fiziološke osnove reprodukcije domaćih životinja", "", autorrad1NG, "reprodukcija, razvoj, polne ćelije, ciklus, sisar, živina, stoka", "nema", "", naucnaOblast2, StatusRada.PRIHVACEN, new ArrayList<Recenzent>());
+		Rad radNG2 = new Rad(null, "Anatomsko-fiziološke osnove reprodukcije domaćih životinja", "", autorrad1NG, "reprodukcija, razvoj, polne ćelije, ciklus, sisar, živina, stoka", "nema", "", naucnaOblast2, StatusRada.PRIHVACEN, recenzenti2MU);
 		radNG2 = radRepository.save(radNG2);//rad4
 		Rad radNG3 = new Rad(null, "Očuvanje genetičkih resursa autohtonih rasa domaćih životinja u Srbiji", "Darko Drobnjak, ddrobnjak@edu.rs; Milivoje Urošević, m.urosevic@edu.rs", autorrad2NG, "životinjski resursi, autohtone rase, očuvanje, stočarska proizvodnja", "nema", "", naucnaOblast2, StatusRada.PRIHVACEN, new ArrayList<Recenzent>());
 		radNG3 = radRepository.save(radNG3);//rad5
-		Rad radNG4 = new Rad(null, "Upravljanje organskim otpadom beogradskih pijaca", "", autorrad3NG, "organski otpad, bio otpad, gradske pijace, anaerobna digestija, kompostiranje, prirodno đubriv", "nema", "", naucnaOblast1, StatusRada.PRIHVACEN, new ArrayList<Recenzent>());
+		Rad radNG4 = new Rad(null, "Upravljanje organskim otpadom beogradskih pijaca", "", autorrad3NG, "organski otpad, bio otpad, gradske pijace, anaerobna digestija, kompostiranje, prirodno đubriv", "nema", "", naucnaOblast1, StatusRada.PRIHVACEN, recenzenti3MU);
 		radNG4 = radRepository.save(radNG4);//rad7
 		
 		ArrayList<Rad> radoviNG = new ArrayList<Rad>();

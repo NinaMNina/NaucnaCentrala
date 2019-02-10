@@ -9,8 +9,8 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 
 import com.udd.Naucna.Centrala.model.enums.StatusRada;
 
@@ -45,7 +45,7 @@ public class Rad {
     @Enumerated(EnumType.STRING)
     private StatusRada status;
 	
-	@OneToMany
+	@ManyToMany
 	private List<Recenzent> recenzenti;
 
 	

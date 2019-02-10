@@ -1,67 +1,60 @@
 package com.udd.Naucna.Centrala.model;
 
 
-import org.springframework.data.geo.Point;
 import java.util.List;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 
+import org.springframework.data.geo.Point;
+
 @Entity
-public class UrednikNO extends Korisnik{
+public class UrednikNO extends Recenzent{
 	@ManyToOne
-	private Casopis casopis;
+	private Casopis angazovanKaoUradnikZaCasopis;
 	
 	@ManyToOne
-	private NaucnaOblast naucnaOblast;
-	
-	@Column(nullable = true, length = 80)
-	private String titula;
+	private NaucnaOblast odgovoranZaNaucnuOblast;
 
-	public Casopis getCasopis() {
-		return casopis;
+	public Casopis getAngazovanKaoUradnikZaCasopis() {
+		return angazovanKaoUradnikZaCasopis;
 	}
 
-	public void setCasopis(Casopis casopis) {
-		this.casopis = casopis;
+	public void setAngazovanKaoUradnikZaCasopis(Casopis angazovanKaoUradnikZaCasopis) {
+		this.angazovanKaoUradnikZaCasopis = angazovanKaoUradnikZaCasopis;
 	}
 
-	public NaucnaOblast getNaucnaOblast() {
-		return naucnaOblast;
+	public NaucnaOblast getOdgovoranZaNaucnuOblast() {
+		return odgovoranZaNaucnuOblast;
 	}
 
-	public void setNaucnaOblast(NaucnaOblast naucnaOblast) {
-		this.naucnaOblast = naucnaOblast;
-	}
-
-	public String getTitula() {
-		return titula;
-	}
-
-	public void setTitula(String titula) {
-		this.titula = titula;
-	}
-
-
-	public UrednikNO(Long id, String korisnickoIme, String lozinka, String ime, String prezime, String email,
-			Point lokacija, List<Kupljeno> kupljeno, List<PretplataNaCasopis> pretplate) {
-		super(id, korisnickoIme, lozinka, ime, prezime, email, lokacija, kupljeno, pretplate);
-		// TODO Auto-generated constructor stub
+	public void setOdgovoranZaNaucnuOblast(NaucnaOblast odgovoranZaNaucnuOblast) {
+		this.odgovoranZaNaucnuOblast = odgovoranZaNaucnuOblast;
 	}
 
 	public UrednikNO(Long id, String korisnickoIme, String lozinka, String ime, String prezime, String email,
-			Point lokacija, List<Kupljeno> kupljeno, List<PretplataNaCasopis> pretplate, Casopis casopis,
-			NaucnaOblast naucnaOblast, String titula) {
-		super(id, korisnickoIme, lozinka, ime, prezime, email, lokacija, kupljeno, pretplate);
-		this.casopis = casopis;
-		this.naucnaOblast = naucnaOblast;
-		this.titula = titula;
+			Point lokacija, List<Kupljeno> kupljeno, List<PretplataNaCasopis> pretplate, List<Casopis> angazovanje,
+			String titula, List<NaucnaOblast> pokrivaNaucneOblasti, Casopis angazovanKaoUradnikZaCasopis,
+			NaucnaOblast odgovoranZaNaucnuOblast) {
+		super(id, korisnickoIme, lozinka, ime, prezime, email, lokacija, kupljeno, pretplate, angazovanje, titula,
+				pokrivaNaucneOblasti);
+		this.angazovanKaoUradnikZaCasopis = angazovanKaoUradnikZaCasopis;
+		this.odgovoranZaNaucnuOblast = odgovoranZaNaucnuOblast;
 	}
 
 	public UrednikNO() {
 		super();
+		// TODO Auto-generated constructor stub
 	}
+
+	public UrednikNO(Long id, String korisnickoIme, String lozinka, String ime, String prezime, String email,
+			Point lokacija, List<Kupljeno> kupljeno, List<PretplataNaCasopis> pretplate, List<Casopis> angazovanje,
+			String titula, List<NaucnaOblast> pokrivaNaucneOblasti) {
+		super(id, korisnickoIme, lozinka, ime, prezime, email, lokacija, kupljeno, pretplate, angazovanje, titula,
+				pokrivaNaucneOblasti);
+		// TODO Auto-generated constructor stub
+	}
+	
 	
 	
 	

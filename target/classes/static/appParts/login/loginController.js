@@ -5,14 +5,15 @@
 		.module('app')
 		.controller('loginController', loginController);
 
-    loginController.$inject = ['$scope','$window','$localStorage','$location', '$stateParams', '$http'];
-        function loginController( $scope, $window, $localStorage, $location, $stateParams, $http) {
+    loginController.$inject = ['$scope','$window','$localStorage','$location', '$stateParams', '$http', 'jwtHelper'];
+        function loginController( $scope, $window, $localStorage, $location, $stateParams, $http, jwtHelper) {
             $scope.token = $stateParams.token;
             var processInstanceId = "";
             var taskId="";
+            $scope.poruka="";
             var init = function(){
             	$scope.korisnik={};
-            	$http({
+            /*	$http({
                     method: 'GET',
                     url: 'https://localhost:8087/NaucnaCentrala/login/get'
                   }).then(function successCallback(response){
@@ -23,7 +24,7 @@
                   },
                     function errorCallback(response){
                         alert("Greska");
-                    });
+                    });*/
             };
             init();
             
@@ -34,24 +35,25 @@
                     url: 'https://localhost:8087/NaucnaCentrala/login/do',
                     data: retVal
                   }).then(function successCallback(response){
-                	  if(response.data!=""){
-                		  $window.localStorage.setItem('token', response.data); 
+                	  if(response.data.lozinka!=""){
+                		  $window.localStorage.setItem('token', response.data.lozinka); 
                 		  var tokenData = jwtHelper.decodeToken($window.localStorage.getItem('token'));
                 		  var tempUser = {id: tokenData.id, 
                 				  korisnickoIme : tokenData.sub, 
                 				  uloga : tokenData.uloga[0].authority,
                 				  processId: processInstanceId
                 		  		}
-                		  $location.path('/home/'+tokenData.id);
-                	  }          	  
+                		  $location.path('/home/'+response.data.lozinka);
+                	  }         	  
                   },
                     function errorCallback(response){
-                        alert("Greska");
+                        $scope.poruka = "Pogrešno uneseni lozinka ili ime"
                     });
             }
             
             $scope.registrujSe = function(){
-            	$http({
+                alert("Under Construction");
+            /*	$http({
                     method: 'GET',
                     url: 'https://localhost:8087/NaucnaCentrala/login/registracija/'+taskId
                   }).then(function successCallback(response){
@@ -60,7 +62,7 @@
                   },
                     function errorCallback(response){
                         alert("Greska");
-                    });
+                    });*/
             	
             }
         }

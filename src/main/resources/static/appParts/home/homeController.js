@@ -5,8 +5,8 @@
 		.module('app')
 		.controller('homeController', homeController);
 
-    homeController.$inject = ['$scope','$window','$localStorage','$location', '$stateParams', '$http', '$sce'];
-        function homeController( $scope, $window, $localStorage, $location, $stateParams, $http, $sce) {
+    homeController.$inject = ['$scope','$window','$localStorage','$location', '$stateParams', '$http', '$sce', 'jwtHelper'];
+        function homeController( $scope, $window, $localStorage, $location, $stateParams, $http, $sce, jwtHelper) {
         	var hc=this;
             $scope.token = $stateParams.token;
             $scope.params = [];
@@ -17,7 +17,7 @@
             	if($stateParams.token=="" || $stateParams.token=="{token}")
             		$window.location.href = 'https://localhost:8087/NaucnaCentrala/#!/login';
             	else{
-            	/*	$http({
+            		$http({
                         method: 'GET',
                         url: 'https://localhost:8087/NaucnaCentrala/login/checkValidity/'+$stateParams.token
                       }).then(function successCallback(response){
@@ -26,7 +26,7 @@
                       },
                         function errorCallback(response){
                             alert("Greska u zahtevu");
-                        });*/
+                        });
             	}
             }
             $scope.dodajParametar = function(){
@@ -140,7 +140,10 @@
             	}
             	return result;
             }
-            
+            $scope.zadaci = function(){
+            	var token = $window.localStorage.getItem('token');
+            	$location.path('/zadaci/'+token);
+            }
             
             $scope.obrisiSve = function(){
             	$scope.searchResult = [];
