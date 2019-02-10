@@ -8,9 +8,12 @@ import javax.persistence.ManyToOne;
 
 import org.springframework.data.geo.Point;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 @Entity
 public class UrednikNO extends Recenzent{
 	@ManyToOne
+	@JsonBackReference
 	private Casopis angazovanKaoUradnikZaCasopis;
 	
 	@ManyToOne

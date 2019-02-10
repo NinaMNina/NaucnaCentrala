@@ -1,11 +1,12 @@
 package com.udd.Naucna.Centrala.dto;
 
+
 import javax.persistence.Id;
 
-import org.elasticsearch.common.geo.GeoPoint;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
+import org.springframework.data.geo.Point;
 
 @Document(indexName = "radovi", type = "radovi", shards = 1, replicas = 0)
 public class RadDTO {
@@ -22,7 +23,7 @@ public class RadDTO {
 	private String autoriRada;
 	
 	@Field(type = FieldType.Nested, store = true, index = false)
-	private GeoPoint lokacija;
+	private Point lokacija;
 	
 	@Field(type = FieldType.Text, store = true, index=true, analyzer = "serbian-analyzer", searchAnalyzer = "serbian-analyzer")
 	private String kljucniPojmovi;
@@ -71,11 +72,11 @@ public class RadDTO {
 		this.autoriRada = autoriRada;
 	}
 
-	public GeoPoint getLokacija() {
+	public Point getLokacija() {
 		return lokacija;
 	}
 
-	public void setLokacija(GeoPoint lokacija) {
+	public void setLokacija(Point lokacija) {
 		this.lokacija = lokacija;
 	}
 
@@ -119,7 +120,7 @@ public class RadDTO {
 		this.free = free;
 	}
 
-	public RadDTO(Long id, String casopis, String naslov, String autoriRada, GeoPoint lokacija, String kljucniPojmovi,
+	public RadDTO(Long id, String casopis, String naslov, String autoriRada, Point lokacija, String kljucniPojmovi,
 			String tekstRada, String naucnaOblast, String file, Boolean free) {
 		super();
 		this.id = id;

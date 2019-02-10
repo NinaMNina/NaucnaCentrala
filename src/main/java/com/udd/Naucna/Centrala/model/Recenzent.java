@@ -1,15 +1,17 @@
 package com.udd.Naucna.Centrala.model;
 
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
 import org.springframework.data.geo.Point;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 public class Recenzent extends Korisnik{
@@ -21,6 +23,8 @@ public class Recenzent extends Korisnik{
 	private String titula;
 	
 	@OneToMany
+    @JsonBackReference
+    @ElementCollection
 	private List<NaucnaOblast> pokrivaNaucneOblasti;
 
 	public void setAngazovanje(List<Casopis> angazovanje) {
@@ -35,10 +39,6 @@ public class Recenzent extends Korisnik{
 		return angazovanje;
 	}
 
-	public void setAngazovanje(ArrayList<Casopis> angazovanje) {
-		this.angazovanje = angazovanje;
-	}
-
 	public String getTitula() {
 		return titula;
 	}
@@ -49,10 +49,6 @@ public class Recenzent extends Korisnik{
 
 	public List<NaucnaOblast> getPokrivaNaucneOblasti() {
 		return pokrivaNaucneOblasti;
-	}
-
-	public void setPokrivaNaucneOblasti(ArrayList<NaucnaOblast> pokrivaNaucneOblasti) {
-		this.pokrivaNaucneOblasti = pokrivaNaucneOblasti;
 	}
 
 

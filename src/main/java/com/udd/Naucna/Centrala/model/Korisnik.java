@@ -1,7 +1,6 @@
 package com.udd.Naucna.Centrala.model;
 
 
-import org.springframework.data.geo.Point;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -11,7 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
-import org.elasticsearch.common.geo.GeoPoint;
+import org.springframework.data.geo.Point;
 
 @Entity
 public class Korisnik {

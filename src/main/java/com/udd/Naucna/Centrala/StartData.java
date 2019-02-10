@@ -16,6 +16,7 @@ import org.springframework.stereotype.Component;
 import com.udd.Naucna.Centrala.model.Autor;
 import com.udd.Naucna.Centrala.model.Casopis;
 import com.udd.Naucna.Centrala.model.Izdanje;
+import com.udd.Naucna.Centrala.model.Korisnik;
 import com.udd.Naucna.Centrala.model.Kupljeno;
 import com.udd.Naucna.Centrala.model.NaucnaOblast;
 import com.udd.Naucna.Centrala.model.PretplataNaCasopis;
@@ -30,6 +31,7 @@ import com.udd.Naucna.Centrala.repository.IzdanjeRepository;
 import com.udd.Naucna.Centrala.repository.NaucnaOblastRepository;
 import com.udd.Naucna.Centrala.repository.RadRepository;
 import com.udd.Naucna.Centrala.repository.RecenzentRepository;
+import com.udd.Naucna.Centrala.repository.UrednikNORepository;
 import com.udd.Naucna.Centrala.repository.UrednikRepository;
 
 @Component
@@ -68,7 +70,6 @@ public class StartData {
 		autorrad2NG = autorRepository.save(autorrad2NG);
 		Autor autorrad3NG = new Autor(null, "tijana", "tijana", "Tijana", "Ivanović", "ispravi!!!tijana.ivanovic@live.com", new Point(new Double(43.32472), new Double(21.90333)), new ArrayList<>(),new ArrayList<>());
 		autorrad3NG = autorRepository.save(autorrad3NG);
-		
 //CASOPISI
 		Casopis casNG = new Casopis(null, "Nacionalna Geografija", true, "12345678", new ArrayList<NaucnaOblast>(), null, new ArrayList<UrednikNO>(),
 				new ArrayList<Recenzent>(), new ArrayList<Izdanje>());
@@ -76,6 +77,40 @@ public class StartData {
 		Casopis casMU = new Casopis(null, "Mašinsko Učenje 101", false, "87654321", new ArrayList<NaucnaOblast>(), null, new ArrayList<UrednikNO>(),
 				new ArrayList<Recenzent>(), new ArrayList<Izdanje>());
 		casMU = casopisRepository.save(casMU);
+//IZDANJA
+		String string4 = "January 1, 2018";
+		String string5 = "February 1, 2018";
+		String string6 = "March 1, 2018";
+		DateFormat format = new SimpleDateFormat("MMMM d, yyyy", Locale.ENGLISH);
+		Date date4 = new Date();
+		Date date5 = new Date();
+		Date date6 = new Date();
+		try {
+			date4 = format.parse(string4);
+			date5 = format.parse(string5);
+			date6 = format.parse(string6);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		Izdanje izd1NG = new Izdanje(null, casNG, date4, date5, new ArrayList<Rad>());	
+		Izdanje izd2NG = new Izdanje(null, casNG, date5, date6, new ArrayList<Rad>());
+		izd1NG = izdanjeRepository.save(izd1NG);
+		izd2NG = izdanjeRepository.save(izd2NG);
+		ArrayList<Izdanje> izdanjaNG = new ArrayList<Izdanje>();
+		izdanjaNG.add(izd1NG);
+		izdanjaNG.add(izd2NG);
+		
+		
+		Izdanje izd1MU = new Izdanje(null, casMU, date4, date5, new ArrayList<Rad>());	
+		Izdanje izd2MU = new Izdanje(null, casMU, date5, date6, new ArrayList<Rad>());
+		izd1MU = izdanjeRepository.save(izd1MU);
+		izd2MU = izdanjeRepository.save(izd2MU);
+		ArrayList<Izdanje> izdanjaMU = new ArrayList<Izdanje>();
+		izdanjaMU.add(izd1MU);
+		izdanjaMU.add(izd2MU);	
+
 //RECENZENTI
 		ArrayList<Casopis> cas1 = new ArrayList<Casopis>();
 		cas1.add(casNG);
@@ -97,7 +132,7 @@ public class StartData {
 		Recenzent rec6 = new Recenzent(null, "rec6", "rec6", "Ištvan", "Sabo", "ispravi!!!isabo@live.com", new Point(new Double(47.49801), new Double(19.03991)), new ArrayList<Kupljeno>(), new ArrayList<PretplataNaCasopis>(), cas1, "dr", new ArrayList<NaucnaOblast>());
 		rec6 = recenzentRepository.save(rec6);	
 //UREDNICI
-		Urednik urednikNG = new Urednik(null, "urednikNG", "urednikNG", "Mika", "Mikić", "ispravi!!!mika@gmail.com", new Point(45.25167, 19.83694), new ArrayList<Kupljeno>(), new ArrayList<PretplataNaCasopis>(), casNG, "dr");
+		Urednik urednikNG = new Urednik(null, "a", "a", "Mika", "Mikić", "ispravi!!!mika@gmail.com", new Point(45.25167, 19.83694), new ArrayList<Kupljeno>(), new ArrayList<PretplataNaCasopis>(), casNG, "dr");
 		urednikNG = urednikRepository.save(urednikNG);
 		casNG.setUrednik(urednikNG);
 	
@@ -133,63 +168,25 @@ public class StartData {
 		UrednikNO urednik1NONG = new UrednikNO(null, "urednik2", "urednik2", "Mirko", "Mirkić", "ispravi!!!mmirko@live.com", new Point(new Double(43.32472), new Double(21.90333)), new ArrayList<Kupljeno>(), new ArrayList<PretplataNaCasopis>(), new ArrayList<Casopis>(), "dr",  new ArrayList<NaucnaOblast>(), casNG, naucnaOblast2);
 		urednik1NONG = urednikNORepository.save(urednik1NONG);
 		UrednikNO urednikNOMU = new UrednikNO(null, "urednik3", "urednik3", "Marko", "Marković", "ispravi!!!mmarko@live.com", new Point(new Double(44.786568), new Double(20.448922)), new ArrayList<Kupljeno>(), new ArrayList<PretplataNaCasopis>(), new ArrayList<Casopis>(), "prof dr",  new ArrayList<NaucnaOblast>(), casMU, naucnaOblast0);
-		urednikNOMU = urednikNORepository.save(urednikNOMU);
-//IZDANJA
-		String string4 = "January 1, 2018";
-		String string5 = "February 1, 2018";
-		String string6 = "March 1, 2018";
-		DateFormat format = new SimpleDateFormat("MMMM d, yyyy", Locale.ENGLISH);
-		Date date4 = new Date();
-		Date date5 = new Date();
-		Date date6 = new Date();
-		try {
-			date4 = format.parse(string4);
-			date5 = format.parse(string5);
-			date6 = format.parse(string6);
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		Izdanje izd1NG = new Izdanje(null, date4, date5, new ArrayList<Rad>());	
-		Izdanje izd2NG = new Izdanje(null, date5, date6, new ArrayList<Rad>());
-		izdanjeRepository.save(izd1NG);
-		izdanjeRepository.save(izd2NG);
-		ArrayList<Izdanje> izdanjaNG = new ArrayList<Izdanje>();
-		izdanjaNG.add(izd1NG);
-		izdanjaNG.add(izd2NG);
-		casNG.setIzdanja(izdanjaNG);
-		casNG = casopisRepository.save(casNG);
-		
-		
-		Izdanje izd1MU = new Izdanje(null, date4, date5, new ArrayList<Rad>());	
-		Izdanje izd2MU = new Izdanje(null, date5, date6, new ArrayList<Rad>());
-		izdanjeRepository.save(izd1MU);
-		izdanjeRepository.save(izd2MU);
-		ArrayList<Izdanje> izdanjaMU = new ArrayList<Izdanje>();
-		izdanjaNG.add(izd1MU);
-		izdanjaNG.add(izd2MU);
-		casNG.setIzdanja(izdanjaMU);
-		casMU = casopisRepository.save(casMU);
-		
+		urednikNOMU = urednikNORepository.save(urednikNOMU);		
 //RADOVI
-		ArrayList<Recenzent> recenzenti1NG = new ArrayList<Recenzent>();
+		ArrayList<Korisnik> recenzenti1NG = new ArrayList<Korisnik>();
 		recenzenti1NG.add(rec3);
 		recenzenti1NG.add(rec4);
-		ArrayList<Recenzent> recenzenti2NG = new ArrayList<Recenzent>();
+		ArrayList<Korisnik> recenzenti2NG = new ArrayList<Korisnik>();
 		recenzenti2NG.add(rec3);
 		recenzenti2NG.add(rec2);
-		ArrayList<Recenzent> recenzenti3NG = new ArrayList<Recenzent>();
+		ArrayList<Korisnik> recenzenti3NG = new ArrayList<Korisnik>();
 		recenzenti3NG.add(rec4);
 		recenzenti3NG.add(rec2);
 		
-		ArrayList<Recenzent> recenzenti1MU = new ArrayList<Recenzent>();
+		ArrayList<Korisnik> recenzenti1MU = new ArrayList<Korisnik>();
 		recenzenti1MU.add(rec2);
 		recenzenti1MU.add(rec3);
-		ArrayList<Recenzent> recenzenti2MU = new ArrayList<Recenzent>();
+		ArrayList<Korisnik> recenzenti2MU = new ArrayList<Korisnik>();
 		recenzenti2MU.add(rec4);
 		recenzenti2MU.add(rec5);
-		ArrayList<Recenzent> recenzenti3MU = new ArrayList<Recenzent>();
+		ArrayList<Korisnik> recenzenti3MU = new ArrayList<Korisnik>();
 		recenzenti3MU.add(rec4);
 		recenzenti3MU.add(rec2);
 		
@@ -197,7 +194,7 @@ public class StartData {
 		radMU1 = radRepository.save(radMU1);//rad1
 		Rad radMU2 = new Rad(null, "Predikcija cene nekretnine na osnovu teksta oglasa, slika i geografske lokacije nekretnine", "Mladen Vidović, mladenvidovic@uns.ac.rs; Ivan Radosavljević, ivanradosavljevic@uns.ac.rs", autorrad2MU, "stanovi, cene, predikcija, slike, nekretnine, regresija", "nema", "", naucnaOblast0, StatusRada.PRIHVACEN, recenzenti2NG);
 		radMU2 = radRepository.save(radMU2);//rad2
-		Rad radMU3 = new Rad(null, "Одређивање степена конзумације алкохола код средњошколаца на основу социјалних фактора", "Милош Марић, milososig@gmail.com; Дражен Ђанић, djanic.home@gmail.com", autorrad3MU, "конзумација алкохола, млади, фактори, предвиђање, Support vector machines, Наивни Бајес, рударење податак ", "nema", "", naucnaOblast0, StatusRada.PRIHVACEN, new ArrayList<Recenzent>());
+		Rad radMU3 = new Rad(null, "Одређивање степена конзумације алкохола код средњошколаца на основу социјалних фактора", "Милош Марић, milososig@gmail.com; Дражен Ђанић, djanic.home@gmail.com", autorrad3MU, "конзумација алкохола, млади, фактори, предвиђање, Support vector machines, Наивни Бајес, рударење податак ", "nema", "", naucnaOblast0, StatusRada.PRIJAVLJEN, new ArrayList<Korisnik>());
 		radMU3 = radRepository.save(radMU3);//rad3
 		Rad radMU4 = new Rad(null, "Uticaj Microsoft-a na razvoj kompjutera i kompjuterskog softvera", "Filip Jerenić", autorrad3MU, "", "nema", "Microsoft, uticaj, kompjuteri, razvoj", naucnaOblast3, StatusRada.PRIHVACEN, recenzenti3NG);
 		radMU4 = radRepository.save(radMU4);//rad8
@@ -212,9 +209,9 @@ public class StartData {
 		
 		Rad radNG1 = new Rad(null, "Izolacija bakterija rezistentnih na metale iz zemljišta", "", autorrad1NG, "zagađenje zemljišta, teški metali, bioremedijacija, izolacija bakterija", "nema", "", naucnaOblast1, StatusRada.PRIHVACEN, recenzenti1MU);
 		radNG1 = radRepository.save(radNG1);//rad6
-		Rad radNG2 = new Rad(null, "Anatomsko-fiziološke osnove reprodukcije domaćih životinja", "", autorrad1NG, "reprodukcija, razvoj, polne ćelije, ciklus, sisar, živina, stoka", "nema", "", naucnaOblast2, StatusRada.PRIHVACEN, recenzenti2MU);
+		Rad radNG2 = new Rad(null, "Anatomsko-fiziološke osnove reprodukcije domaćih životinja", "", autorrad1NG, "reprodukcija, razvoj, polne ćelije, ciklus, sisar, živina, stoka", "nema", "", naucnaOblast2, StatusRada.PRIJAVLJEN, new ArrayList<Korisnik>());
 		radNG2 = radRepository.save(radNG2);//rad4
-		Rad radNG3 = new Rad(null, "Očuvanje genetičkih resursa autohtonih rasa domaćih životinja u Srbiji", "Darko Drobnjak, ddrobnjak@edu.rs; Milivoje Urošević, m.urosevic@edu.rs", autorrad2NG, "životinjski resursi, autohtone rase, očuvanje, stočarska proizvodnja", "nema", "", naucnaOblast2, StatusRada.PRIHVACEN, new ArrayList<Recenzent>());
+		Rad radNG3 = new Rad(null, "Očuvanje genetičkih resursa autohtonih rasa domaćih životinja u Srbiji", "Darko Drobnjak, ddrobnjak@edu.rs; Milivoje Urošević, m.urosevic@edu.rs", autorrad2NG, "životinjski resursi, autohtone rase, očuvanje, stočarska proizvodnja", "nema", "", naucnaOblast2, StatusRada.PRIJAVLJEN, new ArrayList<Korisnik>());
 		radNG3 = radRepository.save(radNG3);//rad5
 		Rad radNG4 = new Rad(null, "Upravljanje organskim otpadom beogradskih pijaca", "", autorrad3NG, "organski otpad, bio otpad, gradske pijace, anaerobna digestija, kompostiranje, prirodno đubriv", "nema", "", naucnaOblast1, StatusRada.PRIHVACEN, recenzenti3MU);
 		radNG4 = radRepository.save(radNG4);//rad7

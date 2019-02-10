@@ -8,15 +8,19 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.udd.Naucna.Centrala.dto.RadDTO;
 import com.udd.Naucna.Centrala.dto.ZadaciDTO;
 import com.udd.Naucna.Centrala.model.Korisnik;
+import com.udd.Naucna.Centrala.model.Recenzent;
 import com.udd.Naucna.Centrala.services.KorisnikService;
 import com.udd.Naucna.Centrala.services.RadService;
+import com.udd.Naucna.Centrala.services.RecenzentService;
 import com.udd.Naucna.Centrala.token.TokenUtils;
 
 @Controller
@@ -26,6 +30,8 @@ public class UddController {
 	private KorisnikService korisnikService;
 	@Autowired
 	private RadService radService;
+	@Autowired
+	private RecenzentService recenzentService;
 	
 	@Autowired
 	private TokenUtils tokenUtils;
@@ -49,6 +55,26 @@ public class UddController {
 		}
 		String lokacija = radService.saveMultipartFile(file);
 		return new ResponseEntity(lokacija, HttpStatus.OK);
+		
+    }
+	@PostMapping(path = "/rad/{token}", produces = "application/json", consumes="application/json")
+    public @ResponseBody ResponseEntity<RadDTO> getRad(@PathVariable String token, @RequestBody ZadaciDTO zad) {
+		String username = tokenUtils.getUsernameFromToken(token);
+		if(username==null){
+			return new ResponseEntity(HttpStatus.BAD_REQUEST);
+		}
+		RadDTO retVal = radService.getRadDTO(zad.getRad());
+		return new ResponseEntity(retVal, HttpStatus.OK);
+		
+    }
+	@PostMapping(path = "/recenzenti/{token}", produces = "application/json", consumes="application/json")
+    public @ResponseBody ResponseEntity<ArrayList<Recenzent>> getRecenzenti(@PathVariable String token, @RequestBody ZadaciDTO zad) {
+		String username = tokenUtils.getUsernameFromToken(token);
+		if(username==null){
+			return new ResponseEntity(HttpStatus.BAD_REQUEST);
+		}
+		ArrayList<Recenzent> retVal = recenzentService.getRecenzenti(zad);
+		return new ResponseEntity(retVal, HttpStatus.OK);
 		
     }
 }

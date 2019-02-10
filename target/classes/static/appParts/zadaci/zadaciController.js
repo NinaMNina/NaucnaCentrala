@@ -54,10 +54,36 @@
                 	$scope.jedanUZadatak = false;            		
             	}
             	else{
+                	var data = {
+                			"opis": zad.opis,
+                			"rad": zad.rad,
+                			"tip": zad.tip            	
+                	};
+            		$http({
+                        method: 'POST',
+                        url: 'https://localhost:8087/NaucnaCentrala/udd/rad/'+$stateParams.token,
+                        data: data
+                      }).then(function successCallback(response){
+                    	  if(response.data!=null || response.data!=undefined)
+                          	$scope.theZadatak = response.data;
+                      },
+                        function errorCallback(response){
+                            alert("Greska u zahtevu");
+                        });
+            		$http({
+                        method: 'POST',
+                        url: 'https://localhost:8087/NaucnaCentrala/udd/recenzenti/'+$stateParams.token,
+                        data: data
+                      }).then(function successCallback(response){
+                    	  if(response.data!=null || response.data!=undefined)
+                          	$scope.recenzenti = response.data;
+                      },
+                        function errorCallback(response){
+                            alert("Greska u zahtevu");
+                        });
                 	$scope.jedanUZadatak = true;
                 	$scope.jedanAZadatak = false;
             	}
-            	$scope.theZadatak = zad;
             }
             $scope.odjaviSe = function(){
             	$stateParams.token = "";

@@ -1,4 +1,4 @@
-package com.udd.Naucna.Centrala;
+package com.udd.Naucna.Centrala.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

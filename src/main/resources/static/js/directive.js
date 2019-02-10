@@ -1,13 +1,11 @@
 (function() {
     'use strict';
-    
-    angular
-	.module('app', [])
-	.directive('demoFileModel', demoFileModel);
-    
-	demoFileModel.$inject = ['$parse'];
-	
-    function demoFileModel($parse) {
+    var myApp = angular.module('app', []);
+ 
+    /*
+     A directive to enable two way binding of file field
+     */
+    myApp.directive('demoFileModel', function ($parse) {
         return {
             restrict: 'A', //the directive can be used as an attribute only
  
@@ -31,5 +29,5 @@
                 });
             }
         };
-    }
+    });
 })();

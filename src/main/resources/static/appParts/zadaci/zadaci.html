@@ -32,7 +32,7 @@
 						<label>Kliknite dugme za upload rada</label>
 					</div>
 					<div class="col-5">	
-						<input type="file" demo-file-model="pdfFajl" accept=".pdf, .PDF"/><br/><span class="text-danger">{{poruka}}</span>
+						<input type="file" class="form-control" demo-file-model="pdfFajl" accept=".PDF, .pdf"/><br/><span class="text-danger">{{poruka}}</span>
 	          		</div>
 					<div class="col-2 float-right">	
 						<button type="button" class="btn btn-outline-secondary float-right" ng-click="zavrsi()">završi zadatak</button>
@@ -42,6 +42,27 @@
 		</div>
 	</div>
 	<div class="p-4 bg-white row" ng-show="jedanUZadatak">
-		u zadatak
+		<div class="col-1"></div>
+		<div class="col-10 card text-justify" >
+			<div class="card box-shadow" style="width: 85vw">
+	          <div class="card-header">
+	            <h6 class="my-0 font-weight-normal">{{theZadatak.casopis}}<small class="text-muted"> časopis</small></h6>
+	          </div>
+	          <div class="card-body">
+	            <h5 class="card-title pricing-card-title">{{theZadatak.naslov}}</h5>
+	          	<div class='row'>
+	          		<div class="col-7">
+		            	<span style="font-size: 13px"> {{theZadatak.tekstRada}}</span><br/><br/>
+		            </div>
+	          		<div class="col-5 text-right">
+	           			<h6 class="my-0 font-weight-normal" style="font-size: 13px" ><div class="text-muted">ključni pojmovi: </div>{{theZadatak.kljucniPojmovi}}</h6>
+	           			<h6 class="my-0 font-weight-normal" style="font-size: 13px"><div class="text-muted">naučna oblast:   </div>{{theZadatak.naucnaOblast}}</h6>
+	           			<h6 class="my-0 font-weight-normal" style="font-size: 13px"><div class="text-muted">autori rada:     </div>{{theZadatak.autoriRada}}</span></h6>
+	           		</div>
+	          	</div>            	
+	          </div>
+	        </div>
+	    </div>
+		<div class="col-1"></div>	
 	</div>
 </div>

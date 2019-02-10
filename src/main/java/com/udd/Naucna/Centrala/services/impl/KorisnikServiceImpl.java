@@ -13,11 +13,13 @@ import com.udd.Naucna.Centrala.model.Casopis;
 import com.udd.Naucna.Centrala.model.Izdanje;
 import com.udd.Naucna.Centrala.model.Korisnik;
 import com.udd.Naucna.Centrala.model.Rad;
+import com.udd.Naucna.Centrala.model.Recenzent;
 import com.udd.Naucna.Centrala.model.Urednik;
 import com.udd.Naucna.Centrala.model.enums.StatusRada;
 import com.udd.Naucna.Centrala.model.enums.ZadatakTip;
 import com.udd.Naucna.Centrala.repository.AutorRepository;
 import com.udd.Naucna.Centrala.repository.CasopisRepository;
+import com.udd.Naucna.Centrala.repository.IzdanjeRepository;
 import com.udd.Naucna.Centrala.repository.KorisnikRepository;
 import com.udd.Naucna.Centrala.repository.RadRepository;
 import com.udd.Naucna.Centrala.services.KorisnikService;
@@ -31,8 +33,8 @@ public class KorisnikServiceImpl implements KorisnikService{
 	private CasopisRepository casopisRepository;
 	@Autowired
 	private RadRepository radRepository;
-	
-	
+	@Autowired
+	private IzdanjeRepository izdanjeRepository;
 	@Override
 	public Korisnik uloguj(KorisnikDTO korisnik) {
 		Korisnik k0 = korisnikRepository.findByKorisnickoIme(korisnik.getIme());
@@ -77,12 +79,16 @@ public class KorisnikServiceImpl implements KorisnikService{
 
 	private ArrayList<ZadaciDTO> getUrednikZadaci(Urednik k) {
 		Casopis casopis = casopisRepository.findByUrednikId(k.getId());
-		ArrayList<Izdanje> izdanja = (ArrayList<Izdanje>) casopis.getIzdanja();
+		ArrayList<Izdanje> izdanja = (ArrayList<Izdanje>) izdanjeRepository.findByIzCasopisaId(casopis.getId());
 		ArrayList<ZadaciDTO> retVal = new ArrayList<ZadaciDTO>();
 		for(Izdanje i0 : izdanja){
 			for(Rad r0 : i0.getRadovi()){
-				if(r0.getStatus().equals(StatusRada.PRIJAVLJEN) && r0.getRecenzenti().size()<2){
-					ZadaciDTO zad = new ZadaciDTO("Potreban odabir recenzenata", r0.getId(), ZadatakTip.DODAJ_RECENZENTA);
+				int size = 0;
+				for(Korisnik rec : r0.getRecenzenti())
+					size++;
+				if(r0.getStatus().equals(StatusRada.PRIJAVLJEN) && size<2){
+					ZadaciDTO zad = new ZadaciDTO("Potreban odabir recenzenata za rad sa nazivom \""+r0.getNaslov()+
+							"\", koji je prijavio autor "+r0.getOdgovorniAutor().getIme()+" "+r0.getOdgovorniAutor().getPrezime(), r0.getId(), ZadatakTip.DODAJ_RECENZENTA);
 					retVal.add(zad);
 				}
 			}

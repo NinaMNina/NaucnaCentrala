@@ -1,5 +1,6 @@
 package com.udd.Naucna.Centrala.model;
 
+import java.util.Collection;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -46,7 +47,7 @@ public class Rad {
     private StatusRada status;
 	
 	@ManyToMany
-	private List<Recenzent> recenzenti;
+	private List<Korisnik> recenzenti;
 
 	
 	
@@ -122,16 +123,16 @@ public class Rad {
 		this.status = status;
 	}
 
-	public List<Recenzent> getRecenzenti() {
+	public List<Korisnik> getRecenzenti() {
 		return recenzenti;
 	}
 
-	public void setRecenzenti(List<Recenzent> recenzenti) {
+	public void setRecenzenti(List<Korisnik> recenzenti) {
 		this.recenzenti = recenzenti;
 	}
 
 	public Rad(Long id, String naslov, String koautoriRada, Autor odgovorniAutor, String kljucniPojmovi, String lokacijaProbnogRada,
-			String lokacijaRada, NaucnaOblast naucnaOblast, StatusRada status, List<Recenzent> recenzenti) {
+			String lokacijaRada, NaucnaOblast naucnaOblast, StatusRada status, List<Korisnik> recenzenti) {
 		super();
 		this.id = id;
 		this.naslov = naslov;

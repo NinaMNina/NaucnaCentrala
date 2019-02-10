@@ -1,6 +1,6 @@
 package com.udd.Naucna.Centrala.model;
 
-import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -10,7 +10,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-import javax.validation.constraints.Size;
 
 @Entity
 public class Casopis {
@@ -78,7 +77,7 @@ public class Casopis {
 		return naucneOblasti;
 	}
 
-	public void setNaucneOblasti(ArrayList<NaucnaOblast> naucneOblasti) {
+	public void setNaucneOblasti(List<NaucnaOblast> naucneOblasti) {
 		this.naucneOblasti = naucneOblasti;
 	}
 
@@ -90,19 +89,19 @@ public class Casopis {
 		this.urednik = urednik;
 	}
 
-	public List<UrednikNO> getUredniciNO() {
+	public Collection<UrednikNO> getUredniciNO() {
 		return uredniciNO;
 	}
 
-	public void setUredniciNO(ArrayList<UrednikNO> uredniciNO) {
+	public void setUredniciNO(List<UrednikNO> uredniciNO) {
 		this.uredniciNO = uredniciNO;
 	}
 
-	public List<Recenzent> getRecenzenti() {
+	public Collection<Recenzent> getRecenzenti() {
 		return recenzenti;
 	}
 
-	public void setRecenzenti(ArrayList<Recenzent> recenzenti) {
+	public void setRecenzenti(List<Recenzent> recenzenti) {
 		this.recenzenti = recenzenti;
 	}
 
@@ -115,8 +114,8 @@ public class Casopis {
 	}
 
 	public Casopis(Long id, String naziv, boolean openAccess, String iSSN,
-			ArrayList<NaucnaOblast> naucneOblasti, Urednik urednik, ArrayList<UrednikNO> uredniciNO,
-			ArrayList<Recenzent> recenzenti, ArrayList<Izdanje> izdanja) {
+			List<NaucnaOblast> naucneOblasti, Urednik urednik, List<UrednikNO> uredniciNO,
+			List<Recenzent> recenzenti, List<Izdanje> izdanja) {
 		super();
 		this.id = id;
 		this.naziv = naziv;
