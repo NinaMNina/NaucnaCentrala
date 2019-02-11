@@ -80,12 +80,7 @@
 	          		<div class="col-5 text-right">
 	           			<h6 class="my-0 font-weight-normal" style="font-size: 13px" ><div class="text-muted">ključni pojmovi: </div><span ng-bind-html="trustDangerousSnippet(result.kljucniPojmovi)"></span></h6>
 	           			<h6 class="my-0 font-weight-normal" style="font-size: 13px"><div class="text-muted">naučna oblast:   </div><span ng-bind-html="trustDangerousSnippet(result.naucnaOblast)"></span></h6>
-	           			<h6 class="my-0 font-weight-normal" style="font-size: 13px"><div class="text-muted">autori rada:     </div>
-	           			<span ng-repeat="autor in result.autoriRada">
-	           				<span ng-bind-html="trustDangerousSnippet(autor.ime)"></span>
-	           				<span ng-bind-html="trustDangerousSnippet(autor.prezime)"></span>
-	           				<span ng-bind-html="trustDangerousSnippet(autor.email)"></span>
-	           			</span></h6>
+	           			<h6 class="my-0 font-weight-normal" style="font-size: 13px"><div class="text-muted">autori rada:     </div><span ng-bind-html="trustDangerousSnippet(result.autoriRada)"></span></h6>
 	           		</div>
 	          	</div>            	
 	            <button type="button" class="btn btn-lg btn-outline-info" ng-hide="result.free">Kupi</button>

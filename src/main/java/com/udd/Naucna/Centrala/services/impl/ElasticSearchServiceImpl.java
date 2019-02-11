@@ -105,7 +105,7 @@ public class ElasticSearchServiceImpl implements ElasticSearchService {
 					query.should(QueryBuilders.matchQuery(p0.getPolje(), p0.getVrednost()));
 			}
 		}
-		System.out.println("QUERY:    "+query.toString());
+	//	System.out.println("QUERY:    "+query.toString());
 		HighlightBuilder highlightBuilder = new HighlightBuilder()
                 .field("tekstRada", 100)
                 .field("casopis", 100)

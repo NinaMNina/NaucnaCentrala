@@ -65,7 +65,7 @@ public class StartData {
 		autor0 = autorRepository.save(autor0);
 		Autor autorrad1MU = new Autor(null, "radovan", "radovan", "Radovan", "Turović", "radovan.turovic@uns.ac.rs", new Point(new Double(45.25167), new Double(19.83694)), new ArrayList<>(),new ArrayList<>());
 		autorrad1MU = autorRepository.save(autorrad1MU);		
-		Autor autorrad2MU = new Autor(null, "aleksandara", "aleksandra", "Aleksandra", "Mitrović", "aleksandramitrovic@uns.ac.rs", new Point(new Double(43.84864), new Double(18.35644)), new ArrayList<>(),new ArrayList<>());
+		Autor autorrad2MU = new Autor(null, "aleksandra", "aleksandra", "Aleksandra", "Mitrović", "aleksandramitrovic@uns.ac.rs", new Point(new Double(43.84864), new Double(18.35644)), new ArrayList<>(),new ArrayList<>());
 		autorrad2MU = autorRepository.save(autorrad2MU);
 		Autor autorrad3MU = new Autor(null, "nemanja", "nemanja", "Nemanja", "Miladinović", "nemanja.miladinovic@live.com", new Point(new Double(45.25167), new Double(19.83694)), new ArrayList<>(),new ArrayList<>());
 		autorrad3MU = autorRepository.save(autorrad3MU);
@@ -232,9 +232,9 @@ public class StartData {
 		recenzenti3MU.add(rec4);
 		recenzenti3MU.add(rec2);
 		
-		Rad radMU1 = new Rad(null, "Оцена популарности станице према објектима у околини", "Горана Гојић, gorana.gojic@uns.ac.rs; Ангелина Вујановић, avujanovic@uns.ac.rs", autorrad1MU, "рударење подaтака, стабло одлучивања, корелација, статистика, Capital Bikeshare, станице бицикaла, промет, модел систем", "D:\\Users\\Nina\\Desktop\\udd\\rad1.pdf", "", naucnaOblast0, StatusRada.PRIHVACEN, recenzenti1MU);
+		Rad radMU1 = new Rad(null, "Оцена популарности станице према објектима у околини", "Горана Гојић, gorana.gojic@uns.ac.rs; Ангелина Вујановић, avujanovic@uns.ac.rs", autorrad1MU, "рударење подaтака, стабло одлучивања, корелација, статистика, Capital Bikeshare, станице бицикaла, промет, модел систем", "D:\\Users\\Nina\\Desktop\\udd\\rad1.pdf", "C:\\Users\\nina.miladinovic\\git\\NaucnaCentrala\\src\\main\\resources\\static\\assets\\pdf\\rad1.pdf", naucnaOblast0, StatusRada.PRIHVACEN, recenzenti1MU);
 		radMU1 = radRepository.save(radMU1);//rad1
-		Rad radMU2 = new Rad(null, "Predikcija cene nekretnine na osnovu teksta oglasa, slika i geografske lokacije nekretnine", "Mladen Vidović, mladenvidovic@uns.ac.rs; Ivan Radosavljević, ivanradosavljevic@uns.ac.rs", autorrad2MU, "stanovi, cene, predikcija, slike, nekretnine, regresija", "D:\\Users\\Nina\\Desktop\\udd\\rad2.pdf", "", naucnaOblast0, StatusRada.PRIHVACEN, recenzenti2MU);
+		Rad radMU2 = new Rad(null, "Predikcija cene nekretnine na osnovu teksta oglasa, slika i geografske lokacije nekretnine", "Mladen Vidović, mladenvidovic@uns.ac.rs; Ivan Radosavljević, ivanradosavljevic@uns.ac.rs", autorrad2MU, "stanovi, cene, predikcija, slike, nekretnine, regresija", "D:\\Users\\Nina\\Desktop\\udd\\rad2.pdf", "C:\\Users\\nina.miladinovic\\git\\NaucnaCentrala\\src\\main\\resources\\static\\assets\\pdf\\rad2.pdf", naucnaOblast0, StatusRada.PRIHVACEN, recenzenti2MU);
 		radMU2 = radRepository.save(radMU2);//rad2
 		Rad radMU3 = new Rad(null, "Одређивање степена конзумације алкохола код средњошколаца на основу социјалних фактора", "Милош Марић, milososig@gmail.com; Дражен Ђанић, djanic.home@gmail.com", autorrad3MU, "конзумација алкохола, млади, фактори, предвиђање, Support vector machines, Наивни Бајес, рударење податак ", "D:\\Users\\Nina\\Desktop\\udd\\rad3.pdf", "", naucnaOblast0, StatusRada.PRIJAVLJEN, new ArrayList<Korisnik>());
 		radMU3 = radRepository.save(radMU3);//rad3
@@ -249,14 +249,16 @@ public class StartData {
 		izd2MU.setRadovi(radoviMU);
 		izd2MU = izdanjeRepository.save(izd2MU);
 		
-		Rad radNG1 = new Rad(null, "Izolacija bakterija rezistentnih na metale iz zemljišta", "", autorrad1NG, "zagađenje zemljišta, teški metali, bioremedijacija, izolacija bakterija", "D:\\Users\\Nina\\Desktop\\udd\\rad6.pdf", "", naucnaOblast1, StatusRada.PRIHVACEN, recenzenti1NG);
+		Rad radNG1 = new Rad(null, "Izolacija bakterija rezistentnih na metale iz zemljišta", "", autorrad1NG, "zagađenje zemljišta, teški metali, bioremedijacija, izolacija bakterija", "D:\\Users\\Nina\\Desktop\\udd\\rad6.pdf", "C:\\Users\\nina.miladinovic\\git\\NaucnaCentrala\\src\\main\\resources\\static\\assets\\pdf\\rad6.pdf", naucnaOblast1, StatusRada.PRIHVACEN, recenzenti1NG);
 		radNG1 = radRepository.save(radNG1);//rad6
 		Rad radNG2 = new Rad(null, "Anatomsko-fiziološke osnove reprodukcije domaćih životinja", "", autorrad1NG, "reprodukcija, razvoj, polne ćelije, ciklus, sisar, živina, stoka", "D:\\Users\\Nina\\Desktop\\udd\\rad4.pdf", "", naucnaOblast2, StatusRada.PRIJAVLJEN, new ArrayList<Korisnik>());
 		radNG2 = radRepository.save(radNG2);//rad4
 		Rad radNG3 = new Rad(null, "Očuvanje genetičkih resursa autohtonih rasa domaćih životinja u Srbiji", "Darko Drobnjak, ddrobnjak@edu.rs; Milivoje Urošević, m.urosevic@edu.rs", autorrad2NG, "životinjski resursi, autohtone rase, očuvanje, stočarska proizvodnja", "D:\\Users\\Nina\\Desktop\\udd\\rad5.pdf", "", naucnaOblast2, StatusRada.PRIJAVLJEN, new ArrayList<Korisnik>());
 		radNG3 = radRepository.save(radNG3);//rad5
-		Rad radNG4 = new Rad(null, "Upravljanje organskim otpadom beogradskih pijaca", "", autorrad3NG, "organski otpad, bio otpad, gradske pijace, anaerobna digestija, kompostiranje, prirodno đubriv", "D:\\Users\\Nina\\Desktop\\udd\\rad7.pdf", "", naucnaOblast1, StatusRada.PRIHVACEN, recenzenti3NG);
+		Rad radNG4 = new Rad(null, "Upravljanje organskim otpadom beogradskih pijaca", "", autorrad3NG, "organski otpad, bio otpad, gradske pijace, anaerobna digestija, kompostiranje, prirodno đubriv", "D:\\Users\\Nina\\Desktop\\udd\\rad7.pdf", "C:\\Users\\nina.miladinovic\\git\\NaucnaCentrala\\src\\main\\resources\\static\\assets\\pdf\\rad7.pdf", naucnaOblast1, StatusRada.PRIHVACEN, recenzenti3NG);
 		radNG4 = radRepository.save(radNG4);//rad7
+		Rad radNG5 = new Rad(null, "Razvoj geografije stanovništva od antropogeografskog do prostorno-analitičkog pristupa", "Milena Spakovski, m.spakovski@live.com; Danica Šantić, danicasantic@gmail.com", autor0, " geografija stanovništva, antropogeografija, društvena geografija, migracije, demografija", "D:\\Users\\Nina\\Desktop\\udd\\rad9.pdf", "", naucnaOblast1, StatusRada.PRIHVACEN, recenzenti3NG);
+		radNG5 = radRepository.save(radNG5);//rad7
 		
 		ArrayList<Rad> radoviNG = new ArrayList<Rad>();
 		radoviNG.add(radNG1);

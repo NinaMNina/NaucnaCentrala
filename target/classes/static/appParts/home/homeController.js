@@ -82,27 +82,11 @@
                     method: 'GET',
                     url: 'https://localhost:8087/NaucnaCentrala/rest/search/'+data
                   }).then(function successCallback(response){
-                	  $scope.paramsResult = [];
                 	  $scope.searchResult = namestiRezultat(response.data);
                   },
                     function errorCallback(response){
                         alert("Greska u zahtevu za pretragu");
                     });
-            }
-            var convertAutori = function(str){
-            	var res = str.split(";");
-            	var retVal = [];
-            	for(var i=0; i<res.length; i++){
-            		var podaci = res.split(",");
-            		var ime = podaci[0].split(" ")[0];
-            		var prezime = podaci[0].split(" ")[0];
-            		var email = podaci[1];
-            		retVal.push({
-            			"ime": ime,
-            			"prezime": prezime,
-            			"email": email
-            		});
-            	}
             }
             var namestiRezultat = function(data){
             	var result = [];
@@ -135,9 +119,9 @@
             			obj.naucnaOblast=res.highlights.naucnaOblast;
             		
             		if(res.highlights.autoriRada==null)
-                		obj.autoriRada = convertAutori(res.rad.autoriRada);
+                		obj.autoriRada = (res.rad.autoriRada);
             		else
-            			obj.autoriRada = convertAutori(res.highlights.naucnaOblast);
+            			obj.autoriRada = res.highlights.naucnaOblast;
             		result.push(obj);
             		obj = {};
             	}
