@@ -2,6 +2,7 @@ package com.udd.Naucna.Centrala.dto;
 
 import javax.persistence.Id;
 
+import org.elasticsearch.common.geo.GeoPoint;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
@@ -17,9 +18,10 @@ public class RecenzentDTO {
 	private String prezime;
 	@Field(type = FieldType.Text, store = true, index=false)
 	private String email;
-	@Field(type = FieldType.Text, store = true, index=true)
+	@Field(type = FieldType.Text, store = true, index=true, analyzer = "serbian-analyzer", searchAnalyzer = "serbian-analyzer")
+	private String casopis;
 	@GeoPointField
-	private String location;
+	private GeoPoint location;
 	public Long getId() {
 		return id;
 	}
@@ -44,24 +46,30 @@ public class RecenzentDTO {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	public String getLocation() {
+	public GeoPoint getLocation() {
 		return location;
 	}
-	public void setLocation(String location) {
+	public void setLocation(GeoPoint location) {
 		this.location = location;
 	}
-	public RecenzentDTO(Long id, String ime, String prezime, String email, String location) {
+	public String getCasopis() {
+		return casopis;
+	}
+	public void setCasopis(String casopis) {
+		this.casopis = casopis;
+	}
+	public RecenzentDTO(Long id, String ime, String prezime, String email, String casopis, GeoPoint location) {
 		super();
 		this.id = id;
 		this.ime = ime;
 		this.prezime = prezime;
 		this.email = email;
+		this.casopis = casopis;
 		this.location = location;
 	}
 	public RecenzentDTO() {
 		super();
 	}
-	
 	
 	
 	

@@ -9,6 +9,7 @@ import java.util.Locale;
 
 import javax.annotation.PostConstruct;
 
+import org.elasticsearch.common.geo.GeoPoint;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.geo.Point;
 import org.springframework.stereotype.Component;
@@ -68,8 +69,8 @@ public class StartData {
 		autorrad2MU = autorRepository.save(autorrad2MU);
 		Autor autorrad3MU = new Autor(null, "nemanja", "nemanja", "Nemanja", "Miladinović", "nemanja.miladinovic@live.com", new Point(new Double(45.25167), new Double(19.83694)), new ArrayList<>(),new ArrayList<>());
 		autorrad3MU = autorRepository.save(autorrad3MU);
-		Autor autorrad1NG = new Autor(null, "lazar", "lazar", "Lazar", "Milin", "lazar.milin@live.com", new Point(new Double(44.787197), new Double(20.457273)), new ArrayList<>(),new ArrayList<>());
-		autorrad1NG = autorRepository.save(autorrad1NG);
+		Autor autorrad1NG = new Autor(null, "lazar", "lazar", "Lazar", "Milin", "lazar.milin@live.com", new Point(new Double(45.25167), new Double(19.83694)), new ArrayList<>(),new ArrayList<>());
+		autorrad1NG = autorRepository.save(autorrad1NG);//Novi Sad
 		Autor autorrad2NG = new Autor(null, "dragutin", "dragutin", "Dragutin", "Mataruga", "dragutin.mataruga@live.com", new Point(new Double(44.787197), new Double(20.457273)), new ArrayList<>(),new ArrayList<>());
 		autorrad2NG = autorRepository.save(autorrad2NG);
 		Autor autorrad3NG = new Autor(null, "tijana", "tijana", "Tijana", "Ivanović", "tijana.ivanovic@live.com", new Point(new Double(43.32472), new Double(21.90333)), new ArrayList<>(),new ArrayList<>());
@@ -158,25 +159,25 @@ public class StartData {
 		casOba.add(casNG);
 		casOba.add(casMU);
 		Recenzent rec1 = new Recenzent(null, "rec1", "rec1", "Pera", "Perić", "pera.p@live.com", new Point(new Double(45.25167), new Double(19.83694)), new ArrayList<Kupljeno>(), new ArrayList<PretplataNaCasopis>(), cas1, "mr", nOblastNG);
-		rec1 = recenzentRepository.save(rec1);
+		rec1 = recenzentRepository.save(rec1);//Novi Sad
 		Recenzent rec2 = new Recenzent(null, "rec2", "rec2", "Mika", "Mikić", "mika.m@live.com", new Point(new Double(43.32472), new Double(21.90333)), new ArrayList<Kupljeno>(), new ArrayList<PretplataNaCasopis>(), cas2, "ms", nOblastMU);
-		rec2 = recenzentRepository.save(rec2);			
+		rec2 = recenzentRepository.save(rec2);//Nis		
 		Recenzent rec3 = new Recenzent(null, "rec3", "rec3", "Jose", "Muchaco", "ho.mu@live.com", new Point(new Double(40.4165), new Double(-3.70256)), new ArrayList<Kupljeno>(), new ArrayList<PretplataNaCasopis>(), casOba, "dr", nOblast3);
-		rec3 = recenzentRepository.save(rec3);			
+		rec3 = recenzentRepository.save(rec3);//Madrid
 		Recenzent rec4 = new Recenzent(null, "rec4", "rec4", "Koja", "Kojić", "koja.kojic@live.com", new Point(new Double(46.05108), new Double(14.50513)), new ArrayList<Kupljeno>(), new ArrayList<PretplataNaCasopis>(), casOba, "dr", nOblast4);
-		rec4 = recenzentRepository.save(rec4);			
+		rec4 = recenzentRepository.save(rec4);//Ljubljana			
 		Recenzent rec5 = new Recenzent(null, "rec5", "rec5", "Mujo", "Mujić", "m.mujic@live.com", new Point(new Double(44.53842), new Double(18.66709)), new ArrayList<Kupljeno>(), new ArrayList<PretplataNaCasopis>(), casOba, "ms", nOblast5);
-		rec5 = recenzentRepository.save(rec5);			
+		rec5 = recenzentRepository.save(rec5);//Tuzla			
 		Recenzent rec6 = new Recenzent(null, "rec6", "rec6", "Ištvan", "Sabo", "isabo@live.com", new Point(new Double(47.49801), new Double(19.03991)), new ArrayList<Kupljeno>(), new ArrayList<PretplataNaCasopis>(), cas1, "dr", nOblast6);
-		rec6 = recenzentRepository.save(rec6);	
+		rec6 = recenzentRepository.save(rec6);//Budimpesta	
 		
-		esRecenzentRepository.save(new RecenzentDTO(rec1.getId(), rec1.getIme(), rec1.getPrezime(), rec1.getEmail(), setStringLokacija(rec1.getLokacija())));
-		esRecenzentRepository.save(new RecenzentDTO(rec2.getId(), rec2.getIme(), rec2.getPrezime(), rec2.getEmail(), setStringLokacija(rec2.getLokacija())));
-		esRecenzentRepository.save(new RecenzentDTO(rec3.getId(), rec3.getIme(), rec3.getPrezime(), rec3.getEmail(), setStringLokacija(rec3.getLokacija())));
-		esRecenzentRepository.save(new RecenzentDTO(rec4.getId(), rec4.getIme(), rec4.getPrezime(), rec4.getEmail(), setStringLokacija(rec4.getLokacija())));
-		esRecenzentRepository.save(new RecenzentDTO(rec5.getId(), rec5.getIme(), rec5.getPrezime(), rec5.getEmail(), setStringLokacija(rec5.getLokacija())));
-		esRecenzentRepository.save(new RecenzentDTO(rec6.getId(), rec6.getIme(), rec6.getPrezime(), rec6.getEmail(), setStringLokacija(rec6.getLokacija())));
-		
+		esRecenzentRepository.save(new RecenzentDTO(rec1.getId(), rec1.getIme(), rec1.getPrezime(), rec1.getEmail(), "Nacionalna Geografija", setGeoPointLokacija(rec1.getLokacija())));
+		esRecenzentRepository.save(new RecenzentDTO(rec2.getId(), rec2.getIme(), rec2.getPrezime(), rec2.getEmail(), "Mašinsko Učenje 101", setGeoPointLokacija(rec2.getLokacija())));
+		esRecenzentRepository.save(new RecenzentDTO(rec3.getId(), rec3.getIme(), rec3.getPrezime(), rec3.getEmail(), "Nacionalna Geografija, Mašinsko Učenje 101", setGeoPointLokacija(rec3.getLokacija())));
+		esRecenzentRepository.save(new RecenzentDTO(rec4.getId(), rec4.getIme(), rec4.getPrezime(), rec4.getEmail(), "Nacionalna Geografija, Mašinsko Učenje 101", setGeoPointLokacija(rec4.getLokacija())));
+		esRecenzentRepository.save(new RecenzentDTO(rec5.getId(), rec5.getIme(), rec5.getPrezime(), rec5.getEmail(), "Nacionalna Geografija, Mašinsko Učenje 101", setGeoPointLokacija(rec5.getLokacija())));
+		esRecenzentRepository.save(new RecenzentDTO(rec6.getId(), rec6.getIme(), rec6.getPrezime(), rec6.getEmail(), "Nacionalna Geografija", setGeoPointLokacija(rec6.getLokacija())));
+	
 //UREDNICI
 		Urednik urednikNG = new Urednik(null, "a", "a", "Mika", "Mikić", "mika@gmail.com", new Point(45.25167, 19.83694), new ArrayList<Kupljeno>(), new ArrayList<PretplataNaCasopis>(), casNG, "dr");
 		urednikNG = urednikRepository.save(urednikNG);
@@ -256,9 +257,7 @@ public class StartData {
 		
 	}
 	
-	private String setStringLokacija(Point lokacija) {
-		String lon = Double.toString(lokacija.getX());
-		String lat = Double.toString(lokacija.getY());
-		return lon+","+lat;
+	private GeoPoint setGeoPointLokacija(Point lokacija) {
+		return new GeoPoint(lokacija.getX(), lokacija.getY());
 	}
 }

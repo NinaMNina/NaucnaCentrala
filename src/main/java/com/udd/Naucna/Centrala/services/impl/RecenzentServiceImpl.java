@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.elasticsearch.common.geo.GeoPoint;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.geo.Point;
 import org.springframework.stereotype.Service;
@@ -53,16 +54,14 @@ public class RecenzentServiceImpl implements RecenzentService {
 	private ArrayList<RecenzentDTO> convertToDTO(ArrayList<Recenzent> rec) {
 		ArrayList<RecenzentDTO> retVal = new ArrayList<RecenzentDTO>();
 		for(Recenzent r : rec){
-			RecenzentDTO rDTO = new RecenzentDTO(r.getId(), r.getIme(), r.getPrezime(), r.getEmail(), setStringLokacija(r.getLokacija()));
+			RecenzentDTO rDTO = new RecenzentDTO(r.getId(), r.getIme(), r.getPrezime(), r.getEmail(), "", setGeoPointLokacija(r.getLokacija()));
 			retVal.add(rDTO);
 		}
 		return retVal;
 	}
 
-	private String setStringLokacija(Point lokacija) {
-		String lon = Double.toString(lokacija.getX());
-		String lat = Double.toString(lokacija.getY());
-		return lon+","+lat;
+	private GeoPoint setGeoPointLokacija(Point lokacija) {
+		return new GeoPoint(lokacija.getX(), lokacija.getY());
 	}
 
 	private Casopis getCasopis(Rad rad) {

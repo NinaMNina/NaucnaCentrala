@@ -231,13 +231,16 @@ public class ElasticSearchServiceImpl implements ElasticSearchService {
 	@Override
 	public ArrayList<RecenzentDTO> findUdaljeniRecenzenti(Rad rad, Casopis casopis) {
 		RadDTO rdto = elasticSearchRepository.findByNaslov(rad.getNaslov());
-		GeoDistanceQueryBuilder geoDistanceFilterBuilder = QueryBuilders.geoDistanceQuery("recenzenti")
-			      .point(rad.getOdgovorniAutor().getLokacija().getX(), rad.getOdgovorniAutor().getLokacija().getY())
+		BoolQueryBuilder query = QueryBuilders.boolQuery();	
+		query.must(QueryBuilders.matchPhraseQuery("casopis", casopis.getNaziv()));		
+		
+		GeoDistanceQueryBuilder geoDistanceFilterBuilder = new GeoDistanceQueryBuilder("location");
+				geoDistanceFilterBuilder.point(rad.getOdgovorniAutor().getLokacija().getX(), rad.getOdgovorniAutor().getLokacija().getY())
 			      .distance(100, DistanceUnit.KILOMETERS)
 			      .geoDistance(GeoDistance.ARC);
+		query.mustNot(geoDistanceFilterBuilder);
 		SearchRequestBuilder searchRequestBuilder = nodeClient.prepareSearch("recenzenti").setTypes("recenzenti")
-			    .setQuery(QueryBuilders.matchAllQuery())
-			    .setPostFilter(geoDistanceFilterBuilder)
+			    .setQuery(query)
 			    .setFrom(0);
 		SearchResponse resp = searchRequestBuilder.execute().actionGet();
 		ArrayList<RecenzentDTO> retVal = new ArrayList<RecenzentDTO>();
