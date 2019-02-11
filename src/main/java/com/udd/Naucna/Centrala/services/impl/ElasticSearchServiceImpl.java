@@ -19,9 +19,12 @@ import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.search.SearchType;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.common.geo.GeoDistance;
+import org.elasticsearch.common.io.stream.StreamInput;
 import org.elasticsearch.common.unit.DistanceUnit;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.GeoDistanceQueryBuilder;
+import org.elasticsearch.index.query.MoreLikeThisQueryBuilder;
+import org.elasticsearch.index.query.MoreLikeThisQueryBuilder.Item;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
@@ -252,6 +255,58 @@ public class ElasticSearchServiceImpl implements ElasticSearchService {
 		}
 		return retVal;
 
+	}
+
+
+	@Override
+	public ArrayList<RecenzentDTO> findSlicniRecenzenti(Rad rad, Casopis casopis) {
+		RadDTO rdto = elasticSearchRepository.findByNaslov(rad.getNaslov());
+		BoolQueryBuilder query = QueryBuilders.boolQuery();	
+		query.must(QueryBuilders.matchPhraseQuery("casopis", casopis.getNaziv()));	
+		ArrayList<RecenzentDTO> retVal = new ArrayList<RecenzentDTO>();
+		MoreLikeThisQueryBuilder mlt;
+		String[] field = {"tekstovi"};
+		String[] value = {getTekstZaSlican(rad.getLokacijaProbnogRada())};
+		mlt = new MoreLikeThisQueryBuilder(field, value, null)
+				.analyzer("serbian-analyzer")
+				.minimumShouldMatch("70%")
+				.minTermFreq(20);
+		query.must(mlt);
+		SearchRequestBuilder searchRequestBuilder = nodeClient.prepareSearch("recenzenti").setTypes("recenzenti")
+			    .setQuery(query)
+			    .setFrom(0);
+		SearchResponse resp = searchRequestBuilder.execute().actionGet();
+		for (SearchHit hit : resp.getHits()) {
+			Gson gson = new Gson();
+            RecenzentDTO recenzentDTO = new RecenzentDTO();
+            recenzentDTO = gson.fromJson(hit.getSourceAsString(), RecenzentDTO.class); 
+            retVal.add(recenzentDTO);
+		}
+		
+		return retVal;
+	}
+
+
+	private String getTekstZaSlican(String lokacijaProbnogRada) {
+		String retVal = "";
+		File pdf = new File(lokacijaProbnogRada);
+		BodyContentHandler handler = new BodyContentHandler();
+		Metadata metadata = new Metadata();
+		ParseContext pcontext = new ParseContext();
+		PDFParser pdfparser = new PDFParser(); 
+		try {
+			FileInputStream inputstream = new FileInputStream(pdf);
+			try {
+				pdfparser.parse(inputstream, handler, metadata,pcontext);
+			//	System.out.println("Contents of the PDF :" + handler.toString());
+				retVal = handler.toString();
+			} catch (IOException | SAXException | TikaException e) {
+				e.printStackTrace();
+			}
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		return retVal;
 	}
 
 

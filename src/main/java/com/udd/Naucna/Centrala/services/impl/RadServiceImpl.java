@@ -1,20 +1,32 @@
 package com.udd.Naucna.Centrala.services.impl;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
+import org.apache.tika.exception.TikaException;
+import org.apache.tika.metadata.Metadata;
+import org.apache.tika.parser.ParseContext;
+import org.apache.tika.parser.pdf.PDFParser;
+import org.apache.tika.sax.BodyContentHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.data.geo.Point;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.xml.sax.SAXException;
 
 import com.udd.Naucna.Centrala.dto.RadDTO;
+import com.udd.Naucna.Centrala.dto.RecenzentDTO;
 import com.udd.Naucna.Centrala.model.Casopis;
 import com.udd.Naucna.Centrala.model.Izdanje;
 import com.udd.Naucna.Centrala.model.Korisnik;
@@ -24,7 +36,9 @@ import com.udd.Naucna.Centrala.repository.CasopisRepository;
 import com.udd.Naucna.Centrala.repository.IzdanjeRepository;
 import com.udd.Naucna.Centrala.repository.RadRepository;
 import com.udd.Naucna.Centrala.repository.RecenzentRepository;
+import com.udd.Naucna.Centrala.repository.elasticSearch.ESRecenzentRepository;
 import com.udd.Naucna.Centrala.repository.elasticSearch.ElasticSearchRepository;
+import com.udd.Naucna.Centrala.services.ElasticSearchService;
 import com.udd.Naucna.Centrala.services.RadService;
 
 @Service
@@ -33,6 +47,8 @@ public class RadServiceImpl implements RadService {
 	@Autowired
 	private ElasticSearchRepository elasticSearchRepository;
 	@Autowired
+	private ESRecenzentRepository esRecenzentRepository;
+	@Autowired
 	private RadRepository radRepository;
 	@Autowired
 	private CasopisRepository casopisRepository;
@@ -40,6 +56,8 @@ public class RadServiceImpl implements RadService {
 	private IzdanjeRepository izdanjeRepository;
 	@Autowired
 	private RecenzentRepository recenzentRepository;
+	@Autowired
+	private ElasticSearchService elasticSearchService;
 	
 	@Override
 	public boolean exists(Long id) {
@@ -49,13 +67,19 @@ public class RadServiceImpl implements RadService {
 	}
 
 	@Override
-	public String saveMultipartFile(MultipartFile file) {
-		final Path rootLocation = Paths.get("src/main/resources/static/assets/pdf/");
+	public Boolean saveMultipartFile(MultipartFile file, Long id) {
+		Optional<Rad> radTry = radRepository.findById(id);
+		Rad rad = null;
+		if(!radTry.isPresent()){
+			return false;
+		}
+		rad = radTry.get();
+		final Path rootLocation = Paths.get("C:/Users/nina.miladinovic/git/NaucnaCentrala/src/main/resources/static/assets/pdf/");
 		String fileName = null;
 		try {
 			fileName = file.getOriginalFilename();
 			if(!(fileName.endsWith(".PDF")|| fileName.endsWith(".pdf"))) {
-				return fileName;
+				return false;
 			}
 			Path filePath = rootLocation.resolve(fileName);
             Resource resource = new UrlResource(filePath.toUri());
@@ -64,13 +88,47 @@ public class RadServiceImpl implements RadService {
             		fileName = fileName + "_"  + System.currentTimeMillis() + ".pdf";
             }
             Files.copy(file.getInputStream(), rootLocation.resolve(fileName));
-            System.out.println("fileName: "+fileName);
-            System.out.println("rootLocation: "+rootLocation.toString());
+            rad.setLokacijaRada("assets/pdf/"+fileName);
+            radRepository.save(rad);
+            HashMap<String, String> podaci = getPodaciORadu(rad);
+            System.out.println(filePath.toString());
+            RadDTO newRad = new RadDTO(rad.getId(), podaci.get("naslov"), rad.getNaslov(), podaci.get("autori"), "", rad.getKljucniPojmovi(), "", podaci.get("naucnaOblast"),filePath.toString(), getIfCasopisFree(rad));
+            RadDTO ret = elasticSearchService.uploadRad(newRad);
+            if(ret==null)
+            	return false;
         } catch (Exception e) {
         	throw new RuntimeException();
         }
-		return "assets/pdf/"+fileName;
+		return true;
 	}
+
+	private Boolean getIfCasopisFree(Rad rad) {
+		ArrayList<Casopis> c = (ArrayList<Casopis>) casopisRepository.findAll();
+		for(Casopis c0 : c){
+			for(Izdanje i0 : izdanjeRepository.findByIzCasopisaId(c0.getId())){
+				for(Rad r0 : i0.getRadovi())
+					if(r0.getId()==rad.getId())
+						return c0.isOpenAccess();
+			}
+		}
+		return false;
+	}
+
+	private HashMap<String, String> getPodaciORadu(Rad rad) {
+		ArrayList<Casopis> c = (ArrayList<Casopis>) casopisRepository.findAll();
+		HashMap<String, String> retVal = new HashMap<String, String>();
+		for(Casopis c0 : c){
+			for(Izdanje i0 : izdanjeRepository.findByIzCasopisaId(c0.getId())){
+				for(Rad r0 : i0.getRadovi())
+					if(r0.getId()==rad.getId())
+						retVal.put("naslov", c0.getNaziv());
+			}
+		}
+		retVal.put("naucnaOblast", rad.getNaucnaOblast().getNazivOblasti()+" - "+rad.getNaucnaOblast().getNazivPodOblasti());
+		retVal.put("autori", getAutori(rad));
+		return retVal;
+	}
+
 
 	@Override
 	public RadDTO getRadDTO(Long rad) {
@@ -121,6 +179,12 @@ public class RadServiceImpl implements RadService {
 				if(recTry.isPresent()){
 					Recenzent rec = recTry.get();
 					lista.add(rec);
+					Optional<RecenzentDTO> recDTOtry = esRecenzentRepository.findById(rec.getId());
+					if(recDTOtry.isPresent()){
+						RecenzentDTO recDTO = recDTOtry.get();
+						recDTO.setTekstovi(recDTO.getTekstovi()+getProbniTekst(r.getLokacijaProbnogRada()));
+						esRecenzentRepository.save(recDTO);
+					}
 				}
 				else{
 					return false;
@@ -131,6 +195,28 @@ public class RadServiceImpl implements RadService {
 			return true;
 		}
 		return false;
+	}
+
+	private String getProbniTekst(String lokacijaProbnogRada) {
+		String retVal = "";
+		File pdf = new File(lokacijaProbnogRada);
+		BodyContentHandler handler = new BodyContentHandler();
+		Metadata metadata = new Metadata();
+		ParseContext pcontext = new ParseContext();
+		PDFParser pdfparser = new PDFParser(); 
+		try {
+			FileInputStream inputstream = new FileInputStream(pdf);
+			try {
+				pdfparser.parse(inputstream, handler, metadata,pcontext);
+			//	System.out.println("Contents of the PDF :" + handler.toString());
+				retVal = handler.toString();
+			} catch (IOException | SAXException | TikaException e) {
+				e.printStackTrace();
+			}
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		return retVal;
 	}
 
 }

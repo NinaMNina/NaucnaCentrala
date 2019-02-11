@@ -35,7 +35,10 @@
                 	"vrednost": "",
                 	"fraza": false});
             }
-            
+            $scope.odjaviSe = function(){
+            	$stateParams.token = "";
+            	$window.location.href = 'https://localhost:8087/NaucnaCentrala/#!/login';
+            }
             $scope.pretrazi = function(){
             	var p = $scope.params;
             	if(p=="" || p==undefined)

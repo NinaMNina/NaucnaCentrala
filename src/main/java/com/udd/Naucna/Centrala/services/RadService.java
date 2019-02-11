@@ -10,7 +10,7 @@ public interface RadService {
 
 	boolean exists(Long id);
 
-	String saveMultipartFile(MultipartFile file);
+	Boolean saveMultipartFile(MultipartFile file, Long id);
 
 	RadDTO getRadDTO(Long rad);
 

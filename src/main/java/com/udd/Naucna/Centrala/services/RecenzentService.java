@@ -13,6 +13,8 @@ public interface RecenzentService {
 	ArrayList<RecenzentDTO> getStrucniRecenzenti(ZadaciDTO zad);
 
 	ArrayList<RecenzentDTO> getUdaljeniRecenzenti(ZadaciDTO zad);
+
+	ArrayList<RecenzentDTO> getSlicniRecenzenti(ZadaciDTO zad);
 	
 
 }

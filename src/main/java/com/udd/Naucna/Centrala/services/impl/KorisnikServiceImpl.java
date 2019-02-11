@@ -102,7 +102,7 @@ public class KorisnikServiceImpl implements KorisnikService{
 		ArrayList<ZadaciDTO> retVal = new ArrayList<ZadaciDTO>();
 		for(Rad r0 : radovi){
 			if(r0.getStatus().equals(StatusRada.PRIHVACEN) && r0.getLokacijaRada().equals("")){
-				ZadaciDTO zad = new ZadaciDTO("Potreban upload rada", r0.getId(), ZadatakTip.DODAJ_PUTANJU);
+				ZadaciDTO zad = new ZadaciDTO("Potreban upload rada - \""+r0.getNaslov()+"\"", r0.getId(), ZadatakTip.DODAJ_PUTANJU);
 				retVal.add(zad);
 			}
 		}

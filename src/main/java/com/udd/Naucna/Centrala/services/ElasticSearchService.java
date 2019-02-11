@@ -21,4 +21,6 @@ public interface ElasticSearchService {
 
 	ArrayList<RecenzentDTO> findUdaljeniRecenzenti(Rad rad, Casopis casopis);
 
+	ArrayList<RecenzentDTO> findSlicniRecenzenti(Rad rad, Casopis casopis);
+
 }

@@ -54,7 +54,7 @@ public class RecenzentServiceImpl implements RecenzentService {
 	private ArrayList<RecenzentDTO> convertToDTO(ArrayList<Recenzent> rec) {
 		ArrayList<RecenzentDTO> retVal = new ArrayList<RecenzentDTO>();
 		for(Recenzent r : rec){
-			RecenzentDTO rDTO = new RecenzentDTO(r.getId(), r.getIme(), r.getPrezime(), r.getEmail(), "", setGeoPointLokacija(r.getLokacija()));
+			RecenzentDTO rDTO = new RecenzentDTO(r.getId(), r.getIme(), r.getPrezime(), r.getEmail(), "", setGeoPointLokacija(r.getLokacija()), "");
 			retVal.add(rDTO);
 		}
 		return retVal;
@@ -110,6 +110,16 @@ public class RecenzentServiceImpl implements RecenzentService {
 		Rad rad = radOpt.get();
 		Casopis casopis = getCasopis(rad);
 		return elasticsearchService.findUdaljeniRecenzenti(rad, casopis);
+	}
+
+	@Override
+	public ArrayList<RecenzentDTO> getSlicniRecenzenti(ZadaciDTO zad) {
+		Optional<Rad> radOpt = radRepository.findById(zad.getRad());
+		if(!radOpt.isPresent())
+			return null;
+		Rad rad = radOpt.get();
+		Casopis casopis = getCasopis(rad);
+		return elasticsearchService.findSlicniRecenzenti(rad, casopis);
 	}
 
 }

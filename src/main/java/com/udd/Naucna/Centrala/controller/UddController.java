@@ -48,14 +48,14 @@ public class UddController {
 		return new ResponseEntity(retVal, HttpStatus.OK);
 		
     }
-	@GetMapping(path = "/upload/{token}", produces = "application/json")
-    public @ResponseBody ResponseEntity<String> uploadPDFa(@PathVariable String token, @RequestBody MultipartFile file) {
+	@PostMapping(path = "/upload/{id}/{token}", produces = "application/json")
+    public @ResponseBody ResponseEntity<Boolean> uploadPDFa(@PathVariable Long id,@PathVariable String token, @RequestBody MultipartFile file) {
 		String username = tokenUtils.getUsernameFromToken(token);
 		if(username==null){
 			return new ResponseEntity(HttpStatus.BAD_REQUEST);
 		}
-		String lokacija = radService.saveMultipartFile(file);
-		return new ResponseEntity(lokacija, HttpStatus.OK);
+		Boolean retVal = radService.saveMultipartFile(file, id);
+		return new ResponseEntity(retVal, HttpStatus.OK);
 		
     }
 	@PostMapping(path = "/rad/{token}", produces = "application/json", consumes="application/json")
@@ -95,6 +95,17 @@ public class UddController {
 			return new ResponseEntity(HttpStatus.BAD_REQUEST);
 		}
 		ArrayList<RecenzentDTO> retVal = recenzentService.getUdaljeniRecenzenti(zad);
+		return new ResponseEntity(retVal, HttpStatus.OK);
+		
+    }
+
+	@PostMapping(path = "/recenzentiSlicni/{token}", produces = "application/json", consumes="application/json")
+    public @ResponseBody ResponseEntity<ArrayList<RecenzentDTO>> getSlicniRecenzenti(@PathVariable String token, @RequestBody ZadaciDTO zad) {
+		String username = tokenUtils.getUsernameFromToken(token);
+		if(username==null){
+			return new ResponseEntity(HttpStatus.BAD_REQUEST);
+		}
+		ArrayList<RecenzentDTO> retVal = recenzentService.getSlicniRecenzenti(zad);
 		return new ResponseEntity(retVal, HttpStatus.OK);
 		
     }

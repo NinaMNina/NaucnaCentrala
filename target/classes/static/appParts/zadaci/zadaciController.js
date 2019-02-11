@@ -133,27 +133,7 @@
             	$stateParams.token = "";
             	$window.location.href = 'https://localhost:8087/NaucnaCentrala/#!/login';
             }
-            $scope.zavrsi = function(){
-            	if($scope.pdfFajl==undefined || $scope.pdfFajl=="")
-            		return;
-            	var file = $scope.pdfFajl;
-	        	var fileFormData = new FormData();
-	            fileFormData.append('file', file);
-	        	$http({
-	        		method: 'POST',
-	                url: 'https://localhost:8087/NaucnaCentrala/udd/upload/'+$stateParams.token,
-	                transformRequest: angular.identity,
-	                headers: {'Content-Type': undefined},
-	                data: fileFormData
-	        	}).then(function successCallback(response){
-	        		var lokacija = response.data;
-	        		alert(lokacija);
-	        		$window.location.href = 'https://localhost:8087/NaucnaCentrala/#!/home/'+$stateParams.token;
-                },
-                  function errorCallback(response){
-                      $scope.poruka = "Problem pri obavljanju zadatka. Neuspešno obavljeno!"
-                  });
-            }
+            
             
             //FILTERI
             $scope.filterStrucni = function(){
@@ -198,7 +178,24 @@
         	}
             
             $scope.filterSlicni = function(){
-            	
+            	var data = {
+            			"opis": zad.opis,
+            			"rad": zad.rad,
+            			"tip": zad.tip            	
+            	};
+        		$http({
+                    method: 'POST',
+                    url: 'https://localhost:8087/NaucnaCentrala/udd/recenzentiSlicni/'+$stateParams.token,
+                    data: data
+                  }).then(function successCallback(response){
+                	  if(response.data!=null || response.data!=undefined)
+                      	$scope.recenzenti = response.data;
+                  },
+                    function errorCallback(response){
+                        alert("Greska u zahtevu");
+                    });
+            	$scope.jedanUZadatak = true;
+            	$scope.jedanAZadatak = false;
             }
             $scope.filterUdaljeni = function(){
             	var data = {
@@ -220,5 +217,26 @@
             	$scope.jedanUZadatak = true;
             	$scope.jedanAZadatak = false;
             }
+            
+            //UPLOAD RADA
+            $scope.uploadFile = function(files) {
+                var fd = new FormData();
+                //Take the first selected file
+                fd.append("file", files[0]);
+                $http({
+	        		method: 'POST',
+	                url: 'https://localhost:8087/NaucnaCentrala/udd/upload/'+zad.rad+'/'+$stateParams.token,
+	                transformRequest: angular.identity,
+	                headers: {'Content-Type': undefined},
+	                data: fd
+	        	}).then(function successCallback(response){
+	        		
+	        		$window.location.href = 'https://localhost:8087/NaucnaCentrala/#!/home/'+$stateParams.token;
+                },
+                  function errorCallback(response){
+                      $scope.poruka = "Problem pri obavljanju zadatka. Neuspešno obavljeno!"
+                  });
+
+            };
         }
 })();
