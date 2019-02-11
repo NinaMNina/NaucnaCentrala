@@ -52,12 +52,38 @@
 	            <h5 class="card-title pricing-card-title">{{theZadatak.naslov}}</h5>
 	          	<div class='row'>
 	          		<div class="col-7">
-		            	<span style="font-size: 13px"> {{theZadatak.tekstRada}}</span><br/><br/>
+	          			<div>
+		          			<h6 class="my-0 font-weight-normal" style="font-size: 13px" ><div class="text-muted">ključni pojmovi: </div>{{theZadatak.kljucniPojmovi}}</h6>
+		           			<h6 class="my-0 font-weight-normal" style="font-size: 13px"><div class="text-muted">naučna oblast:   </div>{{theZadatak.naucnaOblast}}</h6>
+		           			<h6 class="my-0 font-weight-normal" style="font-size: 13px"><div class="text-muted">autori rada:     </div>{{theZadatak.autoriRada}}</span></h6><br/><br/><br/>           		
+	          			</div>
+	          			<div ng-repeat="rec in recenzenti"><label>
+						    <input class="checkbox" type="checkbox" ng-click="menjaStanje(rec.id)"/>
+						    {{rec.ime}} {{rec.prezime}}, {{rec.email}}
+						</label></div>
+						<button type="button" class="btn btn-outline-secondary float-right" ng-click="zavrsiUrednik()">završi zadatak</button>
+		            	<br/><div class="text-info">{{porukica}}</div>
 		            </div>
 	          		<div class="col-5 text-right">
-	           			<h6 class="my-0 font-weight-normal" style="font-size: 13px" ><div class="text-muted">ključni pojmovi: </div>{{theZadatak.kljucniPojmovi}}</h6>
-	           			<h6 class="my-0 font-weight-normal" style="font-size: 13px"><div class="text-muted">naučna oblast:   </div>{{theZadatak.naucnaOblast}}</h6>
-	           			<h6 class="my-0 font-weight-normal" style="font-size: 13px"><div class="text-muted">autori rada:     </div>{{theZadatak.autoriRada}}</span></h6>
+	          			<h5>odredi filter:</h5>
+	          			<div>
+	          				<div>
+							  <input type="radio"name="filter" checked ng-click="filterBez()">
+							  <label>bez filtera</label>
+							</div>
+	          				<div>
+							  <input type="radio" name="filter" ng-click="filterStrucni()">
+							  <label>stručni za naučnu oblast</label>
+							</div>							
+							<div>
+							  <input type="radio" name="filter" ng-click="filterSlicni()">
+							  <label>recenzirali slične radove</label>
+							</div>							
+							<div>
+							  <input type="radio" name="filter" ng-click="filterUdaljeni()">
+							  <label>fizički udaljeni</label>
+							</div>
+	          			</div>
 	           		</div>
 	          	</div>            	
 	          </div>

@@ -5,8 +5,10 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.geo.Point;
 import org.springframework.stereotype.Service;
 
+import com.udd.Naucna.Centrala.dto.RecenzentDTO;
 import com.udd.Naucna.Centrala.dto.ZadaciDTO;
 import com.udd.Naucna.Centrala.model.Casopis;
 import com.udd.Naucna.Centrala.model.Izdanje;
@@ -17,6 +19,7 @@ import com.udd.Naucna.Centrala.repository.CasopisRepository;
 import com.udd.Naucna.Centrala.repository.IzdanjeRepository;
 import com.udd.Naucna.Centrala.repository.RadRepository;
 import com.udd.Naucna.Centrala.repository.RecenzentRepository;
+import com.udd.Naucna.Centrala.services.ElasticSearchService;
 import com.udd.Naucna.Centrala.services.RecenzentService;
 
 
@@ -30,9 +33,11 @@ public class RecenzentServiceImpl implements RecenzentService {
 	private IzdanjeRepository izdanjeRepository;
 	@Autowired
 	private CasopisRepository casopisRepository;
+	@Autowired
+	private ElasticSearchService elasticsearchService;
 	
 	@Override
-	public ArrayList<Recenzent> getRecenzenti(ZadaciDTO zad) {
+	public ArrayList<RecenzentDTO> getRecenzenti(ZadaciDTO zad) {
 		ArrayList<Recenzent> retVal = new ArrayList<Recenzent>();
 		Optional<Rad> radOpt = radRepository.findById(zad.getRad());
 		if(!radOpt.isPresent())
@@ -42,18 +47,24 @@ public class RecenzentServiceImpl implements RecenzentService {
 		if(c==null)
 			return null;
 		ArrayList<Recenzent> rec = recenzentRepository.findAllByAngazovanjeId(c.getId());
-		for(Recenzent rec0 : rec){
-			List<NaucnaOblast> newList = (List<NaucnaOblast>) rec0.getPokrivaNaucneOblasti();
-			ArrayList<NaucnaOblast> al = new ArrayList<>(newList);
-		//	nooo.addAll(noo);
-			for(NaucnaOblast no : newList){
-				if(no.getId()==rad.getNaucnaOblast().getId())
-					retVal.add(rec0);
-			}
+		return convertToDTO(rec);
+	}
+	
+	private ArrayList<RecenzentDTO> convertToDTO(ArrayList<Recenzent> rec) {
+		ArrayList<RecenzentDTO> retVal = new ArrayList<RecenzentDTO>();
+		for(Recenzent r : rec){
+			RecenzentDTO rDTO = new RecenzentDTO(r.getId(), r.getIme(), r.getPrezime(), r.getEmail(), setStringLokacija(r.getLokacija()));
+			retVal.add(rDTO);
 		}
 		return retVal;
 	}
-	
+
+	private String setStringLokacija(Point lokacija) {
+		String lon = Double.toString(lokacija.getX());
+		String lat = Double.toString(lokacija.getY());
+		return lon+","+lat;
+	}
+
 	private Casopis getCasopis(Rad rad) {
 		ArrayList<Casopis> c = (ArrayList<Casopis>) casopisRepository.findAll();
 		for(Casopis c0 : c){
@@ -64,6 +75,42 @@ public class RecenzentServiceImpl implements RecenzentService {
 			}
 		}
 		return null;
+	}
+
+	@Override
+	public ArrayList<RecenzentDTO> getStrucniRecenzenti(ZadaciDTO zad) {
+		ArrayList<Recenzent> retVal = new ArrayList<Recenzent>();
+		Optional<Rad> radOpt = radRepository.findById(zad.getRad());
+		if(!radOpt.isPresent())
+			return null;
+		Rad rad = radOpt.get();
+		Casopis c = getCasopis(rad);
+		if(c==null)
+			return null;
+		ArrayList<Recenzent> rec = recenzentRepository.findAllByAngazovanjeId(c.getId());
+		ArrayList<Long> ubaceni = new ArrayList<>();
+		for(Recenzent rec0 : rec){
+			List<NaucnaOblast> newList = (List<NaucnaOblast>) rec0.getPokrivaNaucneOblasti();
+			for(NaucnaOblast no : newList){
+				if(no.getId()==rad.getNaucnaOblast().getId())
+					if(!ubaceni.contains(rec0.getId())){
+						retVal.add(rec0);
+						ubaceni.add(rec0.getId());						
+					}
+							
+			}
+		}
+		return convertToDTO(retVal);
+	}
+
+	@Override
+	public ArrayList<RecenzentDTO> getUdaljeniRecenzenti(ZadaciDTO zad) {
+		Optional<Rad> radOpt = radRepository.findById(zad.getRad());
+		if(!radOpt.isPresent())
+			return null;
+		Rad rad = radOpt.get();
+		Casopis casopis = getCasopis(rad);
+		return elasticsearchService.findUdaljeniRecenzenti(rad, casopis);
 	}
 
 }

@@ -57,7 +57,18 @@ public class UrednikNO extends Recenzent{
 				pokrivaNaucneOblasti);
 		// TODO Auto-generated constructor stub
 	}
-	
+
+	public UrednikNO(Long id, String korisnickoIme, String lozinka, String ime, String prezime, String email,
+			Point lokacija, List<Kupljeno> kupljeno, List<PretplataNaCasopis> pretplate) {
+		super(id, korisnickoIme, lozinka, ime, prezime, email, lokacija, kupljeno, pretplate);
+		// TODO Auto-generated constructor stub
+	}
+
+
+
+
+
+
 	
 	
 	

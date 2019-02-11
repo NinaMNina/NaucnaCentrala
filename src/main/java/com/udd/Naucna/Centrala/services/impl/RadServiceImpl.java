@@ -4,21 +4,26 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
+import org.springframework.data.geo.Point;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.udd.Naucna.Centrala.dto.RadDTO;
 import com.udd.Naucna.Centrala.model.Casopis;
 import com.udd.Naucna.Centrala.model.Izdanje;
+import com.udd.Naucna.Centrala.model.Korisnik;
 import com.udd.Naucna.Centrala.model.Rad;
+import com.udd.Naucna.Centrala.model.Recenzent;
 import com.udd.Naucna.Centrala.repository.CasopisRepository;
 import com.udd.Naucna.Centrala.repository.IzdanjeRepository;
 import com.udd.Naucna.Centrala.repository.RadRepository;
+import com.udd.Naucna.Centrala.repository.RecenzentRepository;
 import com.udd.Naucna.Centrala.repository.elasticSearch.ElasticSearchRepository;
 import com.udd.Naucna.Centrala.services.RadService;
 
@@ -33,6 +38,9 @@ public class RadServiceImpl implements RadService {
 	private CasopisRepository casopisRepository;
 	@Autowired
 	private IzdanjeRepository izdanjeRepository;
+	@Autowired
+	private RecenzentRepository recenzentRepository;
+	
 	@Override
 	public boolean exists(Long id) {
 		if(elasticSearchRepository.findById(id)!=null)
@@ -70,10 +78,16 @@ public class RadServiceImpl implements RadService {
 		Rad r0;
 		if(rTry.isPresent()){
 			r0 = rTry.get();
-			RadDTO retVal = new RadDTO(r0.getId(), getCasopis(r0), r0.getNaslov(), getAutori(r0), r0.getOdgovorniAutor().getLokacija(), r0.getKljucniPojmovi(), "", r0.getNaucnaOblast().getNazivOblasti()+" - "+r0.getNaucnaOblast().getNazivPodOblasti(), "", true);
+			RadDTO retVal = new RadDTO(r0.getId(), getCasopis(r0), r0.getNaslov(), getAutori(r0), setLokacija(r0.getOdgovorniAutor().getLokacija()), r0.getKljucniPojmovi(), "", r0.getNaucnaOblast().getNazivOblasti()+" - "+r0.getNaucnaOblast().getNazivPodOblasti(), "", true);
 			return retVal;
 		}
 		return null;	
+	}
+
+	private String setLokacija(Point lokacija) {
+		String lon = Double.toString(lokacija.getX());
+		String lat = Double.toString(lokacija.getY());
+		return lon+","+lat;
 	}
 
 	private String getAutori(Rad r0) {
@@ -94,6 +108,29 @@ public class RadServiceImpl implements RadService {
 			}
 		}
 		return "";
+	}
+
+	@Override
+	public Boolean dodajRecenzente(Long id, ArrayList<Long> odabrani) {
+		Optional<Rad> rTry = radRepository.findById(id);
+		if(rTry.isPresent()){
+			Rad r = rTry.get();
+			List<Korisnik> lista = r.getRecenzenti();			
+			for(Long index : odabrani){
+				Optional<Recenzent> recTry = recenzentRepository.findById(index);
+				if(recTry.isPresent()){
+					Recenzent rec = recTry.get();
+					lista.add(rec);
+				}
+				else{
+					return false;
+				}
+			}
+			r.setRecenzenti(lista);
+			radRepository.save(r);
+			return true;
+		}
+		return false;
 	}
 
 }

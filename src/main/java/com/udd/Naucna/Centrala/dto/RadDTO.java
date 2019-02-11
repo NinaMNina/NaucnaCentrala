@@ -22,8 +22,8 @@ public class RadDTO {
 	@Field(type = FieldType.Text, store = true, index=true, analyzer = "serbian-analyzer", searchAnalyzer = "serbian-analyzer")
 	private String autoriRada;
 	
-	@Field(type = FieldType.Nested, store = true, index = false)
-	private Point lokacija;
+	@Field(type = FieldType.Text, store = true, index = false)
+	private String lokacija;
 	
 	@Field(type = FieldType.Text, store = true, index=true, analyzer = "serbian-analyzer", searchAnalyzer = "serbian-analyzer")
 	private String kljucniPojmovi;
@@ -72,11 +72,11 @@ public class RadDTO {
 		this.autoriRada = autoriRada;
 	}
 
-	public Point getLokacija() {
+	public String getLokacija() {
 		return lokacija;
 	}
 
-	public void setLokacija(Point lokacija) {
+	public void setLokacija(String lokacija) {
 		this.lokacija = lokacija;
 	}
 
@@ -120,7 +120,7 @@ public class RadDTO {
 		this.free = free;
 	}
 
-	public RadDTO(Long id, String casopis, String naslov, String autoriRada, Point lokacija, String kljucniPojmovi,
+	public RadDTO(Long id, String casopis, String naslov, String autoriRada, String lokacija, String kljucniPojmovi,
 			String tekstRada, String naucnaOblast, String file, Boolean free) {
 		super();
 		this.id = id;
@@ -137,7 +137,6 @@ public class RadDTO {
 
 	public RadDTO() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 	
 

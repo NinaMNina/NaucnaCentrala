@@ -35,6 +35,9 @@ import com.udd.Naucna.Centrala.dto.HighlightedRadDTO;
 import com.udd.Naucna.Centrala.dto.Parametar;
 import com.udd.Naucna.Centrala.dto.ParametriDTO;
 import com.udd.Naucna.Centrala.dto.RadDTO;
+import com.udd.Naucna.Centrala.dto.RecenzentDTO;
+import com.udd.Naucna.Centrala.model.Casopis;
+import com.udd.Naucna.Centrala.model.Rad;
 import com.udd.Naucna.Centrala.repository.elasticSearch.ElasticSearchRepository;
 import com.udd.Naucna.Centrala.services.ElasticSearchService;
 
@@ -216,6 +219,12 @@ public class ElasticSearchServiceImpl implements ElasticSearchService {
         }
 
         return retVal;
+	}
+
+
+	@Override
+	public ArrayList<RecenzentDTO> findUdaljeniRecenzenti(Rad rad, Casopis casopis) {
+		return null;
 	}
 
 

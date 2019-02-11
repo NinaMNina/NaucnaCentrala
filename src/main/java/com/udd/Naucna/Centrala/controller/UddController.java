@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.udd.Naucna.Centrala.dto.RadDTO;
+import com.udd.Naucna.Centrala.dto.RecenzentDTO;
 import com.udd.Naucna.Centrala.dto.ZadaciDTO;
 import com.udd.Naucna.Centrala.model.Korisnik;
 import com.udd.Naucna.Centrala.model.Recenzent;
@@ -68,12 +69,42 @@ public class UddController {
 		
     }
 	@PostMapping(path = "/recenzenti/{token}", produces = "application/json", consumes="application/json")
-    public @ResponseBody ResponseEntity<ArrayList<Recenzent>> getRecenzenti(@PathVariable String token, @RequestBody ZadaciDTO zad) {
+    public @ResponseBody ResponseEntity<ArrayList<RecenzentDTO>> getRecenzenti(@PathVariable String token, @RequestBody ZadaciDTO zad) {
 		String username = tokenUtils.getUsernameFromToken(token);
 		if(username==null){
 			return new ResponseEntity(HttpStatus.BAD_REQUEST);
 		}
-		ArrayList<Recenzent> retVal = recenzentService.getRecenzenti(zad);
+		ArrayList<RecenzentDTO> retVal = recenzentService.getRecenzenti(zad);
+		return new ResponseEntity(retVal, HttpStatus.OK);
+		
+    }
+	@PostMapping(path = "/recenzentiStrucni/{token}", produces = "application/json", consumes="application/json")
+    public @ResponseBody ResponseEntity<ArrayList<RecenzentDTO>> getStrucniRecenzenti(@PathVariable String token, @RequestBody ZadaciDTO zad) {
+		String username = tokenUtils.getUsernameFromToken(token);
+		if(username==null){
+			return new ResponseEntity(HttpStatus.BAD_REQUEST);
+		}
+		ArrayList<RecenzentDTO> retVal = recenzentService.getStrucniRecenzenti(zad);
+		return new ResponseEntity(retVal, HttpStatus.OK);
+		
+    }
+	@PostMapping(path = "/recenzentiUdaljeni/{token}", produces = "application/json", consumes="application/json")
+    public @ResponseBody ResponseEntity<ArrayList<RecenzentDTO>> getUdaljeniRecenzenti(@PathVariable String token, @RequestBody ZadaciDTO zad) {
+		String username = tokenUtils.getUsernameFromToken(token);
+		if(username==null){
+			return new ResponseEntity(HttpStatus.BAD_REQUEST);
+		}
+		ArrayList<RecenzentDTO> retVal = recenzentService.getUdaljeniRecenzenti(zad);
+		return new ResponseEntity(retVal, HttpStatus.OK);
+		
+    }
+	@PostMapping(path = "/dodajRecenzente/{id}/{token}", produces = "application/json", consumes="application/json")
+    public @ResponseBody ResponseEntity<Boolean> dodajRecenzente(@PathVariable Long id, @PathVariable String token, @RequestBody ArrayList<Long> odabrani) {
+		String username = tokenUtils.getUsernameFromToken(token);
+		if(username==null){
+			return new ResponseEntity(HttpStatus.BAD_REQUEST);
+		}
+		Boolean retVal = radService.dodajRecenzente(id, odabrani);
 		return new ResponseEntity(retVal, HttpStatus.OK);
 		
     }
