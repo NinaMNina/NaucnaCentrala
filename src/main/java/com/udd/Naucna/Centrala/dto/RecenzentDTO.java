@@ -5,6 +5,7 @@ import javax.persistence.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
+import org.springframework.data.elasticsearch.annotations.GeoPointField;
 
 @Document(indexName = "recenzenti", type = "recenzenti", shards = 1, replicas = 0)
 public class RecenzentDTO {
@@ -17,6 +18,7 @@ public class RecenzentDTO {
 	@Field(type = FieldType.Text, store = true, index=false)
 	private String email;
 	@Field(type = FieldType.Text, store = true, index=true)
+	@GeoPointField
 	private String location;
 	public Long getId() {
 		return id;

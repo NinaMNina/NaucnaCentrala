@@ -18,7 +18,10 @@ import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.search.SearchType;
 import org.elasticsearch.client.Client;
+import org.elasticsearch.common.geo.GeoDistance;
+import org.elasticsearch.common.unit.DistanceUnit;
 import org.elasticsearch.index.query.BoolQueryBuilder;
+import org.elasticsearch.index.query.GeoDistanceQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
@@ -38,6 +41,7 @@ import com.udd.Naucna.Centrala.dto.RadDTO;
 import com.udd.Naucna.Centrala.dto.RecenzentDTO;
 import com.udd.Naucna.Centrala.model.Casopis;
 import com.udd.Naucna.Centrala.model.Rad;
+import com.udd.Naucna.Centrala.repository.elasticSearch.ESRecenzentRepository;
 import com.udd.Naucna.Centrala.repository.elasticSearch.ElasticSearchRepository;
 import com.udd.Naucna.Centrala.services.ElasticSearchService;
 
@@ -45,7 +49,9 @@ import com.udd.Naucna.Centrala.services.ElasticSearchService;
 public class ElasticSearchServiceImpl implements ElasticSearchService {
 	
 	@Autowired
-	ElasticSearchRepository elasticSearchRepository;
+	private ElasticSearchRepository elasticSearchRepository;
+	@Autowired
+	private ESRecenzentRepository esRecenzentRepository;
 
     @Autowired
     private ElasticsearchTemplate elasticsearchTemplate;
@@ -224,7 +230,25 @@ public class ElasticSearchServiceImpl implements ElasticSearchService {
 
 	@Override
 	public ArrayList<RecenzentDTO> findUdaljeniRecenzenti(Rad rad, Casopis casopis) {
-		return null;
+		RadDTO rdto = elasticSearchRepository.findByNaslov(rad.getNaslov());
+		GeoDistanceQueryBuilder geoDistanceFilterBuilder = QueryBuilders.geoDistanceQuery("recenzenti")
+			      .point(rad.getOdgovorniAutor().getLokacija().getX(), rad.getOdgovorniAutor().getLokacija().getY())
+			      .distance(100, DistanceUnit.KILOMETERS)
+			      .geoDistance(GeoDistance.ARC);
+		SearchRequestBuilder searchRequestBuilder = nodeClient.prepareSearch("recenzenti").setTypes("recenzenti")
+			    .setQuery(QueryBuilders.matchAllQuery())
+			    .setPostFilter(geoDistanceFilterBuilder)
+			    .setFrom(0);
+		SearchResponse resp = searchRequestBuilder.execute().actionGet();
+		ArrayList<RecenzentDTO> retVal = new ArrayList<RecenzentDTO>();
+		for (SearchHit hit : resp.getHits()) {
+			Gson gson = new Gson();
+            RecenzentDTO recenzentDTO = new RecenzentDTO();
+            recenzentDTO = gson.fromJson(hit.getSourceAsString(), RecenzentDTO.class); 
+            retVal.add(recenzentDTO);
+		}
+		return retVal;
+
 	}
 
 

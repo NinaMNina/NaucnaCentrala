@@ -8,6 +8,6 @@ import com.udd.Naucna.Centrala.dto.RadDTO;
 
 public interface ElasticSearchRepository extends ElasticsearchRepository<RadDTO, Long>{
 	
-	ArrayList<RadDTO> findByNaslov(String naslov);
+	RadDTO findByNaslov(String naslov);
 	
 }
