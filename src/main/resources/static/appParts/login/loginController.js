@@ -13,7 +13,7 @@
             $scope.poruka="";
             var init = function(){
             	$scope.korisnik={};
-            /*	$http({
+            	$http({
                     method: 'GET',
                     url: 'https://localhost:8087/NaucnaCentrala/login/get'
                   }).then(function successCallback(response){
@@ -24,7 +24,7 @@
                   },
                     function errorCallback(response){
                         alert("Greska");
-                    });*/
+                    });
             };
             init();
             
@@ -53,7 +53,7 @@
             
             $scope.registrujSe = function(){
                 alert("Under Construction");
-            /*	$http({
+            	$http({
                     method: 'GET',
                     url: 'https://localhost:8087/NaucnaCentrala/login/registracija/'+taskId
                   }).then(function successCallback(response){
@@ -62,7 +62,7 @@
                   },
                     function errorCallback(response){
                         alert("Greska");
-                    });*/
+                    });
             	
             }
         }

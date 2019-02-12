@@ -1,5 +1,19 @@
 package com.udd.Naucna.Centrala.controller;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.camunda.bpm.engine.FormService;
+import org.camunda.bpm.engine.IdentityService;
+import org.camunda.bpm.engine.RuntimeService;
+import org.camunda.bpm.engine.TaskService;
+import org.camunda.bpm.engine.form.FormField;
+import org.camunda.bpm.engine.form.TaskFormData;
+import org.camunda.bpm.engine.identity.User;
+import org.camunda.bpm.engine.runtime.ProcessInstance;
+import org.camunda.bpm.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,7 +25,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.udd.Naucna.Centrala.dto.FormFieldsCamunda;
 import com.udd.Naucna.Centrala.dto.KorisnikDTO;
+import com.udd.Naucna.Centrala.dto.TaskDto;
 import com.udd.Naucna.Centrala.model.Korisnik;
 import com.udd.Naucna.Centrala.security.CustomUserDetailsFactory;
 import com.udd.Naucna.Centrala.services.KorisnikService;
@@ -21,15 +37,17 @@ import com.udd.Naucna.Centrala.token.TokenUtils;
 @Controller
 @RequestMapping("/login")
 public class LoginController {
-	//CAMUNDA
-	/*@Autowired
+	@Autowired
 	private RuntimeService runtimeService;
 	
 	@Autowired
 	TaskService taskService;
 	
 	@Autowired
-	FormService formService;*/
+	FormService formService;
+	
+	@Autowired
+	IdentityService identityService;
 	
 	@Autowired
 	private KorisnikService korisnikService;
@@ -38,7 +56,7 @@ public class LoginController {
 	private TokenUtils tokenUtils;
 	
 	@PostMapping(path = "/do", produces = "application/json", consumes="application/json")
-    public @ResponseBody ResponseEntity<KorisnikDTO> get(@RequestBody KorisnikDTO korisnik) {
+    public @ResponseBody ResponseEntity<KorisnikDTO> getDo(@RequestBody KorisnikDTO korisnik) {
 		Korisnik k = korisnikService.uloguj(korisnik);
 		if(k==null)
 			return new ResponseEntity(HttpStatus.BAD_REQUEST);
@@ -46,11 +64,10 @@ public class LoginController {
 		korisnik.setLozinka(token);
 		return new ResponseEntity(korisnik, HttpStatus.OK);		
     }
-	//CAMUNDA
-/*	@GetMapping(path = "/get", produces = "application/json")
-    public @ResponseBody FormFieldsCamunda get() {
+	@GetMapping(path = "/get", produces = "application/json")
+    public @ResponseBody ResponseEntity<FormFieldsCamunda> getFormFields(){
 		//provera da li korisnik sa id-jem pera postoji
-		//List<User> users = identityService.createUserQuery().userId("pera").list();
+		List<User> users = identityService.createUserQuery().userId("pera").list();
 		ProcessInstance pi = runtimeService.startProcessInstanceByKey("upravljanje_poslovnim_procesima");
 
 		Task task = taskService.createTaskQuery().processInstanceId(pi.getId()).list().get(0);
@@ -61,17 +78,9 @@ public class LoginController {
 			System.out.println(fp.getId() + fp.getType());
 		}
 		
-        return new FormFieldsCamunda(task.getId(),properties, pi.getId());
+        return new ResponseEntity(new FormFieldsCamunda(task.getId(),properties, pi.getId()), HttpStatus.OK);
     }
 	
-	@PostMapping(path = "/do", produces = "application/json", consumes="application/json")
-    public @ResponseBody ResponseEntity<String> get(KorisnikDTO korisnik) {
-		Korisnik k = korisnikService.uloguj(korisnik);
-		if(k==null)
-			return new ResponseEntity(HttpStatus.BAD_REQUEST);
-		String token = tokenUtils.generateToken(CustomUserDetailsFactory.createCustomUserDetails(k));
-		return new ResponseEntity(token, HttpStatus.OK);		
-    }
 	@GetMapping(path = "/registracija/{id}")
     public @ResponseBody ResponseEntity<String> registracija(@PathVariable String id) {
 		Task task = taskService.createTaskQuery().taskId(id).singleResult();
@@ -90,7 +99,7 @@ public class LoginController {
 		
         return null;
     }
-	*/@GetMapping(path = "/checkValidity/{token}")
+	@GetMapping(path = "/checkValidity/{token}")
     public @ResponseBody ResponseEntity<Boolean> checkValidity(@PathVariable String token) {
 		if(token.isEmpty() || token==null)
 			return new ResponseEntity(HttpStatus.BAD_REQUEST);

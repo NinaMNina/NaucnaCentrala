@@ -13,7 +13,6 @@ import com.udd.Naucna.Centrala.model.Casopis;
 import com.udd.Naucna.Centrala.model.Izdanje;
 import com.udd.Naucna.Centrala.model.Korisnik;
 import com.udd.Naucna.Centrala.model.Rad;
-import com.udd.Naucna.Centrala.model.Recenzent;
 import com.udd.Naucna.Centrala.model.Urednik;
 import com.udd.Naucna.Centrala.model.enums.StatusRada;
 import com.udd.Naucna.Centrala.model.enums.ZadatakTip;
@@ -108,20 +107,19 @@ public class KorisnikServiceImpl implements KorisnikService{
 		}
 		return retVal;
 	}
-
-//CAMUNDA
-	/*@Override
-	public Korisnik registruj(FormFieldsCamunda ffc, KorisnikDTO korisnik) {
-		Autor a = new Autor(ffc.getFormFields().get(0).getValue().toString(),
+/*
+	@Override
+	public Korisnik registrujForm(FormFieldsCamunda ffc, KorisnikDTO korisnik) {
+		Autor a = new Autor(null, ffc.getFormFields().get(0).getValue().toString(),
 				ffc.getFormFields().get(1).getValue().toString(),
 				ffc.getFormFields().get(2).getValue().toString(),
 				ffc.getFormFields().get(3).getValue().toString(),
-				ffc.getFormFields().get(4).getValue().toString());
+				ffc.getFormFields().get(4).getValue().toString(), null, null, null);
 		autorRepository.save(a);
-		Korisnik k = new Korisnik(korisnik.getIme(), korisnik.getLozinka(), TipKorisnika.OBICAN, new ArrayList<>(), new ArrayList<>(),
+		Korisnik k = new Korisnik(korisnik.getIme(), korisnik.getLozinka(), new ArrayList<>(), new ArrayList<>(),
 				a, null, null, null);
 		return korisnikRepository.save(k);
-	}*/
-	
+	}
+	*/
 
 }

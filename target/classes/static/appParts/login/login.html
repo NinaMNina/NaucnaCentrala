@@ -2,31 +2,33 @@
 	<img src='./assets/logo-cover.png'/>
 </div> 
   
-<!-- <div class="vertical-center"> -->
-<!-- 	<div class="row" ng-repeat="ff in formFields"> -->
-<!-- 		<div class="col-3"></div> -->
-<!-- 		<div class="col-2"> -->
-<!-- 			<label><b>{{ff.label}}</b></label> -->
-<!-- 		</div> -->
-<!-- 		<div class="col-4" ng-if="ff.id=='ps_korisnickoIme'"> -->
-<!-- 			<input type="text" placeholder="Unesite korisničko ime" name="" ng-model="korisnik.ime" required> -->
-<!-- 		</div> -->
-<!-- 		<div class="col-4" ng-if="ff.id=='ps_lozinka'"> -->
-<!-- 	   		<input type="password" placeholder="Unesite lozinku" name="psw" ng-model="korisnik.lozinka" required> -->
-<!-- 		</div> -->
-<!-- 		<div class="col-4" ng-if="ff.id!='ps_lozinka' && ff.id!='ps_korisnickoIme'"> -->
-<!-- 	   		 <input type="text" ng-if="ff.type.name=='string'" ng-model="korisnik.{{ff.id}}"/> -->
-<!--     		 <input type="checkbox" ng-if="ff.type.name=='boolean'" ng-model="korisnik.{{ff.id}}"/> -->
-<!--   		     <input type="number" ng-if="ff.type.name=='long'" ng-model="korisnik.{{ff.id}}"/> -->
-<!--      		 <select ng-if="ff.type.name=='enum'" ng-model="korisnik.{{ff.id}}"> -->
-<!-- 	     		 <option ng-for="let val of enumValues" value={{val}}> -->
-<!-- 			          {{ff.type.values[val]}} -->
-<!-- 			     </option> -->
-<!-- 		     </select> -->
-<!-- 		</div> -->
-<!-- 		<div class="col-3"></div> -->
-<!-- 	</div> -->
-<!-- </div> -->
+<div class="vertical-center">
+	<div class="row" ng-repeat="ff in formFields">
+		<div class="col-3"></div>
+		<div class="col-2">
+			<label><b>{{ff.label}}</b></label>
+		</div>
+		<div class="col-4" ng-if="ff.id=='ps_korisnickoIme'">
+			<input type="text" placeholder="Unesite korisničko ime" name="" ng-model="korisnik.ime" required>
+		</div>
+		<div class="col-4" ng-if="ff.id=='ps_lozinka'">
+	   		<input type="password" placeholder="Unesite lozinku" name="psw" ng-model="korisnik.lozinka" required>
+		</div>
+		<div class="col-4" ng-if="ff.id!='ps_lozinka' && ff.id!='ps_korisnickoIme'">
+	   		 <input type="text" ng-if="ff.type.name=='string'" ng-model="korisnik.{{ff.id}}"/>
+    		 <input type="checkbox" ng-if="ff.type.name=='boolean'" ng-model="korisnik.{{ff.id}}"/>
+  		     <input type="number" ng-if="ff.type.name=='long'" ng-model="korisnik.{{ff.id}}"/>
+     		 <select ng-if="ff.type.name=='enum'" ng-model="korisnik.{{ff.id}}">
+	     		 <option ng-for="let val of enumValues" value={{val}}>
+			          {{ff.type.values[val]}}
+			     </option>
+		     </select>
+		</div>
+		<div class="col-3"></div>
+	</div>
+</div>
+
+<!--
 <div class="vertical-center">
 	<div class="row">
 		<div class="col-3"></div>
@@ -49,7 +51,7 @@
 	 		<div class="col-3"></div>
 		</div>
 	</div>
-</div>
+</div>-->
 <div class="vertical-center">
 	<div class="row" style="height: 5px">
 		<div class="col-3"></div>

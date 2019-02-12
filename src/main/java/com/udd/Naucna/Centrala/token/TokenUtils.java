@@ -106,7 +106,7 @@ public class TokenUtils
         Korisnik korisnik = korisnikRepository.findByKorisnickoIme(userDetails.getUsername());
         
         if(korisnik==null) {
-        	throw new UsernameNotFoundException("Ne postojeci korisnik");
+        	throw new UsernameNotFoundException("Nepostojeci korisnik");
         }
           
         try
