@@ -1,8 +1,10 @@
 package com.udd.Naucna.Centrala.dto;
 
+import java.util.ArrayList;
+
 public class RegistracijaDTO {
 	private KorisnikDTO korisnikDTO;
-	private FormFieldsCamunda formFieldsCamunda;
+	private FormFieldsCamundaDTO formFieldsCamunda;
 	
 	public KorisnikDTO getKorisnikDTO() {
 		return korisnikDTO;
@@ -10,13 +12,13 @@ public class RegistracijaDTO {
 	public void setKorisnikDTO(KorisnikDTO korisnikDTO) {
 		this.korisnikDTO = korisnikDTO;
 	}
-	public FormFieldsCamunda getFormFieldsCamunda() {
+	public FormFieldsCamundaDTO getFormFieldsCamunda() {
 		return formFieldsCamunda;
 	}
-	public void setFormFieldsCamunda(FormFieldsCamunda formFieldsCamunda) {
+	public void setFormFieldsCamunda(FormFieldsCamundaDTO formFieldsCamunda) {
 		this.formFieldsCamunda = formFieldsCamunda;
 	}
-	public RegistracijaDTO(KorisnikDTO korisnikDTO, FormFieldsCamunda formFieldsCamunda) {
+	public RegistracijaDTO(KorisnikDTO korisnikDTO, FormFieldsCamundaDTO formFieldsCamunda) {
 		super();
 		this.korisnikDTO = korisnikDTO;
 		this.formFieldsCamunda = formFieldsCamunda;

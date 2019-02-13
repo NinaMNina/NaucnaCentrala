@@ -73,7 +73,7 @@ public class LoginController {
 		Task task = taskService.createTaskQuery().processInstanceId(pi.getId()).list().get(0);
 		
 		TaskFormData tfd = formService.getTaskFormData(task.getId());
-		List<FormField> properties = tfd.getFormFields();
+		ArrayList<FormField> properties = (ArrayList<FormField>) tfd.getFormFields();
 		for(FormField fp : properties) {
 			System.out.println(fp.getId() + fp.getType());
 		}
@@ -90,7 +90,7 @@ public class LoginController {
 		Map<String, Object> retVal = new HashMap<>();
 		retVal.put("retVal", "REGISTRACIJA");
 		taskService.complete(id, retVal);
-		List<Task> tasks = taskService.createTaskQuery().processInstanceId(task.getProcessInstanceId()).list();
+		ArrayList<Task> tasks = (ArrayList<Task>) taskService.createTaskQuery().processInstanceId(task.getProcessInstanceId()).list();
 		List<TaskDto> dtos = new ArrayList<TaskDto>();
 		for (Task task0 : tasks) {
 			TaskDto t = new TaskDto(task0.getId(), task0.getName(), task0.getAssignee());

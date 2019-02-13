@@ -14,7 +14,7 @@
 		<div class="col-4" ng-if="ff.id=='ps_lozinka'">
 	   		<input type="password" placeholder="Unesite lozinku" name="psw" ng-model="korisnik.lozinka" required>
 		</div>
-		<div class="col-4" ng-if="ff.id!='ps_lozinka' && ff.id!='ps_korisnickoIme'">
+	<!-- 	<div class="col-4" ng-if="ff.id!='ps_lozinka' && ff.id!='ps_korisnickoIme'">
 	   		 <input type="text" ng-if="ff.type.name=='string'" ng-model="korisnik.{{ff.id}}"/>
     		 <input type="checkbox" ng-if="ff.type.name=='boolean'" ng-model="korisnik.{{ff.id}}"/>
   		     <input type="number" ng-if="ff.type.name=='long'" ng-model="korisnik.{{ff.id}}"/>
@@ -23,7 +23,7 @@
 			          {{ff.type.values[val]}}
 			     </option>
 		     </select>
-		</div>
+		</div> -->
 		<div class="col-3"></div>
 	</div>
 </div>

@@ -42,9 +42,9 @@
 		
 		<div class="col-4">
 	   		 <input type="text" ng-if="ff.type.name=='string'" ng-model="ff.value.value"/>
-    		 <input type="checkbox" ng-if="ff.type.name=='boolean'"/>
-  		     <input type="number" ng-if="ff.type.name=='long'"/>
-     		 <select ng-if="ff.type.name=='enum'">
+    		 <input type="checkbox" ng-if="ff.type.name=='boolean'" ng-model="ff.value.value"/>
+  		     <input type="number" ng-if="ff.type.name=='long'" ng-model="ff.value.value"/>
+     		 <select ng-if="ff.type.name=='enum'" ng-model="ff.value.value"> 
 	     		 <option ng-for="let val of enumValues" value={{val}}>
 			          {{ff.type.values[val]}}
 			     </option>
@@ -65,7 +65,7 @@
 		<div class="col-3"></div>
 		<div class="col-2"></div>
 		<div class="col-4">
-			<span></span><button class="btn btn-outline-warning" type="submit" ng-click="registrujSe()">Registruj se</button></span>
+			<span></span><button class="btn btn-outline-info" type="submit" ng-click="registrujSe()">Registruj se</button></span>
 		</div>
 		<div class="col-3"></div>
 	</div>

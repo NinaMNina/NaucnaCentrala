@@ -52,7 +52,6 @@
             }
             
             $scope.registrujSe = function(){
-                alert("Under Construction");
             	$http({
                     method: 'GET',
                     url: 'https://localhost:8087/NaucnaCentrala/login/registracija/'+taskId

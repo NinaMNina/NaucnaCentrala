@@ -2,10 +2,12 @@ package com.udd.Naucna.Centrala.services.impl;
 
 import java.util.ArrayList;
 
+import org.camunda.bpm.engine.IdentityService;
+import org.camunda.bpm.engine.identity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.udd.Naucna.Centrala.dto.FormFieldsCamunda;
+import com.udd.Naucna.Centrala.dto.FormFieldsCamundaDTO;
 import com.udd.Naucna.Centrala.dto.KorisnikDTO;
 import com.udd.Naucna.Centrala.dto.ZadaciDTO;
 import com.udd.Naucna.Centrala.model.Autor;
@@ -34,6 +36,9 @@ public class KorisnikServiceImpl implements KorisnikService{
 	private RadRepository radRepository;
 	@Autowired
 	private IzdanjeRepository izdanjeRepository;
+	@Autowired
+	private IdentityService identityService;
+	
 	@Override
 	public Korisnik uloguj(KorisnikDTO korisnik) {
 		Korisnik k0 = korisnikRepository.findByKorisnickoIme(korisnik.getIme());
@@ -45,13 +50,6 @@ public class KorisnikServiceImpl implements KorisnikService{
 	    	return null;
 	    }
 		return k0;
-	}
-
-
-	@Override
-	public Korisnik registruj(FormFieldsCamunda ffc, KorisnikDTO korisnik) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 
@@ -121,5 +119,23 @@ public class KorisnikServiceImpl implements KorisnikService{
 		return korisnikRepository.save(k);
 	}
 	*/
+
+
+	@Override
+	public Korisnik registruj(FormFieldsCamundaDTO ffc, KorisnikDTO korisnik) {
+		Autor retVal = new Autor(null, korisnik.getIme(), korisnik.getLozinka(), ffc.findImeValue(), ffc.findPrezimeValue(), ffc.findEmailValue(), ffc.findPointValue(), new ArrayList<>(), new ArrayList<>());
+		retVal = autorRepository.save(retVal);
+		if(retVal!=null){
+			User u = identityService.newUser(korisnik.getIme());
+			u.setFirstName(ffc.findImeValue());
+			u.setLastName(ffc.findPrezimeValue());
+			u.setEmail(ffc.findEmailValue());
+			u.setPassword(korisnik.getLozinka());
+			identityService.saveUser(u);
+			identityService.createMembership(korisnik.getIme(), "autor");
+			return retVal;
+		}
+		return null;
+	}
 
 }

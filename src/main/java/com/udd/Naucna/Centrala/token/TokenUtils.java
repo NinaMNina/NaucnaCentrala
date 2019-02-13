@@ -1,5 +1,6 @@
 package com.udd.Naucna.Centrala.token;
 
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -7,6 +8,7 @@ import java.util.Map;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
@@ -101,7 +103,7 @@ public class TokenUtils
         claims.put("sub", userDetails.getUsername());
         claims.put("kreirano", new Date(System.currentTimeMillis()));
         claims.put("istice", new Date(System.currentTimeMillis() + expiration * 1000));
-        claims.put("uloga", userDetails.getAuthorities());
+        claims.put("uloga", setUloga(userDetails.getAuthorities()));
         
         Korisnik korisnik = korisnikRepository.findByKorisnickoIme(userDetails.getUsername());
         
@@ -120,6 +122,19 @@ public class TokenUtils
                 .setExpiration(new Date(System.currentTimeMillis() + expiration * 1000))
                 .signWith(SignatureAlgorithm.HS512, secret).compact();
     }
+
+
+	private String setUloga(Collection<? extends GrantedAuthority> authorities) {
+		if(authorities.toString().contains("Autor"))
+			return "autor";
+		if(authorities.toString().contains("Urednik"))
+			return "urednik";
+		if(authorities.toString().contains("UrednikNO"))
+			return "urednikNO";
+		if(authorities.toString().contains("Recenzent"))
+			return "recenzent";
+		return "undefined";
+	}
 
 
 

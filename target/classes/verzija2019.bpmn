@@ -25,8 +25,18 @@
             <camunda:formField id="ar_ime" label="Ime" type="string" />
             <camunda:formField id="ar_prezime" label="Prezime" type="string" />
             <camunda:formField id="ar_mail" label="E-mail" type="string" />
-            <camunda:formField id="ar_grad" label="Grad" type="string" />
-            <camunda:formField id="ar_drzava" label="Država" type="string" />
+            <camunda:formField id="ar_geografskaSirina" label="Geografska Širina" type="long">
+              <camunda:validation>
+                <camunda:constraint name="min" config="-90" />
+                <camunda:constraint name="max" config="90" />
+              </camunda:validation>
+            </camunda:formField>
+            <camunda:formField id="ar_geografskaDuzina" label="Geografska Dužina" type="long">
+              <camunda:validation>
+                <camunda:constraint name="min" config="-180" />
+                <camunda:constraint name="max" config="180" />
+              </camunda:validation>
+            </camunda:formField>
           </camunda:formData>
         </bpmn:extensionElements>
         <bpmn:incoming>SequenceFlow_07lcy5i</bpmn:incoming>

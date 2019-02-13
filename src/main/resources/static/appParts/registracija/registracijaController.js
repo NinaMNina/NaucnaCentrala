@@ -37,7 +37,7 @@
             		$scope.secretMessage="Lozinke se ne poklapaju";
             		return;
             	}	
-            	if(!retVal.ime){
+            	if(retVal.ime=="" || retVal.ime==undefined){
             		$scope.secretMessage="Potrebno je uneti sve podatke";
             		return;
             	}
@@ -48,7 +48,17 @@
                 		return;
                 	}
             	}
-            	var retVal1 = {"formFields": $scope.formFields,
+            	var forma = [];
+            	for(var i=0; i<$scope.formFields.length; i++){
+            		var f0 ={};
+            		f0 = {
+            			"key": $scope.formFields[i].id,
+            			"value": $scope.formFields[i].value.value,
+            			"tip": $scope.formFields[i].type.name.toUpperCase()
+            		};
+            		forma.push(f0);
+            	}
+            	var retVal1 = {"formFields": forma,
             			"processInstanceId": processInstanceId,
             			"taskId": taskId};
             	var retVal3 =  { "ime": retVal.ime,

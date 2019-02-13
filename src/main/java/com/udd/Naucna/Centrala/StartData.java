@@ -9,12 +9,15 @@ import java.util.Locale;
 
 import javax.annotation.PostConstruct;
 
+import org.apache.james.mime4j.field.address.Mailbox;
+import org.camunda.bpm.engine.IdentityService;
+import org.camunda.bpm.engine.identity.Group;
+import org.camunda.bpm.engine.identity.User;
 import org.elasticsearch.common.geo.GeoPoint;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.geo.Point;
 import org.springframework.stereotype.Component;
 
-import com.udd.Naucna.Centrala.dto.RecenzentDTO;
 import com.udd.Naucna.Centrala.model.Autor;
 import com.udd.Naucna.Centrala.model.Casopis;
 import com.udd.Naucna.Centrala.model.Izdanje;
@@ -57,6 +60,8 @@ public class StartData {
     private UrednikNORepository urednikNORepository;
 	@Autowired
     private ESRecenzentRepository esRecenzentRepository;
+	@Autowired
+    private IdentityService identityService;
 	
 	@PostConstruct
     private void init(){
@@ -75,6 +80,23 @@ public class StartData {
 		autorrad2NG = autorRepository.save(autorrad2NG);
 		Autor autorrad3NG = new Autor(null, "tijana", "tijana", "Tijana", "Ivanović", "tijana.ivanovic@live.com", new Point(new Double(43.32472), new Double(21.90333)), new ArrayList<>(),new ArrayList<>());
 		autorrad3NG = autorRepository.save(autorrad3NG);
+		
+		Group autori = identityService.newGroup("autor");
+		identityService.saveGroup(autori);
+		User nina = identityService.newUser(autor0.getIme());
+		nina.setFirstName(autor0.getIme());
+		nina.setLastName(autor0.getPrezime());
+		nina.setEmail(autor0.getEmail());
+		nina.setPassword(autor0.getLozinka());
+		identityService.saveUser(nina);
+		Group urednici = identityService.newGroup("urednik");
+		identityService.saveGroup(urednici);
+		Group recenzenti = identityService.newGroup("recenzent");
+		identityService.saveGroup(recenzenti);
+		Group uredniciNO = identityService.newGroup("urednikNO");
+		identityService.saveGroup(uredniciNO);
+
+		
 //CASOPISI
 		Casopis casNG = new Casopis(null, "Nacionalna Geografija", true, "12345678", new ArrayList<NaucnaOblast>(), null, new ArrayList<UrednikNO>(),
 				new ArrayList<Recenzent>(), new ArrayList<Izdanje>());
