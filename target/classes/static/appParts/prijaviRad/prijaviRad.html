@@ -1,0 +1,17 @@
+<div class="p-4 bg-white">
+	<img src='./assets/logo-cover.png'/>
+</div> 
+<div class="vertical-center">
+	<h5 class="my-0 font-weight-normal text-center">Izaberite časopis za objavu rada:</h5><br/><br/>
+	<div class="row" ng-repeat="c in casopisi">
+		<div class="col-3"></div>
+		<div class="col-6 card text-justify">
+			<h6 class="my-0 font-weight-bold"><small class="text-muted"> časopis:</small><span class="float-right">{{c.naziv}}</span> </h6><br/>
+			<h6 class="my-0 font-weight-normal"><small class="text-muted"> naučne oblasti:</small> <span class="float-right" ng-bind-html="trustDangerousSnippet(c.naucneOblasti)"></span> </h6><br/>
+			<h6 class="my-0 font-weight-normal" ng-if="c.isOpenAccess"><small class="text-muted"> tip časopisa: otvorenog tipa</small> </h6>	
+			<h6 class="my-0 font-weight-normal" ng-if="!c.isOpenAccess"><small class="text-muted"> tip časopisa: zatvorenog tipa</small> </h6><br/>	
+            <button type="button" class="btn float-right btn-outline-info" ng-click="odaberi(c)">Odaberi časopis</button>
+		</div>
+		<div class="col-3"></div>
+	</div>
+</div>

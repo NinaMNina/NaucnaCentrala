@@ -15,9 +15,13 @@
             $scope.paramsResult = [];
     		$scope.isLoggedIn=true;
             $scope.init = function(){
-            	if($stateParams.token=="" || $stateParams.token=="{token}")
+            	var tokenData = $window.localStorage.getItem('token');
+            	if(tokenData==null){
             		$scope.isLoggedIn=false;
-            		/*$window.location.href = 'https://localhost:8087/NaucnaCentrala/#!/login';
+            	}
+            /*	if($stateParams.token=="" || $stateParams.token==undefined)
+            		$scope.isLoggedIn=false;
+            		$window.location.href = 'https://localhost:8087/NaucnaCentrala/#!/login';
             /*	else{
             		$http({
                         method: 'GET',
@@ -30,6 +34,9 @@
                             alert("Greska u zahtevu");
                         });
             	}*/
+            }
+            $scope.prijaviRad = function(){
+            	$window.location.href = 'https://localhost:8087/NaucnaCentrala/#!/prijaviRad';
             }
             $scope.dodajParametar = function(){
                 $scope.params.push({"operacija": "",

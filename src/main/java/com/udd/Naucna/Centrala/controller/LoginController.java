@@ -58,7 +58,7 @@ public class LoginController {
     public @ResponseBody ResponseEntity<KorisnikDTO> getDo(@RequestBody KorisnikDTO korisnik) {
 		Korisnik k = korisnikService.uloguj(korisnik);
 		if(k==null)
-			return new ResponseEntity(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity(null, HttpStatus.OK);
 		String token = tokenUtils.generateToken(CustomUserDetailsFactory.createCustomUserDetails(k));
 		korisnik.setLozinka(token);
 		return new ResponseEntity(korisnik, HttpStatus.OK);		

@@ -11,6 +11,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
+import com.udd.Naucna.Centrala.dto.CasopisDTO;
+
 @Entity
 public class Casopis {
 	@Id
@@ -21,7 +23,7 @@ public class Casopis {
 	private String naziv;
 	
 	@Column
-	private boolean openAccess;
+	private Boolean openAccess;
 	
 	@Column(nullable = false, length=8)
 	private String ISSN;
@@ -57,11 +59,11 @@ public class Casopis {
 		this.naziv = naziv;
 	}
 
-	public boolean isOpenAccess() {
+	public Boolean isOpenAccess() {
 		return openAccess;
 	}
 
-	public void setOpenAccess(boolean openAccess) {
+	public void setOpenAccess(Boolean openAccess) {
 		this.openAccess = openAccess;
 	}
 
@@ -113,7 +115,7 @@ public class Casopis {
 		this.izdanja = izdanja;
 	}
 
-	public Casopis(Long id, String naziv, boolean openAccess, String iSSN,
+	public Casopis(Long id, String naziv, Boolean openAccess, String iSSN,
 			List<NaucnaOblast> naucneOblasti, Urednik urednik, List<UrednikNO> uredniciNO,
 			List<Recenzent> recenzenti, List<Izdanje> izdanja) {
 		super();
@@ -130,6 +132,22 @@ public class Casopis {
 
 	public Casopis() {
 		super();
+	}
+	
+	public CasopisDTO convertToDTO(){
+		CasopisDTO retVal = new CasopisDTO(this.id, this.naziv, this.openAccess, getStringNO(this.getNaucneOblasti()), this.urednik.getKorisnickoIme());
+		return retVal;
+	}
+
+	private String getStringNO(List<NaucnaOblast> naucneOblasti2) {
+		String retVal = "";
+		for(NaucnaOblast no : naucneOblasti2){
+			retVal+=no.getNazivOblasti();
+			retVal+=" - ";
+			retVal+=no.getNazivPodOblasti();
+			retVal+="<br/>";
+		}
+		return retVal;
 	}
 	
 	

@@ -10,6 +10,7 @@
             $scope.token = $stateParams.token;
             var processInstanceId = "";
             var taskId="";
+            $scope.isCamundaTask=false;
             $scope.poruka="";
             var init = function(){
             	$scope.korisnik={};
@@ -17,10 +18,16 @@
                     method: 'GET',
                     url: 'https://localhost:8087/NaucnaCentrala/login/get'
                   }).then(function successCallback(response){
-                	  if(response.data!="")
+                	  if(response.data!="" || response.data!=null || response.data!=undefined){
                 		  $scope.formFields = response.data.formFields;
                 	  	  processInstanceId = response.data.processInstanceId;
                 	  	  taskId = response.data.taskId;
+                	  	  $scope.isCamundaTask=true;
+                	  }
+                	  else{
+                          $scope.isCamundaTask=false;
+                	  		  
+                	  }
                   },
                     function errorCallback(response){
                         alert("Greska");
@@ -35,7 +42,10 @@
                     url: 'https://localhost:8087/NaucnaCentrala/login/do',
                     data: retVal
                   }).then(function successCallback(response){
-                	  if(response.data.lozinka!=""){
+                	  if(response.data==null){
+                          $scope.poruka = "Pogrešno uneseni lozinka ili ime";                		  
+                	  }
+                	  else if(response.data.lozinka!=""){
                 		  $window.localStorage.setItem('token', response.data.lozinka); 
                 		  var tokenData = jwtHelper.decodeToken($window.localStorage.getItem('token'));
                 		  var tempUser = {id: tokenData.id, 
@@ -44,7 +54,7 @@
                 				  processId: processInstanceId
                 		  		}
                 		  $location.path('/home');
-                	  }         	  
+                	  }    	  
                   },
                     function errorCallback(response){
                         $scope.poruka = "Pogrešno uneseni lozinka ili ime"

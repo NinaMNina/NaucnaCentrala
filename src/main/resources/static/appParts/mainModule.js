@@ -26,4 +26,9 @@ app.config(function($stateProvider, $urlRouterProvider) {
         templateUrl : 'appParts/zadaci/zadaci.html',
         controller : 'zadaciController'
     })
+    .state('prijaviRad', {
+        url: '/prijaviRad',
+        templateUrl : 'appParts/prijaviRad/prijaviRad.html',
+        controller : 'prijaviRadController'
+    })
   });
