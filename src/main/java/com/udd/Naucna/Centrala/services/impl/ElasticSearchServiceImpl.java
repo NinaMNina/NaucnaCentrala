@@ -1,44 +1,11 @@
 package com.udd.Naucna.Centrala.services.impl;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Map;
-import java.util.Optional;
 
-import org.apache.tika.exception.TikaException;
-import org.apache.tika.metadata.Metadata;
-import org.apache.tika.parser.ParseContext;
-import org.apache.tika.parser.pdf.PDFParser;
-import org.apache.tika.sax.BodyContentHandler;
-import org.elasticsearch.action.search.SearchRequestBuilder;
-import org.elasticsearch.action.search.SearchResponse;
-import org.elasticsearch.action.search.SearchType;
-import org.elasticsearch.client.Client;
-import org.elasticsearch.common.geo.GeoDistance;
-import org.elasticsearch.common.io.stream.StreamInput;
-import org.elasticsearch.common.unit.DistanceUnit;
-import org.elasticsearch.index.query.BoolQueryBuilder;
-import org.elasticsearch.index.query.GeoDistanceQueryBuilder;
-import org.elasticsearch.index.query.MoreLikeThisQueryBuilder;
-import org.elasticsearch.index.query.MoreLikeThisQueryBuilder.Item;
-import org.elasticsearch.index.query.QueryBuilders;
-import org.elasticsearch.search.SearchHit;
-import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
-import org.elasticsearch.search.fetch.subphase.highlight.HighlightField;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
 import org.springframework.stereotype.Service;
-import org.xml.sax.SAXException;
 
-import com.google.gson.Gson;
 import com.udd.Naucna.Centrala.dto.HighlightedRadDTO;
-import com.udd.Naucna.Centrala.dto.Parametar;
 import com.udd.Naucna.Centrala.dto.ParametriDTO;
 import com.udd.Naucna.Centrala.dto.RadDTO;
 import com.udd.Naucna.Centrala.dto.RecenzentDTO;
@@ -51,12 +18,42 @@ import com.udd.Naucna.Centrala.services.ElasticSearchService;
 @Service
 public class ElasticSearchServiceImpl implements ElasticSearchService {
 	
-	@Autowired
+/*	@Autowired
 	private ElasticSearchRepository elasticSearchRepository;
 	@Autowired
-	private ESRecenzentRepository esRecenzentRepository;
+	private ESRecenzentRepository esRecenzentRepository;*/
+	@Override
+	public RadDTO uploadRad(RadDTO rad) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public ArrayList<HighlightedRadDTO> searchObican(String tekst) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public ArrayList<RadDTO> moreLikeThis(Long id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public ArrayList<HighlightedRadDTO> searchParams(ParametriDTO p) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public ArrayList<RecenzentDTO> findUdaljeniRecenzenti(Rad rad, Casopis casopis) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public ArrayList<RecenzentDTO> findSlicniRecenzenti(Rad rad, Casopis casopis) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
-    @Autowired
+  /*  @Autowired
     private ElasticsearchTemplate elasticsearchTemplate;
     
     @Autowired
@@ -310,7 +307,7 @@ public class ElasticSearchServiceImpl implements ElasticSearchService {
 	}
 
 
-
+*/
 	
 	
 }

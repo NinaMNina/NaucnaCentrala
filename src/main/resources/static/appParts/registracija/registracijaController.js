@@ -81,7 +81,7 @@
                 				  uloga : tokenData.uloga[0].authority,
                 				  processId: processInstanceId
                 		  		}
-                		  $location.path('/home/'+tokenData.id);
+                		  $location.path('/home');
                 	  }          	  
                   },
                     function errorCallback(response){

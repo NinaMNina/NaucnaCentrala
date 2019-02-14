@@ -122,17 +122,16 @@ public class KorisnikServiceImpl implements KorisnikService{
 
 
 	@Override
-	public Korisnik registruj(FormFieldsCamundaDTO ffc, KorisnikDTO korisnik) {
-		Autor retVal = new Autor(null, korisnik.getIme(), korisnik.getLozinka(), ffc.findImeValue(), ffc.findPrezimeValue(), ffc.findEmailValue(), ffc.findPointValue(), new ArrayList<>(), new ArrayList<>());
-		retVal = autorRepository.save(retVal);
+	public Korisnik registruj(Autor autor) {
+		Autor retVal = autorRepository.save(autor);
 		if(retVal!=null){
-			User u = identityService.newUser(korisnik.getIme());
-			u.setFirstName(ffc.findImeValue());
-			u.setLastName(ffc.findPrezimeValue());
-			u.setEmail(ffc.findEmailValue());
-			u.setPassword(korisnik.getLozinka());
+			User u = identityService.newUser(retVal.getKorisnickoIme());
+			u.setFirstName(retVal.getIme());
+			u.setLastName(retVal.getPrezime());
+			u.setEmail(retVal.getEmail());
+			u.setPassword(retVal.getLozinka());
 			identityService.saveUser(u);
-			identityService.createMembership(korisnik.getIme(), "autor");
+			identityService.createMembership(retVal.getKorisnickoIme(), "autor");
 			return retVal;
 		}
 		return null;

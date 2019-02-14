@@ -270,7 +270,6 @@
       <bpmn:incoming>SequenceFlow_027gpmh</bpmn:incoming>
       <bpmn:incoming>SequenceFlow_1ece181</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_1le1ez3</bpmn:outgoing>
-      <bpmn:multiInstanceLoopCharacteristics isSequential="true" camunda:collection="1" />
     </bpmn:userTask>
     <bpmn:serviceTask id="ServiceTask_1khz1ph" name="ponuda relevantnih recenzenata" camunda:class="com.udd.Naucna.Centrala.services.camunda.PonudaRelevantnihRecenzenata">
       <bpmn:incoming>SequenceFlow_1cz1ark</bpmn:incoming>

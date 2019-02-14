@@ -13,10 +13,12 @@
             $scope.pretragaReci = "";
             $scope.searchResult = [];
             $scope.paramsResult = [];
+    		$scope.isLoggedIn=true;
             $scope.init = function(){
             	if($stateParams.token=="" || $stateParams.token=="{token}")
-            		$window.location.href = 'https://localhost:8087/NaucnaCentrala/#!/login';
-            	else{
+            		$scope.isLoggedIn=false;
+            		/*$window.location.href = 'https://localhost:8087/NaucnaCentrala/#!/login';
+            /*	else{
             		$http({
                         method: 'GET',
                         url: 'https://localhost:8087/NaucnaCentrala/login/checkValidity/'+$stateParams.token
@@ -27,7 +29,7 @@
                         function errorCallback(response){
                             alert("Greska u zahtevu");
                         });
-            	}
+            	}*/
             }
             $scope.dodajParametar = function(){
                 $scope.params.push({"operacija": "",
@@ -36,7 +38,11 @@
                 	"fraza": false});
             }
             $scope.odjaviSe = function(){
+        		$scope.isLoggedIn=false;
             	$stateParams.token = "";
+            	$window.localStorage.removeItem('token');
+            }
+            $scope.ulogujSe = function(){
             	$window.location.href = 'https://localhost:8087/NaucnaCentrala/#!/login';
             }
             $scope.pretrazi = function(){

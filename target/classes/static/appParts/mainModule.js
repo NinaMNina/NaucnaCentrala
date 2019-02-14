@@ -3,11 +3,11 @@ var app = angular.module('app', [ 'ui.router', 'ngStorage', 'angular-jwt' ]);
 
 app.config(function($stateProvider, $urlRouterProvider) {
 
-    $urlRouterProvider.otherwise("/home/{token}");
+    $urlRouterProvider.otherwise("/home");
 
     $stateProvider
 	.state('home', {
-        url: '/home/{token}',
+        url: '/home',
         templateUrl : 'appParts/home/home.html',
         controller : 'homeController'
     })

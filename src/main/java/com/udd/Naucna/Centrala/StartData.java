@@ -9,11 +9,9 @@ import java.util.Locale;
 
 import javax.annotation.PostConstruct;
 
-import org.apache.james.mime4j.field.address.Mailbox;
 import org.camunda.bpm.engine.IdentityService;
 import org.camunda.bpm.engine.identity.Group;
 import org.camunda.bpm.engine.identity.User;
-import org.elasticsearch.common.geo.GeoPoint;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.geo.Point;
 import org.springframework.stereotype.Component;
@@ -58,8 +56,8 @@ public class StartData {
     private RecenzentRepository recenzentRepository;
 	@Autowired
     private UrednikNORepository urednikNORepository;
-	@Autowired
-    private ESRecenzentRepository esRecenzentRepository;
+//	@Autowired
+//    private ESRecenzentRepository esRecenzentRepository;
 	@Autowired
     private IdentityService identityService;
 	
@@ -88,7 +86,8 @@ public class StartData {
 		nina.setLastName(autor0.getPrezime());
 		nina.setEmail(autor0.getEmail());
 		nina.setPassword(autor0.getLozinka());
-		identityService.saveUser(nina);
+		identityService.saveUser(nina);	
+		
 		Group urednici = identityService.newGroup("urednik");
 		identityService.saveGroup(urednici);
 		Group recenzenti = identityService.newGroup("recenzent");
@@ -292,7 +291,7 @@ public class StartData {
 		
 	}
 	
-	private GeoPoint setGeoPointLokacija(Point lokacija) {
+/*	private GeoPoint setGeoPointLokacija(Point lokacija) {
 		return new GeoPoint(lokacija.getX(), lokacija.getY());
-	}
+	}*/
 }

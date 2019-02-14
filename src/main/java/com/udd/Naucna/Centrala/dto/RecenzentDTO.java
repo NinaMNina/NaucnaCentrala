@@ -1,16 +1,8 @@
 package com.udd.Naucna.Centrala.dto;
 
-import javax.persistence.Id;
-
-import org.elasticsearch.common.geo.GeoPoint;
-import org.springframework.data.elasticsearch.annotations.Document;
-import org.springframework.data.elasticsearch.annotations.Field;
-import org.springframework.data.elasticsearch.annotations.FieldType;
-import org.springframework.data.elasticsearch.annotations.GeoPointField;
-
-@Document(indexName = "recenzenti", type = "recenzenti", shards = 1, replicas = 0)
+//@Document(indexName = "recenzenti", type = "recenzenti", shards = 1, replicas = 0)
 public class RecenzentDTO {
-	@Id
+	/*@Id
 	private Long id;
 	@Field(type = FieldType.Text, store = true, index=false)
 	private String ime;
@@ -81,7 +73,7 @@ public class RecenzentDTO {
 	public RecenzentDTO() {
 		super();
 	}
-	
+	*/
 	
 	
 

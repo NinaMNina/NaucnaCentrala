@@ -44,10 +44,12 @@ import com.udd.Naucna.Centrala.services.RadService;
 @Service
 public class RadServiceImpl implements RadService {
 
-	@Autowired
+	/*@Autowired
 	private ElasticSearchRepository elasticSearchRepository;
 	@Autowired
 	private ESRecenzentRepository esRecenzentRepository;
+	@Autowired
+	private ElasticSearchService elasticSearchService;*/
 	@Autowired
 	private RadRepository radRepository;
 	@Autowired
@@ -56,10 +58,28 @@ public class RadServiceImpl implements RadService {
 	private IzdanjeRepository izdanjeRepository;
 	@Autowired
 	private RecenzentRepository recenzentRepository;
-	@Autowired
-	private ElasticSearchService elasticSearchService;
-	
 	@Override
+	public boolean exists(Long id) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	@Override
+	public Boolean saveMultipartFile(MultipartFile file, Long id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public RadDTO getRadDTO(Long rad) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public Boolean dodajRecenzente(Long id, ArrayList<Long> odabrani) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+/*	@Override
 	public boolean exists(Long id) {
 		if(elasticSearchRepository.findById(id)!=null)
 			return true;
@@ -218,5 +238,5 @@ public class RadServiceImpl implements RadService {
 		}
 		return retVal;
 	}
-
+*/
 }

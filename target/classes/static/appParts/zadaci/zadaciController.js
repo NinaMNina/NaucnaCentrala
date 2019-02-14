@@ -231,7 +231,7 @@
 	                data: fd
 	        	}).then(function successCallback(response){
 	        		
-	        		$window.location.href = 'https://localhost:8087/NaucnaCentrala/#!/home/'+$stateParams.token;
+	        		$window.location.href = 'https://localhost:8087/NaucnaCentrala/#!/home';
                 },
                   function errorCallback(response){
                       $scope.poruka = "Problem pri obavljanju zadatka. Neuspešno obavljeno!"

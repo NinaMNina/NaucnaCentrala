@@ -2,12 +2,14 @@ package com.udd.Naucna.Centrala.controller;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 import org.camunda.bpm.engine.FormService;
 import org.camunda.bpm.engine.RuntimeService;
 import org.camunda.bpm.engine.TaskService;
 import org.camunda.bpm.engine.form.FormField;
 import org.camunda.bpm.engine.form.TaskFormData;
+import org.camunda.bpm.engine.impl.persistence.entity.ExecutionEntity;
 import org.camunda.bpm.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,13 +22,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.udd.Naucna.Centrala.dto.FormFieldDTO;
 import com.udd.Naucna.Centrala.dto.FormFieldsCamunda;
 import com.udd.Naucna.Centrala.dto.FormFieldsCamundaDTO;
 import com.udd.Naucna.Centrala.dto.KorisnikDTO;
 import com.udd.Naucna.Centrala.dto.RegistracijaDTO;
-import com.udd.Naucna.Centrala.model.Korisnik;
-import com.udd.Naucna.Centrala.security.CustomUserDetailsFactory;
 import com.udd.Naucna.Centrala.services.KorisnikService;
 import com.udd.Naucna.Centrala.token.TokenUtils;
 
@@ -66,24 +65,25 @@ public class RegistracijaController {
     }
 	
 	@PostMapping(path = "/do", produces = "application/json", consumes="application/json")
-    public @ResponseBody ResponseEntity<String> register(@RequestBody RegistracijaDTO reg) {
+    public @ResponseBody ResponseEntity<String> register(@RequestBody RegistracijaDTO reg) {		
 		FormFieldsCamundaDTO ffc = reg.getFormFieldsCamunda();
 		KorisnikDTO korisnik = reg.getKorisnikDTO();
-		Korisnik korisnik0 = korisnikService.registruj(ffc, korisnik);
-		if(korisnik0==null){
-			return new ResponseEntity(HttpStatus.BAD_REQUEST);
-		}
-		Korisnik k = korisnikService.uloguj(korisnik);
-		if(k==null)
-			return new ResponseEntity(HttpStatus.BAD_REQUEST);
-		String token = tokenUtils.generateToken(CustomUserDetailsFactory.createCustomUserDetails(k));
-		String id = ffc.getTaskId();
-		Task task = taskService.createTaskQuery().taskId(id).singleResult();
+		
+		Task task = taskService.createTaskQuery().taskId(ffc.getTaskId()).singleResult();
 		String processInstanceId = task.getProcessInstanceId();
-//		String user = (String) runtimeService.getVariable(processInstanceId, korisnik.getIme());
-		taskService.claim(id, korisnik.getIme());
-		taskService.complete(id);
-		return new ResponseEntity(token, HttpStatus.OK);	
-		//ovo nije dobro, jer postoji service task koji resava klasa "com.udd.Naucna.Centrala.services.ProcesiranjePodataka"
-    }
+		String user = (String) runtimeService.getVariable(processInstanceId, "username");
+		taskService.claim(ffc.getTaskId(), user);
+		Map<String, Object> retVal = new HashMap<>();
+		retVal.put("ime", ffc.findImeValue());
+		retVal.put("prezime", ffc.findPrezimeValue());
+		retVal.put("email", ffc.findEmailValue());
+		retVal.put("geografskaSirina", ffc.findSirinaValue());
+		retVal.put("geografskaDuzina", ffc.findDuzinaValue());
+		retVal.put("korisnickoIme", korisnik.getIme());
+		retVal.put("lozinka", korisnik.getLozinka());
+		taskService.complete(ffc.getTaskId(), retVal);
+		
+		
+		return new ResponseEntity("", HttpStatus.OK);	
+	}
 }

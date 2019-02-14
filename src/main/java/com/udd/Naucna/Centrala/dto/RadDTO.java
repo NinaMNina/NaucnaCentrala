@@ -1,16 +1,8 @@
 package com.udd.Naucna.Centrala.dto;
 
-
-import javax.persistence.Id;
-
-import org.springframework.data.elasticsearch.annotations.Document;
-import org.springframework.data.elasticsearch.annotations.Field;
-import org.springframework.data.elasticsearch.annotations.FieldType;
-import org.springframework.data.geo.Point;
-
-@Document(indexName = "radovi", type = "radovi", shards = 1, replicas = 0)
+//@Document(indexName = "radovi", type = "radovi", shards = 1, replicas = 0)
 public class RadDTO {
-	@Id
+/*	@Id
 	private Long id;
 	
 	@Field(type = FieldType.Text, store = true, index=true, analyzer = "serbian-analyzer", searchAnalyzer = "serbian-analyzer")
@@ -138,7 +130,7 @@ public class RadDTO {
 	public RadDTO() {
 		super();
 	}
-	
+	*/
 
 	
 }

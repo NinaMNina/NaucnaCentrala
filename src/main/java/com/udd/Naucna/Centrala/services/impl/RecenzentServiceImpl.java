@@ -1,26 +1,16 @@
 package com.udd.Naucna.Centrala.services.impl;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 
-import org.elasticsearch.common.geo.GeoPoint;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.geo.Point;
 import org.springframework.stereotype.Service;
 
 import com.udd.Naucna.Centrala.dto.RecenzentDTO;
 import com.udd.Naucna.Centrala.dto.ZadaciDTO;
-import com.udd.Naucna.Centrala.model.Casopis;
-import com.udd.Naucna.Centrala.model.Izdanje;
-import com.udd.Naucna.Centrala.model.NaucnaOblast;
-import com.udd.Naucna.Centrala.model.Rad;
-import com.udd.Naucna.Centrala.model.Recenzent;
 import com.udd.Naucna.Centrala.repository.CasopisRepository;
 import com.udd.Naucna.Centrala.repository.IzdanjeRepository;
 import com.udd.Naucna.Centrala.repository.RadRepository;
 import com.udd.Naucna.Centrala.repository.RecenzentRepository;
-import com.udd.Naucna.Centrala.services.ElasticSearchService;
 import com.udd.Naucna.Centrala.services.RecenzentService;
 
 
@@ -34,7 +24,7 @@ public class RecenzentServiceImpl implements RecenzentService {
 	private IzdanjeRepository izdanjeRepository;
 	@Autowired
 	private CasopisRepository casopisRepository;
-	@Autowired
+/*	@Autowired
 	private ElasticSearchService elasticsearchService;
 	
 	@Override
@@ -121,5 +111,25 @@ public class RecenzentServiceImpl implements RecenzentService {
 		Casopis casopis = getCasopis(rad);
 		return elasticsearchService.findSlicniRecenzenti(rad, casopis);
 	}
-
+*/
+	@Override
+	public ArrayList<RecenzentDTO> getRecenzenti(ZadaciDTO zad) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public ArrayList<RecenzentDTO> getStrucniRecenzenti(ZadaciDTO zad) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public ArrayList<RecenzentDTO> getUdaljeniRecenzenti(ZadaciDTO zad) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public ArrayList<RecenzentDTO> getSlicniRecenzenti(ZadaciDTO zad) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

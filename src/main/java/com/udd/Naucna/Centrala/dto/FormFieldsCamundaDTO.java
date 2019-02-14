@@ -67,6 +67,20 @@ public class FormFieldsCamundaDTO {
 		}
 		return new Point(lat, lon);
 	}
+	public String findSirinaValue() {
+		for(FormFieldDTO f : formFields){
+			if(f.getKey().equals("ar_geografskaSirina"))
+				return f.getValue();
+		}
+		return "";
+	}
+	public String findDuzinaValue() {
+		for(FormFieldDTO f : formFields){
+			if(f.getKey().equals("ar_geografskaDuzina"))
+				return f.getValue();
+		}
+		return "";
+	}
 	
 	
 }

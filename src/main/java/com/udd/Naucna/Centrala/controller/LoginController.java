@@ -11,7 +11,6 @@ import org.camunda.bpm.engine.RuntimeService;
 import org.camunda.bpm.engine.TaskService;
 import org.camunda.bpm.engine.form.FormField;
 import org.camunda.bpm.engine.form.TaskFormData;
-import org.camunda.bpm.engine.identity.User;
 import org.camunda.bpm.engine.runtime.ProcessInstance;
 import org.camunda.bpm.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,7 +66,7 @@ public class LoginController {
 	@GetMapping(path = "/get", produces = "application/json")
     public @ResponseBody ResponseEntity<FormFieldsCamunda> getFormFields(){
 		//provera da li korisnik sa id-jem pera postoji
-		List<User> users = identityService.createUserQuery().userId("pera").list();
+//		List<User> users = identityService.createUserQuery().userId("pera").list();
 		ProcessInstance pi = runtimeService.startProcessInstanceByKey("upravljanje_poslovnim_procesima");
 
 		Task task = taskService.createTaskQuery().processInstanceId(pi.getId()).list().get(0);
