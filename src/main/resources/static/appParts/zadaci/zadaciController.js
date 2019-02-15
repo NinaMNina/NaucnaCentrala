@@ -19,9 +19,9 @@
         	$scope.porukica = "";
         	var zad = {};
             $scope.init = function(){
-            	if($stateParams.token=="" || $stateParams.token=="{token}")
+            	if($stateParams.token=="" || $stateParams.token=="{token}" || $stateParams.token==undefined || $stateParams.token==null || $stateParams.token=="null")
             		$window.location.href = 'https://localhost:8087/NaucnaCentrala/#!/login';
-            	else{
+          /*  	else{
             		$http({
                         method: 'GET',
                         url: 'https://localhost:8087/NaucnaCentrala/login/checkValidity/'+$stateParams.token
@@ -44,13 +44,25 @@
                         function errorCallback(response){
                             alert("Greska u zahtevu");
                         });
+            	}*/
+            	{
+            		$http({
+                        method: 'GET',
+                        url: 'https://localhost:8087/NaucnaCentrala/zadaci/get/'+$stateParams.token
+                      }).then(function successCallback(response){
+                    	  if(response.data!=null || response.data!=undefined)
+                    		  $scope.zadaci = response.data;
+                      },
+                        function errorCallback(response){
+                            alert("Greska u zahtevu");
+                        });
             	}
             }
             $scope.home = function(){
             	var token = $window.localStorage.getItem('token');
             	$location.path('/home/'+token);
             }
-            $scope.resiZadatak = function(zadatak){
+     /*       $scope.resiZadatak = function(zadatak){
             	zad = zadatak;
             	$scope.sviZadaci = false;
             	if(zadatak.tip=="DODAJ_PUTANJU"){
@@ -88,6 +100,22 @@
                 	$scope.jedanUZadatak = true;
                 	$scope.jedanAZadatak = false;
             	}
+            }*/
+            $scope.resiZadatak = function(zadatak){
+            	$scope.jedanAZadatak = true;
+            	$scope.jedanUZadatak = false;
+            	$scope.sviZadaci = false;
+            	$http({
+                    method: 'GET',
+                    url: 'https://localhost:8087/NaucnaCentrala/casopis/getForma/'+zadatak.taskId
+                  }).then(function successCallback(response){
+                	  if(response.data!="")
+                		  $scope.formFields = response.data.formFields;
+                	  	  taskId = response.data.taskId;
+                  },
+                    function errorCallback(response){
+                        alert("Greska");
+                    });
             }
             $scope.menjaStanje = function(id){
             	if(odabrani.includes(id)){
@@ -131,6 +159,7 @@
             }
             $scope.odjaviSe = function(){
             	$stateParams.token = "";
+            	$window.localStorage.clear();
             	$window.location.href = 'https://localhost:8087/NaucnaCentrala/#!/login';
             }
             

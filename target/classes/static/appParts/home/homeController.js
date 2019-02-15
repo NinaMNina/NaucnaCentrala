@@ -47,7 +47,7 @@
             $scope.odjaviSe = function(){
         		$scope.isLoggedIn=false;
             	$stateParams.token = "";
-            	$window.localStorage.removeItem('token');
+            	$window.localStorage.clear();
             }
             $scope.ulogujSe = function(){
             	$window.location.href = 'https://localhost:8087/NaucnaCentrala/#!/login';

@@ -80,13 +80,25 @@ public class StartData {
 		autorrad3NG = autorRepository.save(autorrad3NG);
 		
 		Group autori = identityService.newGroup("autor");
-		identityService.saveGroup(autori);
-		User nina = identityService.newUser(autor0.getIme());
+		autori.setName("autori");
+		autori.setType("AUTORI");
+	    identityService.saveGroup(autori);
+	    
+		User nina = identityService.newUser(autor0.getKorisnickoIme());
 		nina.setFirstName(autor0.getIme());
 		nina.setLastName(autor0.getPrezime());
 		nina.setEmail(autor0.getEmail());
 		nina.setPassword(autor0.getLozinka());
 		identityService.saveUser(nina);	
+		identityService.createMembership("nina", "autor");
+		
+		User radovan = identityService.newUser(autorrad1MU.getKorisnickoIme());
+		radovan.setFirstName(autorrad1MU.getIme());
+		radovan.setLastName(autorrad1MU.getPrezime());
+		radovan.setEmail(autorrad1MU.getEmail());
+		radovan.setPassword(autorrad1MU.getLozinka());
+		identityService.saveUser(radovan);	
+		identityService.createMembership("radovan", "autor");
 		
 		Group urednici = identityService.newGroup("urednik");
 		identityService.saveGroup(urednici);
@@ -95,6 +107,7 @@ public class StartData {
 		Group uredniciNO = identityService.newGroup("urednikNO");
 		identityService.saveGroup(uredniciNO);
 
+		
 		
 //CASOPISI
 		Casopis casNG = new Casopis(null, "Nacionalna Geografija", true, "12345678", new ArrayList<NaucnaOblast>(), null, new ArrayList<UrednikNO>(),
@@ -211,15 +224,31 @@ public class StartData {
 		esRecenzentRepository.save(new RecenzentDTO(rec7.getId(), rec7.getIme(), rec7.getPrezime(), rec7.getEmail(), "Nacionalna Geografija", setGeoPointLokacija(rec7.getLokacija()), tekst7));
 */
 //UREDNICI
-		Urednik urednikNG = new Urednik(null, "a", "a", "Mika", "Mikić", "mika@gmail.com", new Point(45.25167, 19.83694), new ArrayList<Kupljeno>(), new ArrayList<PretplataNaCasopis>(), casNG, "dr");
+		Urednik urednikNG = new Urednik(null, "urednikNG", "u", "Mika", "Mikić", "mika@gmail.com", new Point(45.25167, 19.83694), new ArrayList<Kupljeno>(), new ArrayList<PretplataNaCasopis>(), casNG, "dr");
 		urednikNG = urednikRepository.save(urednikNG);
 		casNG.setUrednik(urednikNG);
 		casNG = casopisRepository.save(casNG);
 	
-		Urednik urednikMU = new Urednik(null, "urednikMU", "urednikMU", "Pera", "peric", "pera@gmail.com", new Point(new Double(43.32472), new Double(21.90333)), new ArrayList<Kupljeno>(), new ArrayList<PretplataNaCasopis>(), casMU, "dr");
+		Urednik urednikMU = new Urednik(null, "urednikMU", "u", "Pera", "peric", "pera@gmail.com", new Point(new Double(43.32472), new Double(21.90333)), new ArrayList<Kupljeno>(), new ArrayList<PretplataNaCasopis>(), casMU, "dr");
 		urednikMU = urednikRepository.save(urednikMU);
 		casMU.setUrednik(urednikMU);
 		casMU = casopisRepository.save(casMU);
+		
+		User urednikNGMika = identityService.newUser(urednikNG.getKorisnickoIme());
+		urednikNGMika.setFirstName(urednikNG.getIme());
+		urednikNGMika.setLastName(urednikNG.getPrezime());
+		urednikNGMika.setEmail(urednikNG.getEmail());
+		urednikNGMika.setPassword(urednikNG.getLozinka());
+		identityService.saveUser(urednikNGMika);			
+		identityService.createMembership("urednikNG", "urednik");
+		
+		User urednikMUPera = identityService.newUser(urednikMU.getKorisnickoIme());
+		urednikMUPera.setFirstName(urednikMU.getIme());
+		urednikMUPera.setLastName(urednikMU.getPrezime());
+		urednikMUPera.setEmail(urednikMU.getEmail());
+		urednikMUPera.setPassword(urednikMU.getLozinka());
+		identityService.saveUser(urednikMUPera);	
+		identityService.createMembership("urednikMU", "urednik");
 //
 		
 		

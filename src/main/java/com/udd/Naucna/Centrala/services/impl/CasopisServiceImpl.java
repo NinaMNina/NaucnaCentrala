@@ -24,4 +24,8 @@ public class CasopisServiceImpl implements CasopisService{
 		}
 		return retVal;
 	}
+	@Override
+	public Casopis findOne(Long id) {		
+		return casopisRepository.findById(id).get();
+	}
 }

@@ -5,7 +5,6 @@
 		</div>
 		<div class="col-2">
 			<button type="button" class="btn btn-outline-info float-right"  ng-click="odjaviSe()">Odjavi se</button><br/><br/>
-			<button type="button" class="btn btn-outline-secondary float-right">Kupljeno</button><br/><br/>
 			<button type="button" class="btn btn-outline-secondary float-right" ng-click="home()">Početna stranica</button>
 		</div>
 	</div> 	
@@ -14,7 +13,8 @@
 			<div class="col-1"></div>
 			<div class="col-10 card box-shadow" style="background-color: #ccebff">
 	          	<div class='row card-body'>
-	          		<div class="col-8">{{zad.opis}}</div>
+	          	<!--<div class="col-8">{{zad.opis}}</div>-->
+	          		<div class="col-8">{{zad.naziv}}</div>
 	          		<div class="col-4">
 						<button type="button" class="btn btn-outline-secondary" ng-click="resiZadatak(zad)">reši zadatak</button>
 	          		</div>
@@ -28,13 +28,34 @@
 			<div class="col-1"></div>
 			<div class="col-10 card box-shadow" style="background-color: #ccebff">
 	          	<div class='card-body'>
-	          		<div class="col-10 center">
+	          	<!--<div class="col-10 center">
 						<label>Kliknite dugme za upload rada</label>
 						<input type="file" class="form-control" onchange="angular.element(this).scope().uploadFile(this.files)" accept=".PDF, .pdf"/><br/><span class="text-danger">{{poruka}}</span>
 	          		</div>
-					<!-- <div class="col-2 float-right">	
+					<div class="col-2 float-right">	
 						<button type="button" class="btn btn-outline-secondary float-right" ng-click="zavrsi()">završi zadatak</button>
 	          		</div> -->
+	          		<div class="row" ng-repeat="ff in formFields">
+						<div class="col-1"></div>
+						<div class="col-3">
+							<label><b>{{ff.label}}</b></label>
+						</div>
+						
+						<div class="col-7">
+					   		 <input type="text" size=70 ng-if="ff.type.name=='string'" ng-model="ff.value.value"/>
+				    		 <input type="checkbox" ng-if="ff.type.name=='boolean'" ng-model="ff.value.value"/>
+				  		     <input type="number" ng-if="ff.type.name=='long'" ng-model="ff.value.value"/>
+				     		 <select ng-if="ff.type.name=='enum'" ng-model="ff.value.value"> 
+					     		 <option ng-for="let val of enumValues" value={{val}}>
+							          {{ff.type.values[val]}}
+							     </option>
+						     </select> 
+						</div>
+						<div class="col-1"></div>
+					</div>
+					<div class="row float-right">	
+						<button type="button" class="btn btn-outline-secondary float-right" ng-click="zavrsi()">završi zadatak</button>
+	          		</div>
 				</div>
 			</div>	
 		</div>

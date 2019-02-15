@@ -83,9 +83,9 @@ public class LoginController {
 	@GetMapping(path = "/registracija/{id}")
     public @ResponseBody ResponseEntity<String> registracija(@PathVariable String id) {
 		Task task = taskService.createTaskQuery().taskId(id).singleResult();
-		String processInstanceId = task.getProcessInstanceId();
+	/*	String processInstanceId = task.getProcessInstanceId();
 		String user = (String) runtimeService.getVariable(processInstanceId, "username");
-		taskService.claim(id, user);
+		taskService.claim(id, user);*/
 		Map<String, Object> retVal = new HashMap<>();
 		retVal.put("retVal", "REGISTRACIJA");
 		taskService.complete(id, retVal);

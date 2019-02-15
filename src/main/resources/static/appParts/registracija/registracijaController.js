@@ -12,6 +12,12 @@
             var taskId="";
             var init = function(){
             	$scope.korisnik={};
+            	$scope.korisnik={};
+            	var odabranCasopisId = $window.localStorage.getItem('odabranCasopisId'); 
+            	if(odabranCasopisId==null || odabranCasopisId==undefined){
+            		$window.location.href = 'https://localhost:8087/NaucnaCentrala/#!/home';
+            		return;
+            	}
             	$http({
                     method: 'GET',
                     url: 'https://localhost:8087/NaucnaCentrala/registracija/get/'+$window.localStorage.getItem('processInstanceId')
@@ -81,7 +87,27 @@
                 				  uloga : tokenData.uloga[0].authority,
                 				  processId: processInstanceId
                 		  		}
-                		  $location.path('/home');
+                		  var c = $window.localStorage.getItem('odabranCasopisId');
+	                      if(c==null || c==undefined){
+	                		  $location.path('/home');
+	                      }
+	                      else{
+	                		  var c = $window.localStorage.getItem('odabranCasopisId');
+	                    	  var taskId = $window.localStorage.getItem('taskId');          
+	                    	  if(taskId==undefined)
+	                    		  taskId = "nemaga";
+	                    	  $http({
+	                              method: 'POST',
+	                              url: 'https://localhost:8087/NaucnaCentrala/casopis/odaberi/'+taskId+'/'+c+'/'+$window.localStorage.getItem('token')
+	                            }).then(function successCallback(response){
+	                          	  if(response.data!=null){
+	                                	$window.location.href = 'https://localhost:8087/NaucnaCentrala/#!/zadaci/'+$window.localStorage.getItem('token');
+	                          	  }
+	                            },
+	                              function errorCallback(response){
+	                                  
+	                             });
+	                      }
                 	  }          	  
                   },
                     function errorCallback(response){

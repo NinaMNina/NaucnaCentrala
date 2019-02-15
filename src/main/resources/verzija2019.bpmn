@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_0718x33" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="2.2.1">
-  <bpmn:process id="upravljanje_poslovnim_procesima" isExecutable="true">
+  <bpmn:process id="upravljanje_poslovnim_procesima" isExecutable="true" camunda:candidateStarterGroups="autor">
     <bpmn:startEvent id="StartEvent_1">
       <bpmn:outgoing>SequenceFlow_0e9z1g9</bpmn:outgoing>
     </bpmn:startEvent>
@@ -81,6 +81,7 @@
           <camunda:formField id="ps_korisnickoIme" label="Korisničko ime" type="string" />
           <camunda:formField id="ps_lozinka" label="Lozinka" type="string" />
           <camunda:formField id="ps_odabranCasopisId" type="long" />
+          <camunda:formField id="ps_odgovorniUrednik" label="Odgovorni Urednik" type="string" />
         </camunda:formData>
       </bpmn:extensionElements>
       <bpmn:incoming>SequenceFlow_0e9z1g9</bpmn:incoming>
@@ -150,7 +151,7 @@
       </bpmn:exclusiveGateway>
       <bpmn:sequenceFlow id="SequenceFlow_1w6526r" sourceRef="Task_0j3x7ck" targetRef="ExclusiveGateway_1ll02zl" />
       <bpmn:sequenceFlow id="SequenceFlow_12vkuqb" name="neuspešno plaćanje" sourceRef="ExclusiveGateway_1ll02zl" targetRef="IntermediateThrowEvent_0gvmteo">
-        <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${!uspesno}</bpmn:conditionExpression>
+        <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${!uspesnoPlacanje}</bpmn:conditionExpression>
       </bpmn:sequenceFlow>
       <bpmn:endEvent id="IntermediateThrowEvent_0gvmteo">
         <bpmn:incoming>SequenceFlow_12vkuqb</bpmn:incoming>
@@ -160,7 +161,7 @@
         <bpmn:incoming>SequenceFlow_0bhgrrg</bpmn:incoming>
       </bpmn:endEvent>
       <bpmn:sequenceFlow id="SequenceFlow_0bhgrrg" name="uspešno plaćanje" sourceRef="ExclusiveGateway_1ll02zl" targetRef="EndEvent_0rq62wb">
-        <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${uspesno}</bpmn:conditionExpression>
+        <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${uspesnoPlacanje}</bpmn:conditionExpression>
       </bpmn:sequenceFlow>
     </bpmn:subProcess>
     <bpmn:boundaryEvent id="BoundaryEvent_1nbgso6" attachedToRef="Task_1vrd6o0">
@@ -169,18 +170,19 @@
     </bpmn:boundaryEvent>
     <bpmn:sequenceFlow id="SequenceFlow_17izeqb" sourceRef="Task_1vrd6o0" targetRef="ExclusiveGateway_19hol4i" />
     <bpmn:sequenceFlow id="SequenceFlow_1mi8vqf" sourceRef="ExclusiveGateway_0bbrny4" targetRef="Task_1pnmobr" />
-    <bpmn:userTask id="Task_1pnmobr" name="unos podataka o radu" camunda:assignee="userId" camunda:candidateUsers="autor">
+    <bpmn:userTask id="Task_1pnmobr" name="unos podataka o radu" camunda:assignee="${ps_korisnickoIme}" camunda:candidateUsers="autor">
       <bpmn:extensionElements>
         <camunda:formData>
           <camunda:formField id="up_naziv" label="Naziv rada" type="string" />
-          <camunda:formField id="up_autor" label="Autori" type="string" />
+          <camunda:formField id="up_koautori" label="Autori" type="string" />
           <camunda:formField id="up_kljucneReci" label="Ključne reči" type="string" />
           <camunda:formField id="up_apstrakt" label="Aprstrakt" type="string" />
           <camunda:formField id="up_oblast" label="Primarna naučna oblast" type="string" />
           <camunda:formField id="up_pdf" label="PDF" type="string" />
+          <camunda:formField id="up_odgovorniUrednikNO" label="Odgovorni Urednik Naučne Oblasti" type="string" />
         </camunda:formData>
         <camunda:inputOutput>
-          <camunda:inputParameter name="userId" />
+          <camunda:outputParameter name="odgovorniUrednikNO" />
         </camunda:inputOutput>
       </bpmn:extensionElements>
       <bpmn:incoming>SequenceFlow_1mi8vqf</bpmn:incoming>
@@ -192,7 +194,7 @@
       <bpmn:outgoing>SequenceFlow_0zki7la</bpmn:outgoing>
     </bpmn:serviceTask>
     <bpmn:sequenceFlow id="SequenceFlow_0zki7la" sourceRef="Task_1r5bil3" targetRef="Task_0h1n60w" />
-    <bpmn:userTask id="Task_0h1n60w" name="pregled naslova, apstrakta i ključnih pojmova" camunda:candidateUsers="urednik">
+    <bpmn:userTask id="Task_0h1n60w" name="pregled naslova, apstrakta i ključnih pojmova" camunda:assignee="${ps_odgovorniUrednik}" camunda:candidateUsers="urednik">
       <bpmn:extensionElements>
         <camunda:inputOutput>
           <camunda:inputParameter name="casopisId" />
@@ -210,7 +212,7 @@
     <bpmn:sequenceFlow id="SequenceFlow_0z4gdk8" name="relevantan rad" sourceRef="ExclusiveGateway_10wv7ch" targetRef="Task_03gtaf5">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${isRelevantan}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:userTask id="Task_03gtaf5" name="pregled pdf-a" camunda:candidateUsers="urednik">
+    <bpmn:userTask id="Task_03gtaf5" name="pregled pdf-a" camunda:assignee="${ps_odgovorniUrednik}" camunda:candidateUsers="urednik">
       <bpmn:incoming>SequenceFlow_0z4gdk8</bpmn:incoming>
       <bpmn:incoming>SequenceFlow_021dyx9</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_1q3kvvy</bpmn:outgoing>
@@ -240,7 +242,7 @@
       <bpmn:outgoing>SequenceFlow_1pa7o2h</bpmn:outgoing>
     </bpmn:serviceTask>
     <bpmn:sequenceFlow id="SequenceFlow_1pa7o2h" sourceRef="Task_0hdt19r" targetRef="Task_06udn59" />
-    <bpmn:userTask id="Task_06udn59" name="upload novog pdf-a" camunda:assignee="userId">
+    <bpmn:userTask id="Task_06udn59" name="upload novog pdf-a" camunda:assignee="${ps_korisnickoIme}" camunda:candidateUsers="autor">
       <bpmn:extensionElements>
         <camunda:inputOutput>
           <camunda:inputParameter name="userId" />
@@ -266,7 +268,14 @@
     <bpmn:sequenceFlow id="SequenceFlow_06djkyx" sourceRef="Task_12u5d86" targetRef="EndEvent_0b59fm4" />
     <bpmn:sequenceFlow id="SequenceFlow_021dyx9" sourceRef="Task_06udn59" targetRef="Task_03gtaf5" />
     <bpmn:sequenceFlow id="SequenceFlow_027gpmh" name="dobro formatiran rad" sourceRef="ServiceTask_1khz1ph" targetRef="Task_1624tub" />
-    <bpmn:userTask id="Task_1624tub" name="izbor recenzenta i vremenskog roka" camunda:candidateUsers="urednik">
+    <bpmn:userTask id="Task_1624tub" name="izbor recenzenta i vremenskog roka" camunda:assignee="${up_odgovorniUrednikNO}" camunda:candidateUsers="urednikNO, urednik">
+      <bpmn:extensionElements>
+        <camunda:inputOutput>
+          <camunda:outputParameter name="odabraniRecenzent1" />
+          <camunda:outputParameter name="odabraniRecenzent2" />
+          <camunda:outputParameter name="odabraniRecenzent3" />
+        </camunda:inputOutput>
+      </bpmn:extensionElements>
       <bpmn:incoming>SequenceFlow_027gpmh</bpmn:incoming>
       <bpmn:incoming>SequenceFlow_1ece181</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_1le1ez3</bpmn:outgoing>
@@ -283,6 +292,9 @@
       <bpmn:incoming>SequenceFlow_115m964</bpmn:incoming>
       <bpmn:incoming>SequenceFlow_1le1ez3</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_1urwa8s</bpmn:outgoing>
+      <bpmn:multiInstanceLoopCharacteristics>
+        <bpmn:loopCardinality xsi:type="bpmn:tFormalExpression">&gt;1</bpmn:loopCardinality>
+      </bpmn:multiInstanceLoopCharacteristics>
       <bpmn:startEvent id="StartEvent_1d01lqx">
         <bpmn:outgoing>SequenceFlow_1d4lym0</bpmn:outgoing>
       </bpmn:startEvent>
@@ -303,11 +315,11 @@
       </bpmn:timerEventDefinition>
     </bpmn:boundaryEvent>
     <bpmn:sequenceFlow id="SequenceFlow_1ece181" sourceRef="BoundaryEvent_1np2h90" targetRef="Task_1624tub" />
-    <bpmn:userTask id="Task_08x64x3" name="pregled ocena" camunda:candidateUsers="urednik">
-      <bpmn:incoming>SequenceFlow_1urwa8s</bpmn:incoming>
+    <bpmn:userTask id="Task_08x64x3" name="pregled ocena" camunda:assignee="${up_odgovorniUrednikNO}" camunda:candidateUsers="urednik">
+      <bpmn:incoming>SequenceFlow_0wd3bor</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_1hjgtsv</bpmn:outgoing>
     </bpmn:userTask>
-    <bpmn:sequenceFlow id="SequenceFlow_1urwa8s" sourceRef="Task_10hnb5p" targetRef="Task_08x64x3" />
+    <bpmn:sequenceFlow id="SequenceFlow_1urwa8s" sourceRef="Task_10hnb5p" targetRef="ExclusiveGateway_0dg4wvz" />
     <bpmn:exclusiveGateway id="ExclusiveGateway_1f1x21v" name="OCENA">
       <bpmn:incoming>SequenceFlow_1hjgtsv</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0s5mk14</bpmn:outgoing>
@@ -329,7 +341,7 @@
       <bpmn:outgoing>SequenceFlow_0bwbj8d</bpmn:outgoing>
       <bpmn:outgoing>SequenceFlow_115m964</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:userTask id="UserTask_03q5e0n" name="Pregled izmena" camunda:candidateUsers="urednik">
+    <bpmn:userTask id="UserTask_03q5e0n" name="Pregled izmena" camunda:assignee="${up_odgovorniUrednikNO}" camunda:candidateUsers="urednik">
       <bpmn:incoming>SequenceFlow_0bwbj8d</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_12ygh00</bpmn:outgoing>
     </bpmn:userTask>
@@ -372,7 +384,7 @@
     <bpmn:sequenceFlow id="SequenceFlow_12ygh00" sourceRef="UserTask_03q5e0n" targetRef="ExclusiveGateway_09cdii4" />
     <bpmn:sequenceFlow id="SequenceFlow_02dbwqr" sourceRef="ServiceTask_1rihgbc" targetRef="EndEvent_11gkhlj" />
     <bpmn:sequenceFlow id="SequenceFlow_1hjgtsv" sourceRef="Task_08x64x3" targetRef="ExclusiveGateway_1f1x21v" />
-    <bpmn:userTask id="SendTask_0p0x9q0" name="dorada rada i upload novog pdf-a" camunda:assignee="userId" camunda:candidateUsers="autor">
+    <bpmn:userTask id="SendTask_0p0x9q0" name="dorada rada i upload novog pdf-a" camunda:assignee="${ps_korisnickoIme}" camunda:candidateUsers="autor">
       <bpmn:incoming>SequenceFlow_0vvp8ay</bpmn:incoming>
       <bpmn:incoming>SequenceFlow_0f1lj9o</bpmn:incoming>
       <bpmn:incoming>SequenceFlow_1l1qpc2</bpmn:incoming>
@@ -399,7 +411,7 @@
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="SequenceFlow_1et33b1" sourceRef="BoundaryEvent_0qjfxld" targetRef="Task_1p2xr79" />
     <bpmn:sequenceFlow id="SequenceFlow_0ajpnnj" sourceRef="Task_05hjjfk" targetRef="ServiceTask_1rihgbc" />
-    <bpmn:userTask id="Task_05hjjfk" name="Upload rada" camunda:assignee="userId" camunda:candidateUsers="autor">
+    <bpmn:userTask id="Task_05hjjfk" name="Upload rada" camunda:assignee="${ps_korisnickoIme}" camunda:candidateUsers="autor">
       <bpmn:extensionElements>
         <camunda:inputOutput>
           <camunda:inputParameter name="userId" />
@@ -409,6 +421,11 @@
       <bpmn:outgoing>SequenceFlow_0ajpnnj</bpmn:outgoing>
     </bpmn:userTask>
     <bpmn:sequenceFlow id="SequenceFlow_0kezmoa" sourceRef="BoundaryEvent_1nbgso6" targetRef="Task_1p2xr79" />
+    <bpmn:sequenceFlow id="SequenceFlow_0wd3bor" sourceRef="ExclusiveGateway_0dg4wvz" targetRef="Task_08x64x3" />
+    <bpmn:parallelGateway id="ExclusiveGateway_0dg4wvz">
+      <bpmn:incoming>SequenceFlow_1urwa8s</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_0wd3bor</bpmn:outgoing>
+    </bpmn:parallelGateway>
   </bpmn:process>
   <bpmn:error id="Error_0f6e1vg" name="Error_pri_registraciji" errorCode="greska u procesiranju registracije" />
   <bpmn:error id="Error_1o85x8q" />
@@ -763,8 +780,8 @@
         <dc:Bounds x="2222" y="942" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="SequenceFlow_1urwa8s_di" bpmnElement="SequenceFlow_1urwa8s">
-        <di:waypoint x="2065" y="974" />
-        <di:waypoint x="2222" y="974" />
+        <di:waypoint x="2067" y="1085" />
+        <di:waypoint x="2124" y="1085" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="ExclusiveGateway_1f1x21v_di" bpmnElement="ExclusiveGateway_1f1x21v" isMarkerVisible="true">
         <dc:Bounds x="2394" y="959" width="50" height="50" />
@@ -927,6 +944,14 @@
         <di:waypoint x="1303" y="1169" />
         <di:waypoint x="1556" y="1169" />
       </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_0wd3bor_di" bpmnElement="SequenceFlow_0wd3bor">
+        <di:waypoint x="2174" y="1085" />
+        <di:waypoint x="2272" y="1085" />
+        <di:waypoint x="2272" y="1022" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="ParallelGateway_00mn8c3_di" bpmnElement="ExclusiveGateway_0dg4wvz">
+        <dc:Bounds x="2124" y="1060" width="50" height="50" />
+      </bpmndi:BPMNShape>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
 </bpmn:definitions>
