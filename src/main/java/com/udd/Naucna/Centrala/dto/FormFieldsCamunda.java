@@ -26,14 +26,14 @@ public class FormFieldsCamunda {
 	public void setProcessInstanceId(String processInstanceId) {
 		this.processInstanceId = processInstanceId;
 	}
+	public FormFieldsCamunda() {
+		super();
+	}
 	public FormFieldsCamunda(String taskId, ArrayList<FormField> formFields, String processInstanceId) {
 		super();
 		this.taskId = taskId;
 		this.formFields = formFields;
 		this.processInstanceId = processInstanceId;
-	}
-	public FormFieldsCamunda() {
-		super();
 	}
 	
 	

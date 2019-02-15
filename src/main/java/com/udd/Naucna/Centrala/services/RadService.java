@@ -15,6 +15,8 @@ public interface RadService {
 	RadDTO getRadDTO(Long rad);
 
 	Boolean dodajRecenzente(Long id, ArrayList<Long> odabrani);
+
+	String saveProbaMultipartFile(MultipartFile file);
 	
 
 }

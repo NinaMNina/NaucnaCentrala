@@ -78,6 +78,27 @@ public class RadServiceImpl implements RadService {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	@Override
+	public String saveProbaMultipartFile(MultipartFile file) {
+		final Path rootLocation = Paths.get("C:/Users/nina.miladinovic/git/NaucnaCentrala/src/main/resources/static/assets/pdf_proba/");
+		String fileName = null;
+		try {
+			fileName = file.getOriginalFilename();
+			if(!(fileName.endsWith(".PDF")|| fileName.endsWith(".pdf"))) {
+				return "";
+			}
+			Path filePath = rootLocation.resolve(fileName);
+            Resource resource = new UrlResource(filePath.toUri());
+            if(resource.exists()) {
+            	fileName = fileName.substring(0, fileName.length() - 4);
+            		fileName = fileName + "_"  + System.currentTimeMillis() + ".pdf";
+            }
+            Files.copy(file.getInputStream(), rootLocation.resolve(fileName));  
+            return filePath.toString();
+        } catch (Exception e) {
+        	throw new RuntimeException();
+        }
+	}
 	
 /*	@Override
 	public boolean exists(Long id) {

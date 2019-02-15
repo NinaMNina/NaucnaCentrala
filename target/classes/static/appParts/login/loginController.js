@@ -59,6 +59,7 @@
                 				  uloga : tokenData.uloga[0].authority,
                 				  processId: processInstanceId
                 		  		}
+                		  $window.localStorage.setItem('processInstanceId', processInstanceId);
                 		  var c = $window.localStorage.getItem('odabranCasopisId');
 	                      if(c==null || c==undefined){
 	                		  $location.path('/home');
@@ -70,7 +71,7 @@
 	                    		  taskId = "nemaga";
 	                    	  $http({
 	                              method: 'POST',
-	                              url: 'https://localhost:8087/NaucnaCentrala/casopis/odaberi/'+taskId+'/'+odabranCasopisId+'/'+$window.localStorage.getItem('token')
+	                              url: 'https://localhost:8087/NaucnaCentrala/casopis/odaberi/'+taskId+'/'+odabranCasopisId+'/'+processInstanceId+'/'+$window.localStorage.getItem('token')
 	                            }).then(function successCallback(response){
 	                          	  if(response.data!=null){
 	                                	$window.location.href = 'https://localhost:8087/NaucnaCentrala/#!/zadaci/'+$window.localStorage.getItem('token');

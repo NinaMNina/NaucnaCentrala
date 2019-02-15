@@ -9,7 +9,6 @@ import org.camunda.bpm.engine.RuntimeService;
 import org.camunda.bpm.engine.TaskService;
 import org.camunda.bpm.engine.form.FormField;
 import org.camunda.bpm.engine.form.TaskFormData;
-import org.camunda.bpm.engine.impl.persistence.entity.ExecutionEntity;
 import org.camunda.bpm.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,6 +25,8 @@ import com.udd.Naucna.Centrala.dto.FormFieldsCamunda;
 import com.udd.Naucna.Centrala.dto.FormFieldsCamundaDTO;
 import com.udd.Naucna.Centrala.dto.KorisnikDTO;
 import com.udd.Naucna.Centrala.dto.RegistracijaDTO;
+import com.udd.Naucna.Centrala.model.Proces;
+import com.udd.Naucna.Centrala.repository.ProcessRepository;
 import com.udd.Naucna.Centrala.services.KorisnikService;
 import com.udd.Naucna.Centrala.token.TokenUtils;
 
@@ -47,6 +48,9 @@ public class RegistracijaController {
 	
 	@Autowired
 	private TokenUtils tokenUtils;
+	
+	@Autowired
+	private ProcessRepository procesRepository;
 
 	@GetMapping(path = "/get/{id}", produces = "application/json")
     public @ResponseBody FormFieldsCamunda get(@PathVariable String id) {
@@ -82,7 +86,7 @@ public class RegistracijaController {
 		retVal.put("korisnickoIme", korisnik.getIme());
 		retVal.put("lozinka", korisnik.getLozinka());
 		taskService.complete(ffc.getTaskId(), retVal);
-		
+		Proces proces = new Proces(null, korisnik.getIme(), null, null, null, null, new Long(runtimeService.getVariable(processInstanceId, "casopisId").toString()), processInstanceId, ffc.getTaskId(),null);
 		
 		return new ResponseEntity("", HttpStatus.OK);	
 	}

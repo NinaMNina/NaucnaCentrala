@@ -10,5 +10,7 @@ public interface CasopisService {
 	ArrayList<CasopisDTO> getAll();
 
 	Casopis findOne(Long id);
+
+	ArrayList<String> stringNO(Long casopisId);
 	
 }

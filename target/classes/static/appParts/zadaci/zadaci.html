@@ -37,23 +37,32 @@
 	          		</div> -->
 	          		<div class="row" ng-repeat="ff in formFields">
 						<div class="col-1"></div>
-						<div class="col-3">
+						<div class="col-3" ng-show="ff.id!='up_odgovorniUrednikNO'">
 							<label><b>{{ff.label}}</b></label>
 						</div>
 						
 						<div class="col-7">
-					   		 <input type="text" size=70 ng-if="ff.type.name=='string'" ng-model="ff.value.value"/>
+					   		 <input type="text" size=70 ng-show="ff.type.name=='string' && ff.label!='Aprstrakt' && ff.id!='up_odgovorniUrednikNO' && ff.id!='up_oblast' && ff.id!='up_pdf'" ng-model="ff.value.value"/>
+					   		 <textarea rows="6" cols="72" ng-show="ff.type.name=='string' && ff.label=='Aprstrakt'" ng-model="ff.value.value"></textarea>
 				    		 <input type="checkbox" ng-if="ff.type.name=='boolean'" ng-model="ff.value.value"/>
 				  		     <input type="number" ng-if="ff.type.name=='long'" ng-model="ff.value.value"/>
 				     		 <select ng-if="ff.type.name=='enum'" ng-model="ff.value.value"> 
 					     		 <option ng-for="let val of enumValues" value={{val}}>
 							          {{ff.type.values[val]}}
 							     </option>
-						     </select> 
+						     </select>
+						     <input type="file" class="form-control" onchange="angular.element(this).scope().uploadFile(this.files)" accept=".PDF, .pdf" ng-show="ff.type.name=='string' && ff.id=='up_pdf'"/>
+						     <select ng-if="ff.type.name=='string' && ff.id=='up_oblast'" ng-model="ff.value.value"> 
+					     		 <option ng-repeat="no in naucneOblasti" value="{{no}}">
+							          {{no}}
+							     </option>
+						     </select>
+						     <br/>
 						</div>
 						<div class="col-1"></div>
 					</div>
 					<div class="row float-right">	
+						<span class="text-danger">{{secretMessage}}</span>
 						<button type="button" class="btn btn-outline-secondary float-right" ng-click="zavrsi()">završi zadatak</button>
 	          		</div>
 				</div>

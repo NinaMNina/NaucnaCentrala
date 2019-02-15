@@ -17,10 +17,23 @@
         	$scope.poruka = "";
         	$scope.pdfFajl = "";
         	$scope.porukica = "";
+        	var taskId;
+        	$scope.naucneOblasti = [];
+        	$scope.secretMessage = "";
+        	var odabraniZadatakTaskId = "";
         	var zad = {};
             $scope.init = function(){
             	if($stateParams.token=="" || $stateParams.token=="{token}" || $stateParams.token==undefined || $stateParams.token==null || $stateParams.token=="null")
             		$window.location.href = 'https://localhost:8087/NaucnaCentrala/#!/login';
+            	$http({
+	        		method: 'GET',
+	                url: 'https://localhost:8087/NaucnaCentrala/casopis/naucneOblasti/'+$stateParams.token
+	        	}).then(function successCallback(response){
+	        		$scope.naucneOblasti = response.data;
+                },
+                  function errorCallback(response){
+                      alert("Problem pri uploadu rada. Neuspešno obavljeno!")
+                  });
           /*  	else{
             		$http({
                         method: 'GET',
@@ -105,6 +118,7 @@
             	$scope.jedanAZadatak = true;
             	$scope.jedanUZadatak = false;
             	$scope.sviZadaci = false;
+            	odabraniZadatakTaskId = zadatak.taskId;
             	$http({
                     method: 'GET',
                     url: 'https://localhost:8087/NaucnaCentrala/casopis/getForma/'+zadatak.taskId
@@ -246,7 +260,37 @@
             	$scope.jedanUZadatak = true;
             	$scope.jedanAZadatak = false;
             }
-            
+            $scope.zavrsi = function(){
+            	for(var i=0; i<$scope.formFields.length; i++){
+            		var ff=$scope.formFields[i];
+            		if(!ff.value.value && ff.id!="up_odgovorniUrednikNO"){
+                		$scope.secretMessage="Potrebno je uneti sve podatke...";
+                		return;
+                	}
+            	}
+            	var forma = [];
+            	for(var i=0; i<$scope.formFields.length; i++){
+            		var f0 ={};
+            		f0 = {
+            			"key": $scope.formFields[i].id,
+            			"value": $scope.formFields[i].value.value,
+            			"tip": $scope.formFields[i].type.name.toUpperCase()
+            		};
+            		forma.push(f0);
+            	}
+            	$http({
+                    method: 'POST',
+                    url: 'https://localhost:8087/NaucnaCentrala/casopis/submitPodaci/'+odabraniZadatakTaskId+'/'+$stateParams.token,
+                    data: forma
+                  }).then(function successCallback(response){
+                	  if(response.data!=null || response.data!=undefined)
+                		  alert("Zadatak uspešno izvršen");
+                		  $window.location.href = 'https://localhost:8087/NaucnaCentrala/#!/zadaci/'+$window.localStorage.getItem('token');
+                  },
+                    function errorCallback(response){
+            		  alert("Greška");
+                  });
+            }
             //UPLOAD RADA
             $scope.uploadFile = function(files) {
                 var fd = new FormData();
@@ -254,16 +298,17 @@
                 fd.append("file", files[0]);
                 $http({
 	        		method: 'POST',
-	                url: 'https://localhost:8087/NaucnaCentrala/udd/upload/'+zad.rad+'/'+$stateParams.token,
+	                url: 'https://localhost:8087/NaucnaCentrala/casopis/proba/upload/'+$stateParams.token,
 	                transformRequest: angular.identity,
 	                headers: {'Content-Type': undefined},
 	                data: fd
 	        	}).then(function successCallback(response){
-	        		
-	        		$window.location.href = 'https://localhost:8087/NaucnaCentrala/#!/home';
+	        		for(var i=0; i<$scope.formFields.length; i++)
+	        			if($scope.formFields[i].id=='up_pdf')
+	        				$scope.formFields[i].value.value = response.data;
                 },
                   function errorCallback(response){
-                      $scope.poruka = "Problem pri obavljanju zadatka. Neuspešno obavljeno!"
+                      alert("Problem pri uploadu rada. Neuspešno obavljeno!")
                   });
 
             };

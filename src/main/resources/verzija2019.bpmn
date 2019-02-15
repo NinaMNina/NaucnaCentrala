@@ -527,9 +527,8 @@
         <dc:Bounds x="782" y="352" width="50" height="50" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="SequenceFlow_0h9ub88_di" bpmnElement="SequenceFlow_0h9ub88">
-        <di:waypoint x="627" y="833" />
-        <di:waypoint x="627" y="617" />
-        <di:waypoint x="788" y="617" />
+        <di:waypoint x="698" y="933" />
+        <di:waypoint x="788" y="933" />
         <di:waypoint x="788" y="383" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="SequenceFlow_04ndd1i_di" bpmnElement="SequenceFlow_04ndd1i">
@@ -572,9 +571,9 @@
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="SequenceFlow_0fk9ft8_di" bpmnElement="SequenceFlow_0fk9ft8">
         <di:waypoint x="997" y="512" />
-        <di:waypoint x="994" y="712" />
+        <di:waypoint x="997" y="711" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1003" y="531.0000000000005" width="59" height="27" />
+          <dc:Bounds x="932" y="530" width="59" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="SequenceFlow_17rpjep_di" bpmnElement="SequenceFlow_17rpjep">
