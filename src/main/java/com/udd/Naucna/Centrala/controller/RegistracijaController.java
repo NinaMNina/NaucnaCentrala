@@ -86,7 +86,7 @@ public class RegistracijaController {
 		retVal.put("korisnickoIme", korisnik.getIme());
 		retVal.put("lozinka", korisnik.getLozinka());
 		taskService.complete(ffc.getTaskId(), retVal);
-		Proces proces = new Proces(null, korisnik.getIme(), null, null, null, null, new Long(runtimeService.getVariable(processInstanceId, "casopisId").toString()), processInstanceId, ffc.getTaskId(),null);
+		Proces proces = new Proces(null, korisnik.getIme(), null, null, null, null, processInstanceId, ffc.getTaskId(),null);
 		
 		return new ResponseEntity("", HttpStatus.OK);	
 	}

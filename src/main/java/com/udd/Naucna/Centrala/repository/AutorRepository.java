@@ -9,5 +9,7 @@ import com.udd.Naucna.Centrala.model.Rad;
 
 public interface AutorRepository extends JpaRepository<Autor, Long>{
 
+	Autor findByKorisnickoIme(String korisnickoIme);
+
 
 }

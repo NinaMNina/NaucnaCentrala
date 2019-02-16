@@ -3,77 +3,88 @@ package com.udd.Naucna.Centrala.services.camunda;
 import java.util.Properties;
 
 import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.Multipart;
-import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
-import javax.mail.internet.MimeMultipart;
 
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+import com.udd.Naucna.Centrala.model.Korisnik;
+import com.udd.Naucna.Centrala.services.KorisnikService;
+
+@Service
 public class SlanjeMejlovaPotvrde implements JavaDelegate{
-
+	@Autowired
+	private KorisnikService korisnikService;
+	
 	private String smtpSender = "ninamns1095@gmail.com";
 	
 	@Override
 	public void execute(DelegateExecution execution) throws Exception {
-		
-		Properties props = new Properties();
-		props.put("mail.smtp.host", "smtp.gmail.com");
-        props.put("mail.smtp.socketFactory.port", "465");
-        props.put("mail.smtp.socketFactory.class",
-                "javax.net.ssl.SSLSocketFactory");
-        props.put("mail.smtp.auth", "true");
-        props.put("mail.smtp.port", "465");
+		Korisnik autor = korisnikService.findByKorisnickoIme(execution.getVariable("ps_korisnickoIme").toString());
+		Korisnik urednik = korisnikService.findByKorisnickoIme(execution.getVariable("ps_odgovorniUrednik").toString());
+		String mailAutor = autor.getEmail();
+		String mailUrednik = urednik.getEmail();
+		Properties props = System.getProperties();
+    	props.put("mail.transport.protocol", "smtp");
+    	props.put("mail.smtp.port", "587"); 
+    	props.put("mail.smtp.starttls.enable", "true");
+    	props.put("mail.smtp.auth", "true");
+    	props.put("mail.smtp.ssl.trust", "smtp.gmail.com");
 
-		   
-		   Session session = Session.getInstance(props, new javax.mail.Authenticator() {
-		      protected PasswordAuthentication getPasswordAuthentication() {
-		         return new PasswordAuthentication(smtpSender, "*");
-		      }
-		   });
-		   try {
-			   Message msg = new MimeMessage(session);
-			   msg.setFrom(new InternetAddress(smtpSender, false));
-	
-			   msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse("ninamiladinovc@hotmail.com"));
-			   msg.setSubject("UPP2019: Potvrda apliciranog rada");
-			   msg.setContent("UPP2019: Potvrda apliciranog rada", "text/html");
-			//   msg.setSentDate(new Date());
-	
-			   MimeBodyPart messageBodyPart = new MimeBodyPart();
-			   messageBodyPart.setContent("Ovim mejlom ste dobili potvrdu da je vaš rad primljen u izbor radova za objavljivanje", "text/html");
-	
-			   Multipart multipart = new MimeMultipart();
-			   multipart.addBodyPart(messageBodyPart);
-	
-			   Transport.send(msg);;
-			   System.out.println("******************************POSLAO MEJLOVE****************************");
-			   
-			   Message msg1 = new MimeMessage(session);
-			   msg1.setFrom(new InternetAddress(smtpSender, false));
-	
-			   msg1.setRecipients(Message.RecipientType.TO, InternetAddress.parse("moj.cicak@hotmail.com"));
-			   msg1.setSubject("UPP2019: Novi aplicirani rad");
-			   msg1.setContent("UPP2019: Novi aplicirani rad", "text/html");
-		//	   msg1.setSentDate(new Date());
-	
-			   MimeBodyPart messageBodyPart1 = new MimeBodyPart();
-			   messageBodyPart1.setContent("Ovim mejlom ste dobili potvrdu da je podnet zahtev za novi rad", "text/html");
-	
-			   Multipart multipart1 = new MimeMultipart();
-			   multipart1.addBodyPart(messageBodyPart1);
-	
-			   Transport.send(msg1);
-			   System.out.println("******************************POSLAO MEJLOVE****************************");
-		   }catch (MessagingException e) {
-	            throw new RuntimeException(e);
-	        }
+        // Create a Session object to represent a mail session with the specified properties. 
+    	Session session = Session.getDefaultInstance(props);
+
+        // Create a message with the specified information. 
+        MimeMessage msg = new MimeMessage(session);
+        msg.setFrom(new InternetAddress("ninamns1095@gmail.com","Nina Miladinovic"));
+        msg.setRecipient(Message.RecipientType.TO, new InternetAddress(mailAutor));
+        msg.setSubject("UPP2019: Potvrda apliciranog rada");
+        msg.setContent("Ovim mejlom ste dobili potvrdu da je vas rad primljen u izbor radova za objavljivanje","text/html");
+        
+        // Add a configuration set header. Comment or delete the 
+        // next line if you are not using a configuration set
+        msg.setHeader("X-SES-CONFIGURATION-SET", "ConfigSet");
+        
+        MimeMessage msg1 = new MimeMessage(session);
+        msg1.setFrom(new InternetAddress("ninamns1095@gmail.com","Nina Miladinovic"));
+        msg1.setRecipient(Message.RecipientType.TO, new InternetAddress(mailUrednik));
+        msg1.setSubject("UPP2019: Novi aplicirani rad");
+        msg1.setContent("Ovim mejlom ste dobili potvrdu da je podnet zahtev za novi rad","text/html");
+        
+        // Add a configuration set header. Comment or delete the 
+        // next line if you are not using a configuration set
+        msg1.setHeader("X-SES-CONFIGURATION-SET", "ConfigSet");
+            
+        // Create a transport.
+        Transport transport = session.getTransport();
+                    
+        // Send the message.
+        try
+        {
+            System.out.println("Sending...");
+            
+            // Connect to Amazon SES using the SMTP username and password you specified above.
+            transport.connect("smtp.gmail.com", "ninamns1095@gmail.com", "**");
+        	
+            // Send the email.
+     //       transport.sendMessage(msg, msg.getAllRecipients());
+     //       transport.sendMessage(msg1, msg1.getAllRecipients());
+            System.out.println("Email sent!");
+            
+        }
+        catch (Exception ex) {
+            System.out.println("The email was not sent.");
+            System.out.println("Error message: " + ex.getMessage());
+        }
+        finally
+        {
+            transport.close();
+        }
 	}
 
 }

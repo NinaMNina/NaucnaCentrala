@@ -64,7 +64,7 @@ public class StartData {
 	@PostConstruct
     private void init(){
 //AUTORI
-		Autor autor0 = new Autor(null, "nina", "nina", "Nina", "Miladinovic", "n@n.com", new Point(new Double(45.25167), new Double(19.83694)), new ArrayList<>(),new ArrayList<>());
+		Autor autor0 = new Autor(null, "nina", "nina", "Nina", "Miladinovic", "ninamiladinovic@hotmail.com", new Point(new Double(45.25167), new Double(19.83694)), new ArrayList<>(),new ArrayList<>());
 		autor0 = autorRepository.save(autor0);
 		Autor autorrad1MU = new Autor(null, "radovan", "radovan", "Radovan", "Turović", "radovan.turovic@uns.ac.rs", new Point(new Double(45.25167), new Double(19.83694)), new ArrayList<>(),new ArrayList<>());
 		autorrad1MU = autorRepository.save(autorrad1MU);		
@@ -224,7 +224,7 @@ public class StartData {
 		esRecenzentRepository.save(new RecenzentDTO(rec7.getId(), rec7.getIme(), rec7.getPrezime(), rec7.getEmail(), "Nacionalna Geografija", setGeoPointLokacija(rec7.getLokacija()), tekst7));
 */
 //UREDNICI
-		Urednik urednikNG = new Urednik(null, "urednikNG", "u", "Mika", "Mikić", "mika@gmail.com", new Point(45.25167, 19.83694), new ArrayList<Kupljeno>(), new ArrayList<PretplataNaCasopis>(), casNG, "dr");
+		Urednik urednikNG = new Urednik(null, "urednikNG", "u", "Mika", "Mikić", "ninamns1095@gmail.com", new Point(45.25167, 19.83694), new ArrayList<Kupljeno>(), new ArrayList<PretplataNaCasopis>(), casNG, "dr");
 		urednikNG = urednikRepository.save(urednikNG);
 		casNG.setUrednik(urednikNG);
 		casNG = casopisRepository.save(casNG);

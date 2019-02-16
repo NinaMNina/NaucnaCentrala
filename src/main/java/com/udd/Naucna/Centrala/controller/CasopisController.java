@@ -29,9 +29,15 @@ import com.udd.Naucna.Centrala.dto.FormFieldDTO;
 import com.udd.Naucna.Centrala.dto.FormFieldsCamunda;
 import com.udd.Naucna.Centrala.model.Casopis;
 import com.udd.Naucna.Centrala.model.Korisnik;
+import com.udd.Naucna.Centrala.model.NaucnaOblast;
 import com.udd.Naucna.Centrala.model.Proces;
+import com.udd.Naucna.Centrala.model.Rad;
 import com.udd.Naucna.Centrala.model.UrednikNO;
+import com.udd.Naucna.Centrala.model.enums.StatusRada;
+import com.udd.Naucna.Centrala.repository.AutorRepository;
+import com.udd.Naucna.Centrala.repository.NaucnaOblastRepository;
 import com.udd.Naucna.Centrala.repository.ProcessRepository;
+import com.udd.Naucna.Centrala.repository.RadRepository;
 import com.udd.Naucna.Centrala.services.CasopisService;
 import com.udd.Naucna.Centrala.services.KorisnikService;
 import com.udd.Naucna.Centrala.services.RadService;
@@ -58,6 +64,13 @@ public class CasopisController {
 	private IdentityService identityService;
 	@Autowired
 	private ProcessRepository procesRepository;
+	@Autowired
+	private AutorRepository autorRepository;
+	@Autowired
+	private RadRepository radRepository;
+	@Autowired
+	private NaucnaOblastRepository naucnaOblastRepository;
+	
 	
 	@GetMapping(path = "/getAll", produces = "application/json")
     public @ResponseBody ResponseEntity<ArrayList<CasopisDTO>> getAll(){		
@@ -198,9 +211,29 @@ public class CasopisController {
 			}
 			retVal.put(ff.getKey(), ff.getValue());
 		}
+		p.setUrednikNO(retVal.get("up_odgovorniUrednikNO").toString());
+		Rad rad = new Rad(null, retVal.get("up_naziv").toString(),
+				retVal.get("up_koautori").toString(), 
+				autorRepository.findByKorisnickoIme(username), 
+				retVal.get("up_kljucneReci").toString(), 
+				retVal.get("up_pdf").toString(), 
+				"", 
+				getNaucneOblastiFromString(retVal.get("up_oblast").toString()),
+				StatusRada.PRIJAVLJEN, 
+				new ArrayList<>());
+		rad = radRepository.save(rad);
 		taskService.complete(taskId, retVal);
 		return new ResponseEntity(true, HttpStatus.OK);	
     }
+
+	private NaucnaOblast getNaucneOblastiFromString(String object) {
+		ArrayList<NaucnaOblast> oblasti = (ArrayList<NaucnaOblast>) naucnaOblastRepository.findAll();
+		for(NaucnaOblast no : oblasti){
+			if(object.contains(no.getNazivOblasti()) && object.contains(no.getNazivPodOblasti()))
+				return no;
+		}
+		return null;
+	}
 
 	private String getUrednikNO(String key, Long casopisId) {
 		Casopis c = casopisService.findOne(casopisId);
