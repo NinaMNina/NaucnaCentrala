@@ -48,7 +48,7 @@
                     url: 'https://localhost:8087/NaucnaCentrala/login/do',
                     data: retVal
                   }).then(function successCallback(response){
-                	  if(response.data==null){
+                	  if(response.data==null || response.data==retVal){
                           $scope.poruka = "Pogrešno uneseni lozinka ili ime";           		  
                 	  }
                 	  else if(response.data.lozinka!=""){

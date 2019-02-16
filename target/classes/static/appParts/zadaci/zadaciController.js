@@ -32,7 +32,7 @@
 	        		$scope.naucneOblasti = response.data;
                 },
                   function errorCallback(response){
-                      alert("Problem pri uploadu rada. Neuspešno obavljeno!")
+                      alert("Problem pri dobavljanju naucnih oblasti. Neuspešno obavljeno!")
                   });
           /*  	else{
             		$http({
@@ -119,6 +119,21 @@
             	$scope.jedanUZadatak = false;
             	$scope.sviZadaci = false;
             	odabraniZadatakTaskId = zadatak.taskId;
+            	$http({
+                    method: 'GET',
+                    url: 'https://localhost:8087/NaucnaCentrala/zadaci/redirekt/'+zadatak.taskId
+                  }).then(function successCallback(response){
+                	  if(response.data!=""){
+                		  if(response.data.redirekcija!="ostani"){
+                    		  $window.localStorage.setItem('taskIdOdZadaciObrisiOdmah', response.data.taskId);
+                    		  $window.location.href = 'https://localhost:8087/NaucnaCentrala/#!/'+response.data.redirekcija+'/'+$window.localStorage.getItem('token')                			  
+                		  }         		  
+                	  }
+                  },
+                    function errorCallback(response){
+                        alert("Greška pri dobavljanju zadatka");
+                    	$window.location.href = 'https://localhost:8087/NaucnaCentrala/#!/home';
+                    });
             	$http({
                     method: 'GET',
                     url: 'https://localhost:8087/NaucnaCentrala/casopis/getForma/'+zadatak.taskId
@@ -285,7 +300,7 @@
                   }).then(function successCallback(response){
                 	  if(response.data!=null || response.data!=undefined)
                 		  alert("Zadatak uspešno izvršen");
-                		  $window.location.href = 'https://localhost:8087/NaucnaCentrala/#!/zadaci/'+$window.localStorage.getItem('token');
+                		  $window.location.href = 'https://localhost:8087/NaucnaCentrala/#!/home';
                   },
                     function errorCallback(response){
             		  alert("Greška");

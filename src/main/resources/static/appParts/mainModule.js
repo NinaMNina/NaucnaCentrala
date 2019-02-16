@@ -30,5 +30,10 @@ app.config(function($stateProvider, $urlRouterProvider) {
         url: '/prijaviRad',
         templateUrl : 'appParts/prijaviRad/prijaviRad.html',
         controller : 'prijaviRadController'
+    })    
+    .state('pregledPodataka', {
+        url: '/pregledPodataka/{token}',
+        templateUrl : 'appParts/pregledPodataka/pregledPodataka.html',
+        controller : 'pregledPodatakaController'
     })
   });

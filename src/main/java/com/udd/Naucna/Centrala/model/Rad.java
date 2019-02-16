@@ -21,7 +21,7 @@ public class Rad {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 	
-	@Column(nullable = false, length = 240)
+	@Column(nullable = false, length = 240, unique=true)
 	private String naslov;
 	
 	@Column(nullable = false, length = 600)

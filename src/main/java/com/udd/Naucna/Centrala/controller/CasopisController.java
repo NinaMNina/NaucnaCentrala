@@ -27,6 +27,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.udd.Naucna.Centrala.dto.CasopisDTO;
 import com.udd.Naucna.Centrala.dto.FormFieldDTO;
 import com.udd.Naucna.Centrala.dto.FormFieldsCamunda;
+import com.udd.Naucna.Centrala.model.Autor;
 import com.udd.Naucna.Centrala.model.Casopis;
 import com.udd.Naucna.Centrala.model.Korisnik;
 import com.udd.Naucna.Centrala.model.NaucnaOblast;
@@ -184,6 +185,9 @@ public class CasopisController {
 		if(username==null){
 			return new ResponseEntity(HttpStatus.BAD_REQUEST);
 		}
+		if(!(korisnikService.findByKorisnickoIme(username) instanceof Autor)){
+			return new ResponseEntity(new ArrayList<String>(),HttpStatus.OK);			
+		}
 		Proces p = procesRepository.findByAutor(username);
 		if(p==null)
 			return new ResponseEntity(HttpStatus.BAD_REQUEST);			
@@ -203,13 +207,13 @@ public class CasopisController {
 		}
 		HashMap<String, Object> retVal = new HashMap<>();
 		for(FormFieldDTO ff : podaci){
-			if(ff.getKey().equals("up_odgovorniUrednikNO")){
-				continue;
+			if(!(ff.getKey().equals("up_odgovorniUrednikNO"))){
+				retVal.put(ff.getKey(), ff.getValue());
 			}
 			if(ff.getKey().equals("up_oblast")){
-				retVal.put(getUrednikNO(ff.getKey(), p.getCasopisId()), "up_odgovorniUrednikNO");
+				String sssss = getUrednikNO(ff.getValue(), p.getCasopisId());
+				retVal.put("up_odgovorniUrednikNO", sssss);
 			}
-			retVal.put(ff.getKey(), ff.getValue());
 		}
 		p.setUrednikNO(retVal.get("up_odgovorniUrednikNO").toString());
 		Rad rad = new Rad(null, retVal.get("up_naziv").toString(),
@@ -240,8 +244,7 @@ public class CasopisController {
 		if(c==null)
 			return "";
 		for(UrednikNO no : c.getUredniciNO()){
-			String str = no.getOdgovoranZaNaucnuOblast().getNazivOblasti() + " - "+no.getOdgovoranZaNaucnuOblast().getNazivPodOblasti();
-			if(key.equals(str))
+			if(key.contains(no.getOdgovoranZaNaucnuOblast().getNazivOblasti()) &&  key.contains(no.getOdgovoranZaNaucnuOblast().getNazivPodOblasti()))
 				return no.getKorisnickoIme();
 		}
 		return c.getUrednik().getKorisnickoIme();

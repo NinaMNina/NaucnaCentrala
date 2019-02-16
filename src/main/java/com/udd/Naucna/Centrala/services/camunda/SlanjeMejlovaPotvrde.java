@@ -1,5 +1,6 @@
 package com.udd.Naucna.Centrala.services.camunda;
 
+import java.util.ArrayList;
 import java.util.Properties;
 
 import javax.mail.Message;
@@ -8,18 +9,26 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
+import org.camunda.bpm.engine.TaskService;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
+import org.camunda.bpm.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.udd.Naucna.Centrala.model.Korisnik;
+import com.udd.Naucna.Centrala.model.Proces;
+import com.udd.Naucna.Centrala.repository.ProcessRepository;
 import com.udd.Naucna.Centrala.services.KorisnikService;
 
 @Service
 public class SlanjeMejlovaPotvrde implements JavaDelegate{
 	@Autowired
 	private KorisnikService korisnikService;
+	@Autowired
+	private TaskService taskService;
+	@Autowired
+	private ProcessRepository procesRepository;
 	
 	private String smtpSender = "ninamns1095@gmail.com";
 	
@@ -75,7 +84,12 @@ public class SlanjeMejlovaPotvrde implements JavaDelegate{
      //       transport.sendMessage(msg, msg.getAllRecipients());
      //       transport.sendMessage(msg1, msg1.getAllRecipients());
             System.out.println("Email sent!");
-            
+            Proces p = procesRepository.findByAutor(autor.getKorisnickoIme());
+    		if(p!=null){
+    			 Task zadatak = taskService.createTaskQuery().active().singleResult();
+    			 if(zadatak!=null)
+    				 p.setTaskId(zadatak.getId());
+    		}
         }
         catch (Exception ex) {
             System.out.println("The email was not sent.");

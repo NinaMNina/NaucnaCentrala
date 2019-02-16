@@ -9,4 +9,6 @@ import com.udd.Naucna.Centrala.model.Rad;
 public interface RadRepository extends JpaRepository<Rad, Long>{
 
 	ArrayList<Rad> findByOdgovorniAutorId(Long id);
+
+	Rad findByNaslov(String naslov);
 }
