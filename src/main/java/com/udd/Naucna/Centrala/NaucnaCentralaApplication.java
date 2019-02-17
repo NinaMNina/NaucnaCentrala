@@ -2,8 +2,12 @@ package com.udd.Naucna.Centrala;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+
+import com.udd.Naucna.Centrala.cofig.FileStorageProps;
 
 @SpringBootApplication
+@EnableConfigurationProperties({FileStorageProps.class})
 public class NaucnaCentralaApplication {
 
 	public static void main(String[] args) {

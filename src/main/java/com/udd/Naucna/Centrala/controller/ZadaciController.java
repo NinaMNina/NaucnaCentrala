@@ -19,7 +19,6 @@ import org.camunda.bpm.engine.form.TaskFormData;
 import org.camunda.bpm.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -49,6 +48,7 @@ import com.udd.Naucna.Centrala.repository.RadRepository;
 import com.udd.Naucna.Centrala.repository.RecenzentRepository;
 import com.udd.Naucna.Centrala.services.KorisnikService;
 import com.udd.Naucna.Centrala.services.RecenzentService;
+import com.udd.Naucna.Centrala.services.impl.FileStorageService;
 import com.udd.Naucna.Centrala.token.TokenUtils;
 
 @Controller
@@ -74,6 +74,9 @@ public class ZadaciController {
 	
 	@Autowired
 	private RecenzentRepository recenzentRepository;
+	
+	@Autowired
+	private FileStorageService fileStorageService;
 	
 	@Autowired
 	private TokenUtils tokenUtils;
@@ -168,31 +171,23 @@ public class ZadaciController {
 		String file = runtimeService.getVariable(processInstanceId, "up_pdf").toString();
 		Resource resource;
 		Path filePath = Paths.get(file);
-        try {
-			resource = new UrlResource(filePath.toUri());
-			String contentType = null;
-			try {
-				contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
-			} catch (IOException ex) {
-				System.out.println("Could not determine file type.");
-			}
-
-			// Fallback to the default content type if type could not be determined
-			if(contentType == null) {
-				contentType = "application/octet-stream";
-			}
-
-			try {
-				return ResponseEntity.ok()
-						.contentType(MediaType.parseMediaType(contentType))
-						.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
-				        .header( HttpHeaders.LOCATION, resource.getURI().toString())
-						.body(resource);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			
-		} catch (MalformedURLException e) {
+        resource = fileStorageService.loadFileAsResource(file);;
+		String contentType = null;
+		try {
+			contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
+		} catch (IOException ex) {
+			System.out.println("Could not determine file type.");
+		}
+		if(contentType == null) {
+			contentType = "application/octet-stream";
+		}
+		try {
+			return ResponseEntity.ok()
+					.contentType(MediaType.parseMediaType(contentType))
+					.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
+			        .header( HttpHeaders.LOCATION, resource.getURI().toString())
+					.body(resource);
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		return null;
