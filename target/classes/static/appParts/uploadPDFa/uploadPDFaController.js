@@ -11,13 +11,23 @@
         	$scope.podaci = {};
         	var novaPutanja = "";
         	$scope.komentar = "";
+        	$scope.formFields = [];
             $scope.init = function(){
+            	$scope.rok.dana=0;
+            	$scope.rok.minuta=0;
+            	$scope.rok.sati=0;
             	$http({
                     method: 'GET',
                     url: 'https://localhost:8087/NaucnaCentrala/zadaci/uploadPDFa/komentar/'+$window.localStorage.getItem('taskIdOdZadaciObrisiOdmah')
                   }).then(function successCallback(response){
-                	  if(response.data!=""){
-                      	$scope.komentar = response.data.value;            			          		  
+                	  if(response.data!=""){   
+                      	$scope.formFields = response.data;
+                      	for(var i=0; $scope.formFields.length; i++){
+                      		if($scope.formFields[i].key=="pp_komentarUradnika")
+                      			$scope.komentar = $scope.formFields[i].value
+                      		if($scope.formFields[i].key=="up_pdf")
+                      			$scope.formFields[i].value = "";
+                      	}
                 	  }
                   },function errorCallback(response){
                     });     
@@ -28,17 +38,17 @@
             }
     
             $scope.zavrsi = function(){     
-            	if(novaPutanja == ""){
-            		alert("Rad nije uploadovan");
-            		return;
+            	for(var i=0; i<$scope.formFields.length; i++){
+            		var ff=$scope.formFields[i];
+            		if(!ff.value && ff.key!="pp_komentarUradnika"){
+                		$scope.secretMessage="Potrebno je uneti sve podatke...";
+                		return;
+                	}
             	}
             	$http({
                     method: 'POST',
                     url: 'https://localhost:8087/NaucnaCentrala/zadaci/uploadPDFa/reseno/'+$window.localStorage.getItem('taskIdOdZadaciObrisiOdmah'),
-                    data: {"key": "up_pdf",
-                    	"value": novaPutanja,
-                    	"tip": "STRING"
-                    }
+                    data: $scope.formFields
                   }).then(function successCallback(response){
                 	  if(response.data!=""){
                     	$window.localStorage.removeItem('taskIdOdZadaciObrisiOdmah');
@@ -60,7 +70,9 @@
 	                headers: {'Content-Type': undefined},
 	                data: fd
 	        	}).then(function successCallback(response){
-	        		novaPutanja = response.data;
+	        		for(var i=0; i<$scope.formFields.length; i++)
+	        			if($scope.formFields[i].key=='up_pdf')
+	        				$scope.formFields[i].value = response.data;
                 },
                   function errorCallback(response){
                       alert("Problem pri uploadu rada. Neuspešno obavljeno!")

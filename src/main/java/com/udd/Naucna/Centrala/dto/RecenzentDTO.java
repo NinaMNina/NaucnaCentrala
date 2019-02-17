@@ -15,8 +15,7 @@ public class RecenzentDTO {
 //	@GeoPointField
 //	private GeoPoint location;
 //	@Field(type = FieldType.Text, store = true, index=true, analyzer = "serbian-analyzer", searchAnalyzer = "serbian-analyzer")
-	private String tekstovi;
-	
+//	private String tekstovi;
 	public Long getId() {
 		return id;
 	}
@@ -41,33 +40,19 @@ public class RecenzentDTO {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-/*	public GeoPoint getLocation() {
-		return location;
-	}
-	public void setLocation(GeoPoint location) {
-		this.location = location;
-	}*/
 	public String getCasopis() {
 		return casopis;
 	}
 	public void setCasopis(String casopis) {
 		this.casopis = casopis;
 	}
-	public String getTekstovi() {
-		return tekstovi;
-	}
-	public void setTekstovi(String tekstovi) {
-		this.tekstovi = tekstovi;
-	}
-	public RecenzentDTO(Long id, String ime, String prezime, String email, String casopis, 
-			String tekstovi) {
+	public RecenzentDTO(Long id, String ime, String prezime, String email, String casopis) {
 		super();
 		this.id = id;
 		this.ime = ime;
 		this.prezime = prezime;
 		this.email = email;
 		this.casopis = casopis;
-		this.tekstovi = tekstovi;
 	}
 	public RecenzentDTO() {
 		super();

@@ -12,26 +12,52 @@
 		<div class="row">
 			<div class="col-1"></div>
 			<div class="col-10 card box-shadow" style="background-color: #ccebff">
-	          	<div class='row card-body'>
-	          		<div class="col-10">zadatak: upload novog formatiranog pdf-a</div>
+	          	<div class='row'>
+	          		<div class="col-10">zadatak: upload novog formatiranog pdf-a i podataka</div>
 	          		<div class="col-2">
 						<button type="button" class="btn btn-outline-secondary" ng-click="zavrsi()">završi zadatak</button>
 	          		</div>
 				</div>
-				<div class='row card-body'>
+				<div class='row'>
 	          		<div class="col-3"></div>
 	          		<div class="col-6">
-						<input type="file" class="form-control" onchange="angular.element(this).scope().uploadFile(this.files)" accept=".PDF, .pdf"/>
+						komentar urednika: {{komentar}}
 					</div>
 	          		<div class="col-3"></div>
 				</div>
-				<div class='row card-body'>
-	          		<div class="col-3"></div>
-	          		<div class="col-6">
-						{{komentar}}
+				<div class="row" ng-repeat="ff in formFields">
+						<div class="col-1"></div>
+						<div class="col-3" ng-show="ff.key=='up_naziv'">
+							<label><b>Naziv rada: </b></label>
+						</div>
+						<div class="col-3" ng-show="ff.key=='up_koautori'">
+							<label><b>Autori: </b></label>
+						</div>
+						<div class="col-3" ng-show="ff.key=='up_kljucneReci'">
+							<label><b>Ključne reči: </b></label>
+						</div>
+						<div class="col-3" ng-show="ff.key=='up_apstrakt'">
+							<label><b>Apstrakt: </b></label>
+						</div>						
+						<div class="col-3" ng-show="ff.key=='up_pdf'">
+							<label></label>
+						</div>
+						
+						<div class="col-7">
+					   		 <input type="text" size=70 ng-show="ff.tip=='STRING' && ff.key!='up_apstrakt' && ff.key!='up_pdf' && ff.key!='pp_komentarUradnika'" ng-model="ff.value"/>
+					   		 <textarea rows="6" cols="72" ng-show="ff.tip=='STRING' && ff.key=='up_apstrakt'" ng-model="ff.value"></textarea>
+				    		 <input type="checkbox" ng-if="ff.tip=='BOOLEAN'" ng-model="ff.value"/>
+				  		     <input type="number" ng-if="ff.tip=='LONG'" ng-model="ff.value"/>
+				     		 <select ng-if="ff.tip=='ENUM'" ng-model="ff.value"> 
+					     		 <option ng-for="let val of enumValues" value={{val}}>
+							          {{ff.values[val]}}
+							     </option>
+						     </select>
+						     <input type="file" class="form-control" onchange="angular.element(this).scope().uploadFile(this.files)" accept=".PDF, .pdf" ng-show="ff.tip=='STRING' && ff.key=='up_pdf'"/>
+						     <br/>
+						</div>
+						<div class="col-1"></div>
 					</div>
-	          		<div class="col-3"></div>
-				</div>
 			</div>
 			<div class="col-1"></div>
 		</div>

@@ -7,7 +7,6 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -36,13 +35,16 @@ import com.udd.Naucna.Centrala.dto.PregledRadDTO;
 import com.udd.Naucna.Centrala.dto.RecenzentDTO;
 import com.udd.Naucna.Centrala.dto.RedirekcijaDTO;
 import com.udd.Naucna.Centrala.dto.ZadaciCamunda;
+import com.udd.Naucna.Centrala.dto.ZadaciDTO;
 import com.udd.Naucna.Centrala.model.Korisnik;
 import com.udd.Naucna.Centrala.model.Rad;
 import com.udd.Naucna.Centrala.model.Recenzent;
 import com.udd.Naucna.Centrala.model.enums.TipPolja;
+import com.udd.Naucna.Centrala.model.enums.ZadatakTip;
 import com.udd.Naucna.Centrala.repository.RadRepository;
 import com.udd.Naucna.Centrala.repository.RecenzentRepository;
 import com.udd.Naucna.Centrala.services.KorisnikService;
+import com.udd.Naucna.Centrala.services.RecenzentService;
 import com.udd.Naucna.Centrala.token.TokenUtils;
 
 @Controller
@@ -71,6 +73,9 @@ public class ZadaciController {
 	
 	@Autowired
 	private TokenUtils tokenUtils;
+	
+	@Autowired
+	private RecenzentService recenzentService;
 	
 	@GetMapping(path = "/get/{token}", produces = "application/json")
     public @ResponseBody ResponseEntity<ArrayList<ZadaciCamunda>> getZadaci(@PathVariable String token) {
@@ -106,7 +111,7 @@ public class ZadaciController {
 				return "pregledPodataka";
 			case "pregled pdf-a":
 				return "pregledPDFa";
-			case "upload novog pdf-a":
+			case "upload novog pdf-a i podataka":
 				return "uploadPDFa";
 			case "izbor recenzenta i vremenskog roka":
 				return "izborRecenzenata";
@@ -196,16 +201,28 @@ public class ZadaciController {
     }
 
 	@GetMapping(path = "/uploadPDFa/komentar/{taskId}", produces = "application/json")
-    public @ResponseBody ResponseEntity<FormFieldDTO> komentarUploadPDFa(@PathVariable String taskId) {
+    public @ResponseBody ResponseEntity<ArrayList<FormFieldDTO>> komentarUploadPDFa(@PathVariable String taskId) {
 		Task task = taskService.createTaskQuery().taskId(taskId).singleResult(); 
 		String processInstanceId = task.getProcessInstanceId(); 
 		
 		String komentar = runtimeService.getVariable(processInstanceId, "pp_komentarUradnika").toString();
-		FormFieldDTO retVal = new FormFieldDTO("pp_komentarUradnika", komentar, TipPolja.STRING);
+		FormFieldDTO kom = new FormFieldDTO("pp_komentarUradnika", komentar, TipPolja.STRING);
+		ArrayList<FormFieldDTO> retVal = new ArrayList<FormFieldDTO>();
+		retVal.add(kom);
+		FormFieldDTO polje1 = new FormFieldDTO("up_naziv", runtimeService.getVariable(processInstanceId, "up_naziv").toString(), TipPolja.STRING);
+		FormFieldDTO polje2 = new FormFieldDTO("up_koautori", runtimeService.getVariable(processInstanceId, "up_koautori").toString(), TipPolja.STRING);
+		FormFieldDTO polje3 = new FormFieldDTO("up_kljucneReci", runtimeService.getVariable(processInstanceId, "up_kljucneReci").toString(), TipPolja.STRING);
+		FormFieldDTO polje4 = new FormFieldDTO("up_apstrakt", runtimeService.getVariable(processInstanceId, "up_apstrakt").toString(), TipPolja.STRING);
+		FormFieldDTO polje5 = new FormFieldDTO("up_pdf", runtimeService.getVariable(processInstanceId, "up_pdf").toString(), TipPolja.STRING);
+		retVal.add(polje1);
+		retVal.add(polje2);
+		retVal.add(polje3);
+		retVal.add(polje4);
+		retVal.add(polje5);
 		return new ResponseEntity(retVal, HttpStatus.OK);
     }
 	@PostMapping(path = "/uploadPDFa/reseno/{taskId}", produces = "application/json")
-    public @ResponseBody ResponseEntity<Boolean> resiUploadPDFa(@PathVariable String taskId, @RequestBody FormFieldDTO novaLokacija) {
+    public @ResponseBody ResponseEntity<Boolean> resiUploadPDFa(@PathVariable String taskId, @RequestBody ArrayList<FormFieldDTO> noveVrednosti) {
 		HashMap<String, Object> retVal = new HashMap<>();
 		
 		Task task = taskService.createTaskQuery().taskId(taskId).singleResult(); 
@@ -213,9 +230,13 @@ public class ZadaciController {
 		
 		String naslov = runtimeService.getVariable(processInstanceId, "up_naziv").toString();
 		Rad r = radRepository.findByNaslov(naslov);
-		r.setLokacijaProbnogRada(novaLokacija.getValue());
-		radRepository.save(r);
-		retVal.put(novaLokacija.getKey(), novaLokacija.getValue());
+		for(FormFieldDTO ff : noveVrednosti){
+			retVal.put(ff.getKey(), ff.getValue());
+			if(ff.getKey().equals("up_pfd")){
+				r.setLokacijaProbnogRada(ff.getValue());
+				radRepository.save(r);
+			}
+		}
 		taskService.complete(taskId, retVal);
 		return new ResponseEntity(true, HttpStatus.OK);
     }
@@ -225,11 +246,13 @@ public class ZadaciController {
 		Task task = taskService.createTaskQuery().taskId(taskId).singleResult(); 
 		String processInstanceId = task.getProcessInstanceId(); 
 		
-		Object rec = runtimeService.getVariable(processInstanceId, "odabrani_recenzenti");
-		ArrayList<RecenzentDTO> retVal = (ArrayList<RecenzentDTO>) rec;
+		String naslov = runtimeService.getVariable(processInstanceId, "up_naziv").toString();
+		Rad rad = radRepository.findByNaslov(naslov);
+		ZadaciDTO zad = new ZadaciDTO("", rad.getId(), ZadatakTip.DODAJ_RECENZENTA);
+		ArrayList<RecenzentDTO> retVal = recenzentService.getRecenzenti(zad);
 		return new ResponseEntity(retVal, HttpStatus.OK);
     }
-	@PostMapping(path = "/izborRecenzenta/{taskId}/{rok}", produces = "application/json")
+	@PostMapping(path = "/izborRecenzenta/{taskId}/{rok}", consumes="application/json")
     public @ResponseBody ResponseEntity<Boolean> resenoIzborRecenzenta(@PathVariable String taskId, @PathVariable String rok, @RequestBody ArrayList<RecenzentDTO> odabrani) {
 		Task task = taskService.createTaskQuery().taskId(taskId).singleResult(); 
 		String processInstanceId = task.getProcessInstanceId(); 

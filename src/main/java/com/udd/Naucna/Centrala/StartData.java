@@ -117,9 +117,9 @@ public class StartData {
 				new ArrayList<Recenzent>(), new ArrayList<Izdanje>());
 		casMU = casopisRepository.save(casMU);
 //IZDANJA
-		String string4 = "January 1, 2018";
-		String string5 = "February 1, 2018";
-		String string6 = "March 1, 2018";
+		String string4 = "February 1, 2019";
+		String string5 = "March 1, 2019";
+		String string6 = "April 1, 2019";
 		DateFormat format = new SimpleDateFormat("MMMM d, yyyy", Locale.ENGLISH);
 		Date date4 = new Date();
 		Date date5 = new Date();
@@ -140,6 +140,8 @@ public class StartData {
 		ArrayList<Izdanje> izdanjaNG = new ArrayList<Izdanje>();
 		izdanjaNG.add(izd1NG);
 		izdanjaNG.add(izd2NG);
+		casNG.setIzdanja(izdanjaNG);
+		casNG = casopisRepository.save(casNG);
 		
 		
 		Izdanje izd1MU = new Izdanje(null, casMU, date4, date5, new ArrayList<Rad>());	
@@ -148,7 +150,9 @@ public class StartData {
 		izd2MU = izdanjeRepository.save(izd2MU);
 		ArrayList<Izdanje> izdanjaMU = new ArrayList<Izdanje>();
 		izdanjaMU.add(izd1MU);
-		izdanjaMU.add(izd2MU);	
+		izdanjaMU.add(izd2MU);
+		casMU.setIzdanja(izdanjaMU);
+		casMU = casopisRepository.save(casMU);	
 //NAUCNA OBLAST
 		NaucnaOblast naucnaOblast0 = new NaucnaOblast(null, "Inženjerstvo i Tehnologije", 2, "Ostalo", 11, "");
 		naucnaOblast0 = naucnaOblastRepository.save(naucnaOblast0);

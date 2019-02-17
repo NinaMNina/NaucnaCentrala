@@ -11,24 +11,27 @@
 	<div class="p-4 bg-white row">
 		<div class="col-1"></div>
 		<div class="col-10 card text-justify" >
-			<div class="card box-shadow" style="width: 85vw">
-	          <div class="card-header">
-	            <h6 class="my-0 font-weight-normal">{{theZadatak.casopis}}<small class="text-muted"> časopis</small></h6>
-	          </div>
+			<div class="card box-shadow" style="width: 85vw; background-color: #ccebff">
 	          <div class="card-body">
-	            <h5 class="card-title pricing-card-title">{{theZadatak.naslov}}</h5>
 	          	<div class='row'>
+		            <div class="col-3">	</div>
 	          		<div class="col-7">
+	          			<span>Odaberite 2 recenzenta za rad:</span><br/><br/>
 	          			<div ng-repeat="rec in recenzenti"><label>
 						    <input class="checkbox" type="checkbox" ng-click="menjaStanje(rec.id)"/>
 						    {{rec.ime}} {{rec.prezime}}, {{rec.email}}
 						</label></div>
-						<input class='form' type="number" ng-model="rok.dana"/>dana
-						<input class='form' type="number" ng-model="rok.sati"/>sati
-						<input class='form' type="number" ng-model="rok.minuta"/>minuta
-						<button type="button" class="btn btn-outline-secondary float-right" ng-click="zavrsiZadatak()">završi zadatak</button>
+						
+						<br/><br/>
+						Odaberite vremenski rok za izradu:
+						<input class='form' type="number" min="0" max="99" ng-model="rok.dana"/>dana
+						<input class='form' type="number" min="0" max="23" ng-model="rok.sati"/>sati
+						<input class='form' type="number" min="0" max="59" ng-model="rok.minuta"/>minuta
 		            	<br/><div class="text-info">{{porukica}}</div>
-		            </div>	          		
+		            </div>	   
+		            <div class="col-2">		            	
+						<button type="button" class="btn btn-outline-secondary float-right" ng-click="zavrsiZadatak()">završi zadatak</button>
+		            </div>       		
 	          	</div>            	
 	          </div>
 	        </div>

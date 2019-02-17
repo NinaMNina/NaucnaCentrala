@@ -50,7 +50,7 @@ public class RecenzentServiceImpl implements RecenzentService {
 		ArrayList<RecenzentDTO> retVal = new ArrayList<RecenzentDTO>();
 		for(Recenzent r : rec){
 		//	RecenzentDTO rDTO = new RecenzentDTO(r.getId(), r.getIme(), r.getPrezime(), r.getEmail(), "", setGeoPointLokacija(r.getLokacija()), "");
-			RecenzentDTO rDTO = new RecenzentDTO(r.getId(), r.getIme(), r.getPrezime(), r.getEmail(), "", "");
+			RecenzentDTO rDTO = new RecenzentDTO(r.getId(), r.getIme(), r.getPrezime(), r.getEmail(), "");
 			retVal.add(rDTO);
 		}
 		return retVal;

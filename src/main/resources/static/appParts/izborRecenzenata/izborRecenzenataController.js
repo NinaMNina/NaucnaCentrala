@@ -3,16 +3,17 @@
 
     angular
 		.module('app')
-		.controller('izborRecenzentaController', izborRecenzentaController);
+		.controller('izborRecenzenataController', izborRecenzenataController);
 
-    izborRecenzentaController.$inject = ['$scope','$window','$localStorage','$location', '$stateParams', '$http', '$sce'];
-        function izborRecenzentaController( $scope, $window, $localStorage, $location, $stateParams, $http, $sce) {
+    izborRecenzenataController.$inject = ['$scope','$window','$localStorage','$location', '$stateParams', '$http', '$sce'];
+        function izborRecenzenataController( $scope, $window, $localStorage, $location, $stateParams, $http, $sce) {
             $scope.token = $stateParams.token;
         	var odabrani = [];
         	$scope.porukica = "";
         	$scope.secretMessage = "";
         	var odabraniZadatakTaskId = "";
         	var zad = {};
+        	$scope.rok={"dana": 4,"minuta": 0, "sati": 0};
             $scope.init = function(){
             	if($stateParams.token=="" || $stateParams.token=="{token}" || $stateParams.token==undefined || $stateParams.token==null || $stateParams.token=="null")
             		$window.location.href = 'https://localhost:8087/NaucnaCentrala/#!/login';
@@ -44,28 +45,35 @@
             }
 
             $scope.zavrsiZadatak = function(){
-            	if(!(rok.dana>0 || rok.sati>0 || rok.minuta>0)){
+            	if(!($scope.rok.dana>0 || $scope.rok.sati>0 || $scope.rok.minuta>0)){
             		alert("Niste uneli rok za recenziju");
-            	}            
+            		return;
+            	}         
+            	if(odabrani.length!=2){
+            		alert("Niste odabrali 2 recenzenta");
+            		return;
+            	}   
             	var data = [];
             	for(var i=0; i<$scope.recenzenti.length; i++){
             		if(odabrani.includes($scope.recenzenti[i].id)){
             			data.push($scope.recenzenti[i]);
             		}
             	}
-            	var rok = "PT";
-            	if(rok.dana>0){
-            		rok=rok+rok.dana+"D";
+            	var rok = "P";
+            	if($scope.rok.dana>0){
+            		rok=rok+$scope.rok.dana.toString()+"D";
             	}
-            	if(rok.sati>0){
-            		rok=rok+rok.sati+"H";
+            	if($scope.rok.sati>0){
+            		rok=rok+"T"+$scope.rok.sati+"H";
             	}
-            	if(rok.minuta>0){
-            		rok=rok+rok.minuta+"M";
+            	if($scope.rok.minuta>0){
+            		if($scope.rok.sati<1)
+            			rok+='T'
+            		rok=rok+$scope.rok.minuta+"M";
             	}
             	$http({
                     method: 'POST',
-                    url: 'https://localhost:8087/NaucnaCentrala/zadaci/izborRecenzenta/reseno/'+$window.localStorage.getItem('taskIdOdZadaciObrisiOdmah')+'/'+rok,
+                    url: 'https://localhost:8087/NaucnaCentrala/zadaci/izborRecenzenta/'+$window.localStorage.getItem('taskIdOdZadaciObrisiOdmah')+'/'+rok,
                     data: data
                   }).then(function successCallback(response){
                 	  if(response.data!=""){

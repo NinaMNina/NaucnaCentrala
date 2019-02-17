@@ -1,6 +1,7 @@
 package com.udd.Naucna.Centrala.controller;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,6 +31,7 @@ import com.udd.Naucna.Centrala.dto.FormFieldDTO;
 import com.udd.Naucna.Centrala.dto.FormFieldsCamunda;
 import com.udd.Naucna.Centrala.model.Autor;
 import com.udd.Naucna.Centrala.model.Casopis;
+import com.udd.Naucna.Centrala.model.Izdanje;
 import com.udd.Naucna.Centrala.model.Korisnik;
 import com.udd.Naucna.Centrala.model.NaucnaOblast;
 import com.udd.Naucna.Centrala.model.Proces;
@@ -37,6 +39,8 @@ import com.udd.Naucna.Centrala.model.Rad;
 import com.udd.Naucna.Centrala.model.UrednikNO;
 import com.udd.Naucna.Centrala.model.enums.StatusRada;
 import com.udd.Naucna.Centrala.repository.AutorRepository;
+import com.udd.Naucna.Centrala.repository.CasopisRepository;
+import com.udd.Naucna.Centrala.repository.IzdanjeRepository;
 import com.udd.Naucna.Centrala.repository.NaucnaOblastRepository;
 import com.udd.Naucna.Centrala.repository.ProcessRepository;
 import com.udd.Naucna.Centrala.repository.RadRepository;
@@ -75,6 +79,10 @@ public class CasopisController {
 	private NaucnaOblastRepository naucnaOblastRepository;
 	@Autowired
 	private UrednikNORepository urednikNORepository;
+	@Autowired
+	private CasopisRepository casopisRepository;
+	@Autowired
+	private IzdanjeRepository izdanjeRepository;
 	
 	
 	
@@ -231,6 +239,20 @@ public class CasopisController {
 				StatusRada.PRIJAVLJEN, 
 				new ArrayList<>());
 		rad = radRepository.save(rad);
+		Casopis c = casopisRepository.findById(p.getCasopisId()).get();
+		List<Izdanje> il = c.getIzdanja();
+		for(Izdanje i : il){
+			Date danas = new Date(System.currentTimeMillis());
+			System.out.println("DANAS "+danas.toString());
+			System.out.println("izdanje - datum "+i.getDatumVazenjaOd().toString());
+			if(i.getDatumVazenjaOd().after(danas)){
+				System.out.println("NASAO");
+				List<Rad> radovi = i.getRadovi();
+				radovi.add(rad);
+				i.setRadovi(radovi);
+				izdanjeRepository.save(i);
+			}
+		}
 		taskService.complete(taskId, retVal);
 		return new ResponseEntity(true, HttpStatus.OK);	
     }
