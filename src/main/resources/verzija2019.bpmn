@@ -213,6 +213,11 @@
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${isRelevantan}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:userTask id="Task_03gtaf5" name="pregled pdf-a" camunda:assignee="${ps_odgovorniUrednik}" camunda:candidateUsers="urednik">
+      <bpmn:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="pp_komentarUradnika" type="string" />
+        </camunda:formData>
+      </bpmn:extensionElements>
       <bpmn:incoming>SequenceFlow_0z4gdk8</bpmn:incoming>
       <bpmn:incoming>SequenceFlow_021dyx9</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_1q3kvvy</bpmn:outgoing>
@@ -251,10 +256,10 @@
       <bpmn:incoming>SequenceFlow_1pa7o2h</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_021dyx9</bpmn:outgoing>
     </bpmn:userTask>
-    <bpmn:boundaryEvent id="BoundaryEvent_0dhkjmn" attachedToRef="Task_06udn59">
+    <bpmn:boundaryEvent id="BoundaryEvent_0dhkjmn" name="vremeLosFormat" attachedToRef="Task_06udn59">
       <bpmn:outgoing>SequenceFlow_0zbwkvm</bpmn:outgoing>
       <bpmn:timerEventDefinition>
-        <bpmn:timeDate xsi:type="bpmn:tFormalExpression">2019-02-15T12:13:14Z</bpmn:timeDate>
+        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">P3D</bpmn:timeDuration>
       </bpmn:timerEventDefinition>
     </bpmn:boundaryEvent>
     <bpmn:sequenceFlow id="SequenceFlow_0zbwkvm" sourceRef="BoundaryEvent_0dhkjmn" targetRef="Task_12u5d86" />
@@ -311,7 +316,7 @@
     <bpmn:boundaryEvent id="BoundaryEvent_1np2h90" attachedToRef="Task_10hnb5p">
       <bpmn:outgoing>SequenceFlow_1ece181</bpmn:outgoing>
       <bpmn:timerEventDefinition>
-        <bpmn:timeDate xsi:type="bpmn:tFormalExpression">2019-02-18T12:13:14Z</bpmn:timeDate>
+        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">${durationRecenzija}</bpmn:timeDuration>
       </bpmn:timerEventDefinition>
     </bpmn:boundaryEvent>
     <bpmn:sequenceFlow id="SequenceFlow_1ece181" sourceRef="BoundaryEvent_1np2h90" targetRef="Task_1624tub" />
@@ -393,7 +398,7 @@
     <bpmn:boundaryEvent id="BoundaryEvent_0s233gm" attachedToRef="SendTask_0p0x9q0">
       <bpmn:outgoing>SequenceFlow_0w19il1</bpmn:outgoing>
       <bpmn:timerEventDefinition>
-        <bpmn:timeDate xsi:type="bpmn:tFormalExpression">2019-02-20T12:13:14Z</bpmn:timeDate>
+        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">${durationDorada}</bpmn:timeDuration>
       </bpmn:timerEventDefinition>
     </bpmn:boundaryEvent>
     <bpmn:sequenceFlow id="SequenceFlow_0w19il1" sourceRef="BoundaryEvent_0s233gm" targetRef="Task_0ef79ux" />
@@ -709,6 +714,9 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BoundaryEvent_0iyeuyk_di" bpmnElement="BoundaryEvent_0dhkjmn">
         <dc:Bounds x="2012" y="690" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1943" y="730" width="84" height="14" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="SequenceFlow_0zbwkvm_di" bpmnElement="SequenceFlow_0zbwkvm">
         <di:waypoint x="2030" y="726" />
@@ -727,8 +735,8 @@
       <bpmndi:BPMNEdge id="SequenceFlow_021dyx9_di" bpmnElement="SequenceFlow_021dyx9">
         <di:waypoint x="2130" y="668" />
         <di:waypoint x="2172" y="668" />
-        <di:waypoint x="2194" y="365" />
-        <di:waypoint x="1955" y="375" />
+        <di:waypoint x="2172" y="377" />
+        <di:waypoint x="1955" y="377" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="SequenceFlow_027gpmh_di" bpmnElement="SequenceFlow_027gpmh">
         <di:waypoint x="1731" y="558" />

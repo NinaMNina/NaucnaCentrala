@@ -2,6 +2,7 @@ package com.udd.Naucna.Centrala.controller;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.camunda.bpm.engine.FormService;
@@ -39,6 +40,7 @@ import com.udd.Naucna.Centrala.repository.AutorRepository;
 import com.udd.Naucna.Centrala.repository.NaucnaOblastRepository;
 import com.udd.Naucna.Centrala.repository.ProcessRepository;
 import com.udd.Naucna.Centrala.repository.RadRepository;
+import com.udd.Naucna.Centrala.repository.UrednikNORepository;
 import com.udd.Naucna.Centrala.services.CasopisService;
 import com.udd.Naucna.Centrala.services.KorisnikService;
 import com.udd.Naucna.Centrala.services.RadService;
@@ -71,6 +73,9 @@ public class CasopisController {
 	private RadRepository radRepository;
 	@Autowired
 	private NaucnaOblastRepository naucnaOblastRepository;
+	@Autowired
+	private UrednikNORepository urednikNORepository;
+	
 	
 	
 	@GetMapping(path = "/getAll", produces = "application/json")
@@ -243,9 +248,17 @@ public class CasopisController {
 		Casopis c = casopisService.findOne(casopisId);
 		if(c==null)
 			return "";
-		for(UrednikNO no : c.getUredniciNO()){
-			if(key.contains(no.getOdgovoranZaNaucnuOblast().getNazivOblasti()) &&  key.contains(no.getOdgovoranZaNaucnuOblast().getNazivPodOblasti()))
-				return no.getKorisnickoIme();
+		NaucnaOblast noDef = null;
+		for(NaucnaOblast no : c.getNaucneOblasti()){
+			if(key.contains(no.getNazivOblasti()) &&  key.contains(no.getNazivPodOblasti()))
+				noDef = no;
+		}
+		if(noDef==null)
+			return c.getUrednik().getKorisnickoIme();
+		List<UrednikNO> nos = urednikNORepository.findAll();
+		for(UrednikNO n0 : nos){
+			if(n0.getAngazovanKaoUradnikZaCasopis().getId()==c.getId() && noDef.getId()==n0.getOdgovoranZaNaucnuOblast().getId())
+				return n0.getKorisnickoIme();
 		}
 		return c.getUrednik().getKorisnickoIme();
 	}

@@ -36,4 +36,14 @@ app.config(function($stateProvider, $urlRouterProvider) {
         templateUrl : 'appParts/pregledPodataka/pregledPodataka.html',
         controller : 'pregledPodatakaController'
     })
+    .state('pregledPDFa', {
+        url: '/pregledPDFa/{token}',
+        templateUrl : 'appParts/pregledPDFa/pregledPDFa.html',
+        controller : 'pregledPDFaController'
+    })
+    .state('uploadPDFa', {
+        url: '/uploadPDFa/{token}',
+        templateUrl : 'appParts/uploadPDFa/uploadPDFa.html',
+        controller : 'uploadPDFaController'
+    })
   });

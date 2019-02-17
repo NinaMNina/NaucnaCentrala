@@ -1,0 +1,32 @@
+<div ng-init="init()" class="wrapper">
+	<div class="p-4 bg-white row" style="height: 207px">
+		<div class="col-2 float-top"><img src='./assets/logo-cover.png'/></div>
+		<div class="col-8 input-group mb-3">			
+		</div>
+		<div class="col-2">
+			<button type="button" class="btn btn-outline-info float-right"  ng-click="odjaviSe()">Odjavi se</button><br/><br/>
+			<button type="button" class="btn btn-outline-secondary float-right" ng-click="home()">Početna stranica</button>
+		</div>
+	</div> 	
+	<div class="p-4 bg-white">
+		<div class="row">
+			<div class="col-1"></div>
+			<div class="col-10 card box-shadow" style="background-color: #ccebff">
+	          	<div class='row card-body'>
+	          		<div class="col-10">zadatak: upload novog formatiranog pdf-a</div>
+	          		<div class="col-2">
+						<button type="button" class="btn btn-outline-secondary" ng-click="zavrsi()">završi zadatak</button>
+	          		</div>
+				</div>
+				<div class='row card-body'>
+	          		<div class="col-3"></div>
+	          		<div class="col-6">
+						<input type="file" class="form-control" onchange="angular.element(this).scope().uploadFile(this.files)" accept=".PDF, .pdf"/>
+					</div>
+	          		<div class="col-3"></div>
+				</div>
+			</div>
+			<div class="col-1"></div>
+		</div>
+	</div>
+</div>

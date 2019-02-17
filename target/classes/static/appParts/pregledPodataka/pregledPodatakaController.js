@@ -31,8 +31,7 @@
             $scope.zadatakRelevantan = function(){       
             	$http({
                     method: 'POST',
-                    url: 'https://localhost:8087/NaucnaCentrala/zadaci/pregledPodataka/reseno/'+$window.localStorage.getItem('taskIdOdZadaciObrisiOdmah')+'/prihvaceno',
-                    data: true
+                    url: 'https://localhost:8087/NaucnaCentrala/zadaci/pregledPodataka/reseno/'+$window.localStorage.getItem('taskIdOdZadaciObrisiOdmah')+'/prihvaceno'
                   }).then(function successCallback(response){
                 	  if(response.data!=""){
                     	$window.localStorage.removeItem('taskIdOdZadaciObrisiOdmah');
@@ -47,8 +46,7 @@
             $scope.zadatakNijeRelevantan = function(){       
             	$http({
                     method: 'POST',
-                    url: 'https://localhost:8087/NaucnaCentrala/zadaci/pregledPodataka/reseno/'+$window.localStorage.getItem('taskIdOdZadaciObrisiOdmah')+'/odbijeno',
-                    data: false
+                    url: 'https://localhost:8087/NaucnaCentrala/zadaci/pregledPodataka/reseno/'+$window.localStorage.getItem('taskIdOdZadaciObrisiOdmah')+'/odbijeno'
                   }).then(function successCallback(response){
                 	  if(response.data!=""){
                       	$window.localStorage.remove('taskIdOdZadaciObrisiOdmah');

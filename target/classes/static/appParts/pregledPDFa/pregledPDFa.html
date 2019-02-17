@@ -13,21 +13,30 @@
 			<div class="col-1"></div>
 			<div class="col-10 card box-shadow" style="background-color: #ccebff">
 	          	<div class='row card-body'>
-	          		<div class="col-8">zadatak: pregled naslova, apstrakta i ključnih pojmova</div>
+	          		<div class="col-10">zadatak: pregled pdf-a</div>
 	          		<div class="col-2">
-						<button type="button" class="btn btn-outline-secondary" ng-click="zadatakRelevantan()">rad JESTE relevantan</button>
-	          		</div>
-	          		<div class="col-2">
-						<button type="button" class="btn btn-outline-danger" ng-click="zadatakNijeRelevantan()">rad NIJE relevantan</button>
+						<button type="button" class="btn btn-outline-secondary" ng-click="otvoriRad()">prikaži rad</button>
 	          		</div>
 				</div>
 				<div class='row card-body'>
-					<div class="row"><h5 class="card-title pricing-card-title"><small class="text-muted">NASLOV:</small>{{podaci.naslov}}</h5><br/></div>
-	          		<div class="row"><h5 class="card-title pricing-card-title"><small class="text-muted">ključne reči:</small>{{podaci.kljucneReci}}</h5><br/></div>
-	          		<div class="row"><h5 class="card-title pricing-card-title"><small class="text-muted">apstrakt:</small>{{podaci.apstrakt}}</h5><br/></div>	          	
+	          		<div class="col-8"></div>
+	          		<div class="col-2">
+						<button type="button" class="btn btn-outline-warning" ng-click="zavrsiZadatak('lose')">LOŠE formatiran</button>
+	          		</div>
+	          		<div class="col-2">
+						<button type="button" class="btn btn-outline-secondary" ng-click="zavrsiZadatak('dobro')">DOBRO formatiran</button>
+	          		</div>
+				</div>
+				<div class='row card-body'>
+	          		<textarea rows="6" cols="80" ng-model="komentar" placeholedr="unesite komentar ili zamerku ukoliko rad nije dobro formatiran"></textarea>
 				</div>
 			</div>
 			<div class="col-1"></div>
+		</div>
+	</div>
+	<div class="p-4 bg-white card">
+		<div class="row card-body">
+			<embed ng-src="{{content}}" style="width:100vw;height:800px;"></embed>			
 		</div>
 	</div>
 </div>

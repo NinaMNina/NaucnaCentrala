@@ -29,8 +29,7 @@ public class SlanjeMejlovaPotvrde implements JavaDelegate{
 	private TaskService taskService;
 	@Autowired
 	private ProcessRepository procesRepository;
-	
-	private String smtpSender = "ninamns1095@gmail.com";
+
 	
 	@Override
 	public void execute(DelegateExecution execution) throws Exception {
@@ -78,11 +77,11 @@ public class SlanjeMejlovaPotvrde implements JavaDelegate{
             System.out.println("Sending...");
             
             // Connect to Amazon SES using the SMTP username and password you specified above.
-            transport.connect("smtp.gmail.com", "ninamns1095@gmail.com", "**");
+//          transport.connect("smtp.gmail.com", "ninamns1095@gmail.com", "**");
         	
             // Send the email.
-     //       transport.sendMessage(msg, msg.getAllRecipients());
-     //       transport.sendMessage(msg1, msg1.getAllRecipients());
+//              transport.sendMessage(msg, msg.getAllRecipients());
+//		        transport.sendMessage(msg1, msg1.getAllRecipients());
             System.out.println("Email sent!");
             Proces p = procesRepository.findByAutor(autor.getKorisnickoIme());
     		if(p!=null){

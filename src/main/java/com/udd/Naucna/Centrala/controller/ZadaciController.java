@@ -1,8 +1,14 @@
 package com.udd.Naucna.Centrala.controller;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.camunda.bpm.engine.FormService;
 import org.camunda.bpm.engine.IdentityService;
@@ -10,19 +16,26 @@ import org.camunda.bpm.engine.RuntimeService;
 import org.camunda.bpm.engine.TaskService;
 import org.camunda.bpm.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.udd.Naucna.Centrala.dto.FormFieldDTO;
 import com.udd.Naucna.Centrala.dto.PregledRadDTO;
 import com.udd.Naucna.Centrala.dto.RedirekcijaDTO;
 import com.udd.Naucna.Centrala.dto.ZadaciCamunda;
 import com.udd.Naucna.Centrala.model.Korisnik;
+import com.udd.Naucna.Centrala.model.Rad;
 import com.udd.Naucna.Centrala.repository.RadRepository;
 import com.udd.Naucna.Centrala.services.KorisnikService;
 import com.udd.Naucna.Centrala.token.TokenUtils;
@@ -85,6 +98,9 @@ public class ZadaciController {
 				return "pregledPodataka";
 			case "pregled pdf-a":
 				return "pregledPDFa";
+			case "upload novog pdf-a":
+				return "uploadPDFa";
+				
 		}
 		return "ostani";
 	}
@@ -113,6 +129,75 @@ public class ZadaciController {
 			retVal.put("isRelevantan", true);
 		else
 			retVal.put("isRelevantan", false);
+		taskService.complete(taskId, retVal);
+		return new ResponseEntity(true, HttpStatus.OK);
+    }
+	@GetMapping(path = "/pregledPDFa/getPDF/{taskId}")
+    public ResponseEntity<Resource> get(@PathVariable String taskId, HttpServletRequest request) {
+		Task task = taskService.createTaskQuery().taskId(taskId).singleResult(); 
+		String processInstanceId = task.getProcessInstanceId(); 
+		
+		String file = runtimeService.getVariable(processInstanceId, "up_pdf").toString();
+		Resource resource;
+		Path filePath = Paths.get(file);
+        try {
+			resource = new UrlResource(filePath.toUri());
+			String contentType = null;
+			try {
+				contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
+			} catch (IOException ex) {
+				System.out.println("Could not determine file type.");
+			}
+
+			// Fallback to the default content type if type could not be determined
+			if(contentType == null) {
+				contentType = "application/octet-stream";
+			}
+
+			try {
+				return ResponseEntity.ok()
+						.contentType(MediaType.parseMediaType(contentType))
+						.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
+				        .header( HttpHeaders.LOCATION, resource.getURI().toString())
+						.body(resource);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+    }
+
+	@PostMapping(path = "/pregledPDFa/reseno/{taskId}/{result}", produces = "application/json")
+    public @ResponseBody ResponseEntity<Boolean> resiPregledPDFa(@PathVariable String taskId, @PathVariable String result, @RequestBody FormFieldDTO komentar) {
+		HashMap<String, Object> retVal = new HashMap<>();
+		if(result.equals("dobro")){
+			retVal.put("isDobroFormatiran", true);
+			retVal.put("pp_komentarUradnika", "");
+		}
+		else{
+			retVal.put("isDobroFormatiran", false);
+			retVal.put("pp_komentarUradnika", komentar.getValue());
+		}
+		taskService.complete(taskId, retVal);
+		return new ResponseEntity(true, HttpStatus.OK);
+    }
+	@PostMapping(path = "/uploadPDFa/reseno/{taskId}", produces = "application/json")
+    public @ResponseBody ResponseEntity<Boolean> resiUploadPDFa(@PathVariable String taskId, @RequestBody FormFieldDTO novaLokacija) {
+		HashMap<String, Object> retVal = new HashMap<>();
+		
+		Task task = taskService.createTaskQuery().taskId(taskId).singleResult(); 
+		String processInstanceId = task.getProcessInstanceId(); 
+		
+		String naslov = runtimeService.getVariable(processInstanceId, "up_naziv").toString();
+		Rad r = radRepository.findByNaslov(naslov);
+		r.setLokacijaProbnogRada(novaLokacija.getValue());
+		radRepository.save(r);
+		retVal.put(novaLokacija.getKey(), novaLokacija.getValue());
 		taskService.complete(taskId, retVal);
 		return new ResponseEntity(true, HttpStatus.OK);
     }

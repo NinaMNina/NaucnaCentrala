@@ -9,8 +9,7 @@ public class RedirekcijaNaKP implements JavaDelegate{
 
 	@Override
 	public void execute(DelegateExecution execution) throws Exception {
-		execution.setVariable("uspesnoPlacanje", true);
-		
+		execution.setVariable("uspesnoPlacanje", true);	
 	}
 
 }
