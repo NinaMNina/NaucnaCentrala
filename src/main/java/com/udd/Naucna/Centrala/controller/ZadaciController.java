@@ -14,6 +14,8 @@ import org.camunda.bpm.engine.FormService;
 import org.camunda.bpm.engine.IdentityService;
 import org.camunda.bpm.engine.RuntimeService;
 import org.camunda.bpm.engine.TaskService;
+import org.camunda.bpm.engine.form.FormField;
+import org.camunda.bpm.engine.form.TaskFormData;
 import org.camunda.bpm.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -31,6 +33,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.udd.Naucna.Centrala.dto.FormFieldDTO;
+import com.udd.Naucna.Centrala.dto.IzmeneDTO;
+import com.udd.Naucna.Centrala.dto.OceneDTO;
 import com.udd.Naucna.Centrala.dto.PregledRadDTO;
 import com.udd.Naucna.Centrala.dto.RecenzentDTO;
 import com.udd.Naucna.Centrala.dto.RedirekcijaDTO;
@@ -115,7 +119,16 @@ public class ZadaciController {
 				return "uploadPDFa";
 			case "izbor recenzenta i vremenskog roka":
 				return "izborRecenzenata";
-				
+			case "Citanje rada, komentari autoru, uredniku i unos procene":
+				return "aktivnostRecenzenta";
+			case "pregled ocena":
+				return "pregledOcena";	
+			case "dorada rada i upload novog pdf-a":
+				return "doradaRada";
+			case "Pregled izmena":
+				return "pregledIzmena";
+			case "Upload rada":
+				return "konacniUpload";
 		}
 		return "ostani";
 	}
@@ -257,14 +270,162 @@ public class ZadaciController {
 		Task task = taskService.createTaskQuery().taskId(taskId).singleResult(); 
 		String processInstanceId = task.getProcessInstanceId(); 
 		HashMap<String, Object> retVal = new HashMap<>();
-		Recenzent rec0 = recenzentRepository.findById(odabrani.get(0).getId()).get();
-		Recenzent rec1 = recenzentRepository.findById(odabrani.get(1).getId()).get();
-		if(rec1==null || rec0==null){
-			return new ResponseEntity(false, HttpStatus.BAD_REQUEST);			
+		List<String> odabraniRec = new ArrayList();
+		List<String> prethodni = (List<String>) runtimeService.getVariable(processInstanceId, "listaRecenzenata");
+		boolean dodatnaRec = false;
+		if(prethodni==null && odabrani.size()<2)
+			return new ResponseEntity(false, HttpStatus.OK);	
+		else if(prethodni!=null){
+			dodatnaRec = true;
+			for(String sss : prethodni)
+				odabraniRec.add(sss);
+		}
+		for(RecenzentDTO rrr : odabrani){
+			Recenzent rec0 = recenzentRepository.findById(rrr.getId()).get();
+			odabraniRec.add(rec0.getKorisnickoIme());
 		}
 		retVal.put("durationRecenzija", rok);
-		retVal.put("ir_recenzent1", rec0.getKorisnickoIme());
-		retVal.put("ir_recenzent2", rec1.getKorisnickoIme());
+		retVal.put("listaRecenzenata", odabraniRec);
+		taskService.complete(taskId, retVal);		
+		if(dodatnaRec){
+			for(String p : prethodni){
+				List<Task> zadaci = taskService.createTaskQuery().taskAssignee(p).list();
+				for(Task t0 : zadaci){
+					if(t0.getName().equals("Citanje rada, komentari autoru, uredniku i unos procene"))
+						taskService.complete(t0.getId());
+				}
+			}
+			
+		}
+		return new ResponseEntity(true, HttpStatus.OK);
+    }
+	@GetMapping(path = "/aktivnostiRecenzenta/{taskId}", produces = "application/json")
+    public @ResponseBody ResponseEntity<ArrayList<FormFieldDTO>> aktivnostRecenzentaForma(@PathVariable String taskId) {
+		
+		TaskFormData tfd = formService.getTaskFormData(taskId);
+		ArrayList<FormField> properties = (ArrayList<FormField>) tfd.getFormFields();
+		ArrayList<FormFieldDTO> retVal = new ArrayList<FormFieldDTO>();
+		for(FormField fp : properties) {
+			FormFieldDTO field = new FormFieldDTO(fp.getId(), "", TipPolja.STRING);
+			retVal.add(field);
+		}
+		return new ResponseEntity(retVal, HttpStatus.OK);
+    }
+	@PostMapping(path = "/aktivnostiRecenzenta/{taskId}/{token}", produces = "application/json", consumes = "application/json")
+    public @ResponseBody ResponseEntity<Boolean> resenoAtivnostRecenzenta(@PathVariable String taskId, @PathVariable String token, @RequestBody ArrayList<FormFieldDTO> polja) {
+		Task task = taskService.createTaskQuery().taskId(taskId).singleResult(); 
+		String processInstanceId = task.getProcessInstanceId(); 
+		String username = tokenUtils.getUsernameFromToken(token);
+		
+		HashMap<String, Object> retVal = new HashMap<>();
+		for(FormFieldDTO fp : polja) {
+			retVal.put(fp.getKey()+"_"+username, fp.getValue());
+		}
+		taskService.complete(taskId, retVal);
+		return new ResponseEntity(true, HttpStatus.OK);
+    }
+	@GetMapping(path = "/pregledOcena/{taskId}", produces = "application/json")
+    public @ResponseBody ResponseEntity<ArrayList<OceneDTO>> pregledOcenaPodaci(@PathVariable String taskId) {
+		Task task = taskService.createTaskQuery().taskId(taskId).singleResult(); 
+		String processInstanceId = task.getProcessInstanceId(); 
+		
+		ArrayList<OceneDTO> retVal = new ArrayList<OceneDTO>();
+		List<String> recenzenti = (List<String>) runtimeService.getVariable(processInstanceId, "listaRecenzenata");
+		for(String fp : recenzenti) {
+			OceneDTO ooo = new OceneDTO(runtimeService.getVariable(processInstanceId, "cr_komentarUredniku"+"_"+fp).toString(), 
+					runtimeService.getVariable(processInstanceId, "cr__ocena"+"_"+fp).toString());
+			retVal.add(ooo);
+		}
+		return new ResponseEntity(retVal, HttpStatus.OK);
+    }
+	@PostMapping(path = "/pregledOcena/{taskId}/{ocena}/{rok}", produces = "application/json")
+    public @ResponseBody ResponseEntity<Boolean> resenjePregledOcena(@PathVariable String taskId, @PathVariable String ocena, @PathVariable String rok) {
+		Task task = taskService.createTaskQuery().taskId(taskId).singleResult(); 
+		String processInstanceId = task.getProcessInstanceId(); 		
+		HashMap<String, Object> retVal = new HashMap<>();
+		if(!rok.equals("P"))
+			retVal.put("durationDorada", rok);
+		retVal.put("ocena", ocena);
+		taskService.complete(taskId, retVal);
+		return new ResponseEntity(true, HttpStatus.OK);
+    }
+	@GetMapping(path = "/doradaRada/{taskId}", produces = "application/json")
+    public @ResponseBody ResponseEntity<ArrayList<OceneDTO>> doradaRadaPodaci(@PathVariable String taskId) {
+		Task task = taskService.createTaskQuery().taskId(taskId).singleResult(); 
+		String processInstanceId = task.getProcessInstanceId(); 
+		
+		ArrayList<OceneDTO> retVal = new ArrayList<OceneDTO>();
+		List<String> recenzenti = (List<String>) runtimeService.getVariable(processInstanceId, "listaRecenzenata");
+		for(String fp : recenzenti) {
+			OceneDTO ooo = new OceneDTO(runtimeService.getVariable(processInstanceId, "cr_komentarAutoru"+"_"+fp).toString(), "");
+			retVal.add(ooo);
+		}
+		return new ResponseEntity(retVal, HttpStatus.OK);
+    }
+	@PostMapping(path = "/doradaRada/{taskId}", produces = "application/json", consumes = "application/json")
+    public @ResponseBody ResponseEntity<Boolean> resenjeDoradaRada(@PathVariable String taskId, @RequestBody FormFieldDTO pdf) {
+		Task task = taskService.createTaskQuery().taskId(taskId).singleResult(); 
+		String processInstanceId = task.getProcessInstanceId(); 		
+		HashMap<String, Object> retVal = new HashMap<>();
+		
+		String naslov = runtimeService.getVariable(processInstanceId, "up_naziv").toString();
+		Rad r = radRepository.findByNaslov(naslov);
+		retVal.put(pdf.getKey(), pdf.getValue());
+		if(pdf.getKey().equals("up_pfd")){
+			r.setLokacijaProbnogRada(pdf.getValue());
+			radRepository.save(r);
+		}
+		taskService.complete(taskId, retVal);
+		return new ResponseEntity(true, HttpStatus.OK);
+    }
+	@GetMapping(path = "/pregledIzmena/{taskId}", produces = "application/json")
+    public @ResponseBody ResponseEntity<IzmeneDTO> pregledIzmenaPodaci(@PathVariable String taskId) {
+		Task task = taskService.createTaskQuery().taskId(taskId).singleResult(); 
+		String processInstanceId = task.getProcessInstanceId(); 
+		
+		ArrayList<OceneDTO> ocene = new ArrayList<OceneDTO>();
+		ArrayList<FormFieldDTO> rad = new ArrayList<FormFieldDTO>();
+		List<String> recenzenti = (List<String>) runtimeService.getVariable(processInstanceId, "listaRecenzenata");
+		for(String fp : recenzenti) {
+			OceneDTO ooo = new OceneDTO(runtimeService.getVariable(processInstanceId, "cr_komentarAutoru"+"_"+fp).toString(), "");
+			ocene.add(ooo);
+		}
+		String naslov = runtimeService.getVariable(processInstanceId, "up_naziv").toString();
+		Rad r = radRepository.findByNaslov(naslov);
+		FormFieldDTO ff0 = new FormFieldDTO("naslov", r.getNaslov(), TipPolja.STRING);
+		FormFieldDTO ff1 = new FormFieldDTO("ključni pojmovi", r.getKljucniPojmovi(), TipPolja.STRING);
+		FormFieldDTO ff2 = new FormFieldDTO("apstrakt", runtimeService.getVariable(processInstanceId, "up_apstrakt").toString(), TipPolja.STRING);
+		rad.add(ff0);
+		rad.add(ff1);
+		rad.add(ff2);
+		IzmeneDTO retVal = new IzmeneDTO(ocene, rad);
+		return new ResponseEntity(retVal, HttpStatus.OK);
+    }
+
+	@PostMapping(path = "/pregledIzmena/{taskId}/{odluka}", produces = "application/json")
+    public @ResponseBody ResponseEntity<Boolean> resenjeDoradaRada(@PathVariable String taskId, @PathVariable String odluka) {
+		Task task = taskService.createTaskQuery().taskId(taskId).singleResult(); 
+		String processInstanceId = task.getProcessInstanceId(); 		
+		HashMap<String, Object> retVal = new HashMap<>();
+		if(odluka.equals("zadovoljan"))
+			retVal.put("zadovoljan", true);
+		else
+			retVal.put("zadovoljan", false);			
+		taskService.complete(taskId, retVal);
+		return new ResponseEntity(true, HttpStatus.OK);
+    }
+	@PostMapping(path = "/konacniUpload/{taskId}", produces = "application/json")
+    public @ResponseBody ResponseEntity<Boolean> resenjeKonacniUpload(@PathVariable String taskId, @RequestBody FormFieldDTO pdf) {
+		Task task = taskService.createTaskQuery().taskId(taskId).singleResult(); 
+		String processInstanceId = task.getProcessInstanceId(); 		
+		HashMap<String, Object> retVal = new HashMap<>();
+		
+		String naslov = runtimeService.getVariable(processInstanceId, "up_naziv").toString();
+		Rad r = radRepository.findByNaslov(naslov);
+		retVal.put("konacnaLokacija", pdf.getValue());
+		r.setLokacijaRada(pdf.getValue());
+		radRepository.save(r);
+		
 		taskService.complete(taskId, retVal);
 		return new ResponseEntity(true, HttpStatus.OK);
     }

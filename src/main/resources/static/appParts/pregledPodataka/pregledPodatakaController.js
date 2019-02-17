@@ -49,7 +49,7 @@
                     url: 'https://localhost:8087/NaucnaCentrala/zadaci/pregledPodataka/reseno/'+$window.localStorage.getItem('taskIdOdZadaciObrisiOdmah')+'/odbijeno'
                   }).then(function successCallback(response){
                 	  if(response.data!=""){
-                      	$window.localStorage.remove('taskIdOdZadaciObrisiOdmah');
+                      	$window.localStorage.removeItem('taskIdOdZadaciObrisiOdmah');
                       	$window.location.href = 'https://localhost:8087/NaucnaCentrala/#!/home'             			          		  
                   	  }
                   },

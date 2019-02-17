@@ -51,4 +51,29 @@ app.config(function($stateProvider, $urlRouterProvider) {
         templateUrl : 'appParts/izborRecenzenata/izborRecenzenata.html',
         controller : 'izborRecenzenataController'
     })
+    .state('aktivnostRecenzenta', {
+        url: '/aktivnostRecenzenta/{token}',
+        templateUrl : 'appParts/aktivnostRecenzenta/aktivnostRecenzenta.html',
+        controller : 'aktivnostRecenzentaController'
+    })
+    .state('pregledOcena', {
+        url: '/pregledOcena/{token}',
+        templateUrl : 'appParts/pregledOcena/pregledOcena.html',
+        controller : 'pregledOcenaController'
+    })
+    .state('doradaRada', {
+        url: '/doradaRada/{token}',
+        templateUrl : 'appParts/doradaRada/doradaRada.html',
+        controller : 'doradaRadaController'
+    })
+    .state('pregledIzmena', {
+        url: '/pregledIzmena/{token}',
+        templateUrl : 'appParts/pregledIzmena/pregledIzmena.html',
+        controller : 'pregledIzmenaController'
+    })
+    .state('konacniUpload', {
+        url: '/konacniUpload/{token}',
+        templateUrl : 'appParts/konacniUpload/konacniUpload.html',
+        controller : 'konacniUploadController'
+    })
   });

@@ -48,11 +48,7 @@
             	if(!($scope.rok.dana>0 || $scope.rok.sati>0 || $scope.rok.minuta>0)){
             		alert("Niste uneli rok za recenziju");
             		return;
-            	}         
-            	if(odabrani.length!=2){
-            		alert("Niste odabrali 2 recenzenta");
-            		return;
-            	}   
+            	}                   	  
             	var data = [];
             	for(var i=0; i<$scope.recenzenti.length; i++){
             		if(odabrani.includes($scope.recenzenti[i].id)){
@@ -75,11 +71,13 @@
                     method: 'POST',
                     url: 'https://localhost:8087/NaucnaCentrala/zadaci/izborRecenzenta/'+$window.localStorage.getItem('taskIdOdZadaciObrisiOdmah')+'/'+rok,
                     data: data
-                  }).then(function successCallback(response){
-                	  if(response.data!=""){
-                    	$window.localStorage.removeItem('taskIdOdZadaciObrisiOdmah');
-                    	$window.location.href = 'https://localhost:8087/NaucnaCentrala/#!/home'             			          		  
+                  }).then(function successCallback(response){                	   
+                	  if(response.data==false){
+                		alert("Morate odabrati minimalno 2 recenzenta.");
+                		return;
                 	  }
+                	  $window.localStorage.removeItem('taskIdOdZadaciObrisiOdmah');
+                	  $window.location.href = 'https://localhost:8087/NaucnaCentrala/#!/home'  
                   },
                     function errorCallback(response){
                         alert("Greška pri obavljanu zadatka");

@@ -47,7 +47,7 @@ public class SlanjeMailaLosFormat implements JavaDelegate{
         msg.setFrom(new InternetAddress("ninamns1095@gmail.com","Nina Miladinovic"));
         msg.setRecipient(Message.RecipientType.TO, new InternetAddress(mailAutor));
         msg.setSubject("UPP2019: Ponovni upload rada");
-        msg.setContent("Ovim putem Vas obaveštavamo da je potrebno dodatno formatiranje rada koji ste postavili za recenyiju","text/html");
+        msg.setContent("Ovim putem Vas obaveštavamo da je potrebno dodatno formatiranje rada koji ste postavili za recenziju","text/html");
         
         // Add a configuration set header. Comment or delete the 
         // next line if you are not using a configuration set
