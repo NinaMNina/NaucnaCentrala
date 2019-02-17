@@ -1,0 +1,38 @@
+<div ng-init="init()" class="wrapper">
+	<div class="p-4 bg-white row" style="height: 207px">
+		<div class="col-2 float-top"><img src='./assets/logo-cover.png'/></div>
+		<div class="col-8 input-group mb-3">			
+		</div>
+		<div class="col-2">
+			<button type="button" class="btn btn-outline-info float-right"  ng-click="odjaviSe()">Odjavi se</button><br/><br/>
+			<button type="button" class="btn btn-outline-secondary float-right" ng-click="home()">Početna stranica</button>
+		</div>
+	</div> 	
+	<div class="p-4 bg-white row">
+		<div class="col-1"></div>
+		<div class="col-10 card text-justify" >
+			<div class="card box-shadow" style="width: 85vw">
+	          <div class="card-header">
+	            <h6 class="my-0 font-weight-normal">{{theZadatak.casopis}}<small class="text-muted"> časopis</small></h6>
+	          </div>
+	          <div class="card-body">
+	            <h5 class="card-title pricing-card-title">{{theZadatak.naslov}}</h5>
+	          	<div class='row'>
+	          		<div class="col-7">
+	          			<div ng-repeat="rec in recenzenti"><label>
+						    <input class="checkbox" type="checkbox" ng-click="menjaStanje(rec.id)"/>
+						    {{rec.ime}} {{rec.prezime}}, {{rec.email}}
+						</label></div>
+						<input class='form' type="number" ng-model="rok.dana"/>dana
+						<input class='form' type="number" ng-model="rok.sati"/>sati
+						<input class='form' type="number" ng-model="rok.minuta"/>minuta
+						<button type="button" class="btn btn-outline-secondary float-right" ng-click="zavrsiZadatak()">završi zadatak</button>
+		            	<br/><div class="text-info">{{porukica}}</div>
+		            </div>	          		
+	          	</div>            	
+	          </div>
+	        </div>
+	    </div>
+		<div class="col-1"></div>	
+	</div>
+</div>

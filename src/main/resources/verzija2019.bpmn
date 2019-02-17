@@ -280,6 +280,10 @@
           <camunda:outputParameter name="odabraniRecenzent2" />
           <camunda:outputParameter name="odabraniRecenzent3" />
         </camunda:inputOutput>
+        <camunda:formData>
+          <camunda:formField id="ir_recenzent1" type="string" />
+          <camunda:formField id="ir_recenzent2" type="string" />
+        </camunda:formData>
       </bpmn:extensionElements>
       <bpmn:incoming>SequenceFlow_027gpmh</bpmn:incoming>
       <bpmn:incoming>SequenceFlow_1ece181</bpmn:incoming>
@@ -303,7 +307,7 @@
       <bpmn:startEvent id="StartEvent_1d01lqx">
         <bpmn:outgoing>SequenceFlow_1d4lym0</bpmn:outgoing>
       </bpmn:startEvent>
-      <bpmn:userTask id="UserTask_0mu3joq" name="Citanje rada, komentari autoru, uredniku i unos procene" camunda:candidateUsers="recenzent">
+      <bpmn:userTask id="UserTask_0mu3joq" name="Citanje rada, komentari autoru, uredniku i unos procene" camunda:assignee="ir_recenzent1, ir_recenzent2" camunda:candidateUsers="recenzent">
         <bpmn:incoming>SequenceFlow_1d4lym0</bpmn:incoming>
         <bpmn:outgoing>SequenceFlow_0aj57wn</bpmn:outgoing>
       </bpmn:userTask>

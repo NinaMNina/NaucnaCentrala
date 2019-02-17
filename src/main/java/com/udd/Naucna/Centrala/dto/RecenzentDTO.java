@@ -2,19 +2,19 @@ package com.udd.Naucna.Centrala.dto;
 
 //@Document(indexName = "recenzenti", type = "recenzenti", shards = 1, replicas = 0)
 public class RecenzentDTO {
-	/*@Id
+//	@Id
 	private Long id;
-	@Field(type = FieldType.Text, store = true, index=false)
+//	@Field(type = FieldType.Text, store = true, index=false)
 	private String ime;
-	@Field(type = FieldType.Text, store = true, index=false)
+//	@Field(type = FieldType.Text, store = true, index=false)
 	private String prezime;
-	@Field(type = FieldType.Text, store = true, index=false)
+//	@Field(type = FieldType.Text, store = true, index=false)
 	private String email;
-	@Field(type = FieldType.Text, store = true, index=true, analyzer = "serbian-analyzer", searchAnalyzer = "serbian-analyzer")
+//	@Field(type = FieldType.Text, store = true, index=true, analyzer = "serbian-analyzer", searchAnalyzer = "serbian-analyzer")
 	private String casopis;
-	@GeoPointField
-	private GeoPoint location;
-	@Field(type = FieldType.Text, store = true, index=true, analyzer = "serbian-analyzer", searchAnalyzer = "serbian-analyzer")
+//	@GeoPointField
+//	private GeoPoint location;
+//	@Field(type = FieldType.Text, store = true, index=true, analyzer = "serbian-analyzer", searchAnalyzer = "serbian-analyzer")
 	private String tekstovi;
 	
 	public Long getId() {
@@ -41,12 +41,12 @@ public class RecenzentDTO {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	public GeoPoint getLocation() {
+/*	public GeoPoint getLocation() {
 		return location;
 	}
 	public void setLocation(GeoPoint location) {
 		this.location = location;
-	}
+	}*/
 	public String getCasopis() {
 		return casopis;
 	}
@@ -59,7 +59,7 @@ public class RecenzentDTO {
 	public void setTekstovi(String tekstovi) {
 		this.tekstovi = tekstovi;
 	}
-	public RecenzentDTO(Long id, String ime, String prezime, String email, String casopis, GeoPoint location,
+	public RecenzentDTO(Long id, String ime, String prezime, String email, String casopis, 
 			String tekstovi) {
 		super();
 		this.id = id;
@@ -67,13 +67,11 @@ public class RecenzentDTO {
 		this.prezime = prezime;
 		this.email = email;
 		this.casopis = casopis;
-		this.location = location;
 		this.tekstovi = tekstovi;
 	}
 	public RecenzentDTO() {
 		super();
 	}
-	*/
 	
 	
 

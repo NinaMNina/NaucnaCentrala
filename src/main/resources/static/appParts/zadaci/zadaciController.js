@@ -32,7 +32,7 @@
 	        		$scope.naucneOblasti = response.data;
                 },
                   function errorCallback(response){
-                      alert("Problem pri dobavljanju naucnih oblasti. Neuspešno obavljeno!")
+                 //     alert("Problem pri dobavljanju naucnih oblasti. Neuspešno obavljeno!")
                   });
           /*  	else{
             		$http({

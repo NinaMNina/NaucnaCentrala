@@ -206,6 +206,62 @@ public class StartData {
 		rec6 = recenzentRepository.save(rec6);//Budimpesta	
 		Recenzent rec7 = new Recenzent(null, "rec7", "rec7", "Todor", "ilić", "ilic.t@live.com", new Point(new Double(45.25167), new Double(19.83694)), new ArrayList<Kupljeno>(), new ArrayList<PretplataNaCasopis>(), cas1, "mr", nOblastNG);
 		rec7 = recenzentRepository.save(rec7);//Novi Sad
+//camunda		
+		User rec1C = identityService.newUser(rec1.getKorisnickoIme());
+		rec1C.setFirstName(rec1.getIme());
+		rec1C.setLastName(rec1.getPrezime());
+		rec1C.setEmail(rec1.getEmail());
+		rec1C.setPassword(rec1.getLozinka());
+		identityService.saveUser(rec1C);			
+		identityService.createMembership(rec1.getKorisnickoIme(), "recenzent");
+		
+		User rec2C = identityService.newUser(rec2.getKorisnickoIme());
+		rec2C.setFirstName(rec2.getIme());
+		rec2C.setLastName(rec2.getPrezime());
+		rec2C.setEmail(rec2.getEmail());
+		rec2C.setPassword(rec2.getLozinka());
+		identityService.saveUser(rec2C);			
+		identityService.createMembership(rec2.getKorisnickoIme(), "recenzent");
+		
+		User rec3C = identityService.newUser(rec3.getKorisnickoIme());
+		rec3C.setFirstName(rec3.getIme());
+		rec3C.setLastName(rec3.getPrezime());
+		rec3C.setEmail(rec3.getEmail());
+		rec3C.setPassword(rec3.getLozinka());
+		identityService.saveUser(rec3C);			
+		identityService.createMembership(rec3.getKorisnickoIme(), "recenzent");
+		
+		User rec4C = identityService.newUser(rec4.getKorisnickoIme());
+		rec4C.setFirstName(rec4.getIme());
+		rec4C.setLastName(rec4.getPrezime());
+		rec4C.setEmail(rec4.getEmail());
+		rec4C.setPassword(rec4.getLozinka());
+		identityService.saveUser(rec4C);			
+		identityService.createMembership(rec4.getKorisnickoIme(), "recenzent");
+		
+		User rec5C = identityService.newUser(rec5.getKorisnickoIme());
+		rec5C.setFirstName(rec5.getIme());
+		rec5C.setLastName(rec5.getPrezime());
+		rec5C.setEmail(rec5.getEmail());
+		rec5C.setPassword(rec5.getLozinka());
+		identityService.saveUser(rec5C);			
+		identityService.createMembership(rec5.getKorisnickoIme(), "recenzent");
+		
+		User rec6C = identityService.newUser(rec6.getKorisnickoIme());
+		rec6C.setFirstName(rec6.getIme());
+		rec6C.setLastName(rec6.getPrezime());
+		rec6C.setEmail(rec6.getEmail());
+		rec6C.setPassword(rec6.getLozinka());
+		identityService.saveUser(rec6C);			
+		identityService.createMembership(rec6.getKorisnickoIme(), "recenzent");
+
+		User rec7C = identityService.newUser(rec7.getKorisnickoIme());
+		rec7C.setFirstName(rec7.getIme());
+		rec7C.setLastName(rec7.getPrezime());
+		rec7C.setEmail(rec7.getEmail());
+		rec7C.setPassword(rec7.getLozinka());
+		identityService.saveUser(rec7C);			
+		identityService.createMembership(rec7.getKorisnickoIme(), "recenzent");
 		
 /*		String tekst1 = "Najpoznatiji tip kretanja životinja vezan je za kontrahovanje i opuštanje mišićnih ćelija.Funkcija mišića zasniva se na djelatnosti kontraktibilnih ćelija koje su obično grupisane i tvore mišićno tkivo. One su sposobne za aktivno skraćivanje, dok se izduživanje odvija kao pasivan odgovor na spoljašnju silu, što može na primjer da bude antagonistički mišić ili hidrostatički pritisak. Mišićno tkivo obezbjeđuje kretanje organizma, ali isto tako i cirkulaciju tjelesnih tečnosti, propulziju hrane kroz digestivni trakt, veličinu lumena arterijskih sudova, te punjenje i pražnjenje mokraćnog i žučnog mjehura. Povezani sa čvrstim skeletnim elementima mišići mogu da ostvare vrlo kompleksne pokrete. Skeletni mišići kičmenjaka su dobro proučeni, dobrim dijelom zbog svoje velič ine i pogodnosti za eksperimenalni rad.Skeletni mišići čine veliki dio organizma kič menjaka. U životinja mišićna masa čini oko 40 % ukupne mase tijela.Njihova funkcija leži u brzom odgovoru na stimulus i pod kontrolom je nervnog sistema.Oni obično funkcionišu kao dio sistema poluga sačinjenih od skeletnih elemenata, za koje su prič vršćeni č vrstim vezivnim tkivom (tetivama). Često se mišići pojavljuju kao antagonistički par - kontrakcija jednog izaziva pokret u jednom, a kontrakcija drugog u suprotnom pravcu. Ponekad kontrakcija jednog od njih refleksno inhibira kontrakciju drugog. Skeletni mišići su obavijeni vezivnim omotač em, epimizijumom,od koga polaze septe (perimizijum) u mišić gdje omotavaju snopove mišićnih vlakana (fascikule). Perimizijum čini jedinstvo sa trakama vezivnog tkiva (endomizijumom) koje se nalaze oko svakog mišićnog vlakna. Nabrojani dijelovi vezivnog tkiva se na završetku mišića spajaju sa tetivom koja je na svom drugom kraju vezana za koštani element. Anatomska i fiziološka osnova kretanja životinja Postoje tri nivoa CNS koji kontrolišu somatsku motornu aktivnost, a organizovani su hijerarhijski i paralelno (Sl. 1). Kičmena moždina sadrži neuronske mreže koje mogu da kontrolišu različite automatske stereotipne reflekse, koji mogu da funkcionišu i kada je kičmena moždina odvojena od viših delova CNS. Moždano stablo sadrži više eferentnih puteva koji učestvuju u kontroli aktivnosti kičmene moždine. Moždano stablo integriše po milion aksona sa svake strane. U produženoj moždini vlakna se grupišu i formiraju piramide na ventralnoj strani produžene moždine. Na granici produžene i kičmene moždine . vlakana se ukršta i formira lateralni kortikospinalni trakt, a neukrštena vlakna formiraju ventralni kortikospinalni trakt koji je filogenetski stariji. Kortikobulbarna vlakna završavaju se direktno na motoneuronima koji inervišu mišiće glave i lica. Aksoni ventralnog trakta završavaju se na interneuronima koji kontrolišu motoneurone aksijalnih mišića trupa i vrata i proksimalnih mišića udova. Aksoni lateralnog trakta završavaju se direktno na motoneuronima koji inervišudistalne mišiće ekstremiteta. Pre sinapse sa motoneuronima se ukrštaju.";
 		String tekst2 = "Korišćenje životinja u naučnim istraživanjima, različitim testiranjima ili u nastavi predstavlja oblast aktivne diskusije i podeljenih mišljenja ne samo među laicima već i u stručnoj javnosti. Sa jedne strane su oni koji smatraju da je upotreba životinja još uvek neophodna i nužna u sticanju naučnih saznanja i da je uz poštovanje određenih etičkih principa opravdano žrtvovati životinje zarad benefita ljudi. Sa druge strane jednako prisutna su i mišljenja koja ne samo da postavljaju pitanje održive etičke opravdanosti upotrebe životinja već i potenciraju nedovoljnu pouzdanost ovako dobijenih rezultata kada se oni primenjuju na ljude. Istraživanja su pokazala da se veliki broj rezultata dobijenih u eksperimentima pokazao neprimenljiv na ljude zbog specifičnosti vrsta. Svaki trenutak života oglednih životinja ispunjen je stresom, strahom, bolom i patnjom u većoj ili manjoj meri u zavisnosti od vrste i trajanja eksperimenta. Uslovi života su daleko ispod minimuma potrebnog za zadovoljenje osnovnih potreba što je dovoljno da izazove stres i strah. Eksperimenti su po definiciji agresivni i razarajući što život oglednih životinja čini bolnim i ispunjenim patnjom, pa je smrt kojom se svaki eksperiment završava – olakšanje. Iz ovih razloga naše udruženje se zalaže za potpuni prestanak korišćenja životinja u eksperimentima. Eksperimentalna praksa koja uključuje životinje ima dugačku istoriju i predistoriju. Verujemo da će vremenom naučnici usavršiti neku drugu alternativnu istraživačku metodologiju koja će zameniti upotrebu živih životinja. Činjenica je da je i pored postojećih alternativa i dalje ubedljivo dominantan animalni model u nauci. Evo kako je počelo ... Može se reći da je ozbiljnija disekcija i vivisekcija životinja u Evropi počela još u 12. veku. Mada su prva eksperimentisanja na životinjama zabeležena i mnogo ranije, u 3. i 2. veku p.n.e. u Antičkoj Grčkoj, Galen (Γαληνός) vrši ispitivanja na svinjama i kozama sa ciljem praćenja efekata presecanja raznih nerava. Ekspanzija istraživanja na životinjama zapravo počinje u 16. veku kada su stvoreni određeni preduslovi čemu su posebno doprineli stav zvanične crkve koja se protivila disekciji ljudskih leševa, kao i rastuća potreba za saznanjima iz fiziologije i anatomije. Takođe opravdanost upotrebe životinja u cilju sticanja naučnih znanja ubrzo dobija potporu u kartezijanskoj racionalističkoj filozofiji koja na životinje gleda kao na automate, mašine čiji organizam funkcioniše po principu mehanizma bilo koje nežive stvari. Kako su naučnici poput Andreasa Vazeliusa (Andreas Vesalius), Frensisa Bekona (Francis Bacon), Renea Dekarta (René Descartes), Entona van Levenhuka (Anton van Leeuwnhoek), na životinjama isprobavali svoje hipoteze, javlja se i kritika opravdanosti upotrebe životinja u tadašnjoj istraživačkoj praksi. Ne zaboravimo da su pioniri eksperimentisanja na životinjama ističući fiziološku i anatomsku sličnost ljudi i životinja, smatrali da životinje ne samo što nemaju dušu i razum nego i nisu sposobne za bol i patnju kao čovek, te njihovi krici nisu ništa manje različiti od zvuka koje proizvode različite mehaničke naprave. Vođeni ovakvim stavom oni su izvodili veoma bolne i okrutne eksperimente.Engleski filozof iz 18. veka Džeremi Bentam (Jeremy Bentham), začetnik utilitarizma je doveo u pitanje navedeno dominantno mišljenje i ozbiljnim stavovima stavio do znanja nužnost pronalaženja kompromisa između benefita koje dobija čovek i cene koju plaćaju životinje. Utilitaristički pristup se i danas koristi kao osnovni princip u radu i odlučivanju etičkih komisija za zaštitu oglednih životinja. Ovaj pristup je takođe i osnova kreiranja tzv. „3R pravila“. Nadalje u 19. veku stvara se već jasna polarizacija kada su u pitanju stavovi prema korišćenju životinja u nauci. Sa jedne strane su Fransoa Mažendi (François Magendie) i Klod Bernar (Claude Bernard) koji se smatraju začetnicima moderne eksperimentalne fiziologije. Sa druge strane antivivisekcionisti, posebno u Engleskoj, su bili veoma aktivni. Tako je organizovan protest 1874. godine kada je predsednik Kraljevskog koledža za hirurge simbolično oslobodio jednog psa korišćenog u ogledima. Svi ovi napori ozvaničeni su donošenjem prvog britanskog zakona o zaštiti životinja 1876. godine. Takođe, Britanska asocijacija za unapređenje nauke je par godina pre toga, 1871., izdala „Akt o pravilima izvođenja fizioloških ogleda na životinjama“. Sve to ukazuje na rastuću svest o potrebama životinja koje su slične potrebama ljudi, a odnose se pre svega na sposobnost životinja da dožive bol, patnju, strah i stres.";
@@ -260,7 +316,32 @@ public class StartData {
 		UrednikNO urednik1NONG = new UrednikNO(null, "urednik2", "urednik2", "Mirko", "Mirkić", "mmirko@live.com", new Point(new Double(43.32472), new Double(21.90333)), new ArrayList<Kupljeno>(), new ArrayList<PretplataNaCasopis>(), new ArrayList<Casopis>(), "dr",  new ArrayList<NaucnaOblast>(), casNG, naucnaOblast2);
 		urednik1NONG = urednikNORepository.save(urednik1NONG);
 		UrednikNO urednikNOMU = new UrednikNO(null, "urednik3", "urednik3", "Marko", "Marković", "mmarko@live.com", new Point(new Double(44.786568), new Double(20.448922)), new ArrayList<Kupljeno>(), new ArrayList<PretplataNaCasopis>(), new ArrayList<Casopis>(), "prof dr",  new ArrayList<NaucnaOblast>(), casMU, naucnaOblast0);
-		urednikNOMU = urednikNORepository.save(urednikNOMU);		
+		urednikNOMU = urednikNORepository.save(urednikNOMU);
+//camunda		
+		User urednikNONGC = identityService.newUser(urednikNONG.getKorisnickoIme());
+		urednikNONGC.setFirstName(urednikNONG.getIme());
+		urednikNONGC.setLastName(urednikNONG.getPrezime());
+		urednikNONGC.setEmail(urednikNONG.getEmail());
+		urednikNONGC.setPassword(urednikNONG.getLozinka());
+		identityService.saveUser(urednikNONGC);			
+		identityService.createMembership(urednikNONG.getKorisnickoIme(), "urednikNO");
+		
+		User urednik1NONGC = identityService.newUser(urednik1NONG.getKorisnickoIme());
+		urednik1NONGC.setFirstName(urednik1NONG.getIme());
+		urednik1NONGC.setLastName(urednik1NONG.getPrezime());
+		urednik1NONGC.setEmail(urednik1NONG.getEmail());
+		urednik1NONGC.setPassword(urednik1NONG.getLozinka());
+		identityService.saveUser(urednik1NONGC);			
+		identityService.createMembership(urednik1NONG.getKorisnickoIme(), "urednikNO");
+		
+		User urednikNOMUC = identityService.newUser(urednikNOMU.getKorisnickoIme());
+		urednikNOMUC.setFirstName(urednikNOMU.getIme());
+		urednikNOMUC.setLastName(urednikNOMU.getPrezime());
+		urednikNOMUC.setEmail(urednikNOMU.getEmail());
+		urednikNOMUC.setPassword(urednikNOMU.getLozinka());
+		identityService.saveUser(urednikNOMUC);			
+		identityService.createMembership(urednikNOMU.getKorisnickoIme(), "urednikNO");
+		
 //RADOVI
 		ArrayList<Korisnik> recenzenti1NG = new ArrayList<Korisnik>();
 		recenzenti1NG.add(rec3);

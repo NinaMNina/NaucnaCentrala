@@ -10,7 +10,17 @@
         	$scope.odluka = {};
         	$scope.podaci = {};
         	var novaPutanja = "";
+        	$scope.komentar = "";
             $scope.init = function(){
+            	$http({
+                    method: 'GET',
+                    url: 'https://localhost:8087/NaucnaCentrala/zadaci/uploadPDFa/komentar/'+$window.localStorage.getItem('taskIdOdZadaciObrisiOdmah')
+                  }).then(function successCallback(response){
+                	  if(response.data!=""){
+                      	$scope.komentar = response.data.value;            			          		  
+                	  }
+                  },function errorCallback(response){
+                    });     
             }
             $scope.home = function(){
             	$window.localStorage.remove('taskIdOdZadaciObrisiOdmah');

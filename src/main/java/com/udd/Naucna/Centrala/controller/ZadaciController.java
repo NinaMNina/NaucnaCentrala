@@ -7,6 +7,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -32,11 +33,15 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.udd.Naucna.Centrala.dto.FormFieldDTO;
 import com.udd.Naucna.Centrala.dto.PregledRadDTO;
+import com.udd.Naucna.Centrala.dto.RecenzentDTO;
 import com.udd.Naucna.Centrala.dto.RedirekcijaDTO;
 import com.udd.Naucna.Centrala.dto.ZadaciCamunda;
 import com.udd.Naucna.Centrala.model.Korisnik;
 import com.udd.Naucna.Centrala.model.Rad;
+import com.udd.Naucna.Centrala.model.Recenzent;
+import com.udd.Naucna.Centrala.model.enums.TipPolja;
 import com.udd.Naucna.Centrala.repository.RadRepository;
+import com.udd.Naucna.Centrala.repository.RecenzentRepository;
 import com.udd.Naucna.Centrala.services.KorisnikService;
 import com.udd.Naucna.Centrala.token.TokenUtils;
 
@@ -60,6 +65,9 @@ public class ZadaciController {
 	
 	@Autowired
 	private RadRepository radRepository;
+	
+	@Autowired
+	private RecenzentRepository recenzentRepository;
 	
 	@Autowired
 	private TokenUtils tokenUtils;
@@ -100,6 +108,8 @@ public class ZadaciController {
 				return "pregledPDFa";
 			case "upload novog pdf-a":
 				return "uploadPDFa";
+			case "izbor recenzenta i vremenskog roka":
+				return "izborRecenzenata";
 				
 		}
 		return "ostani";
@@ -161,12 +171,10 @@ public class ZadaciController {
 				        .header( HttpHeaders.LOCATION, resource.getURI().toString())
 						.body(resource);
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			
 		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return null;
@@ -186,6 +194,16 @@ public class ZadaciController {
 		taskService.complete(taskId, retVal);
 		return new ResponseEntity(true, HttpStatus.OK);
     }
+
+	@GetMapping(path = "/uploadPDFa/komentar/{taskId}", produces = "application/json")
+    public @ResponseBody ResponseEntity<FormFieldDTO> komentarUploadPDFa(@PathVariable String taskId) {
+		Task task = taskService.createTaskQuery().taskId(taskId).singleResult(); 
+		String processInstanceId = task.getProcessInstanceId(); 
+		
+		String komentar = runtimeService.getVariable(processInstanceId, "pp_komentarUradnika").toString();
+		FormFieldDTO retVal = new FormFieldDTO("pp_komentarUradnika", komentar, TipPolja.STRING);
+		return new ResponseEntity(retVal, HttpStatus.OK);
+    }
 	@PostMapping(path = "/uploadPDFa/reseno/{taskId}", produces = "application/json")
     public @ResponseBody ResponseEntity<Boolean> resiUploadPDFa(@PathVariable String taskId, @RequestBody FormFieldDTO novaLokacija) {
 		HashMap<String, Object> retVal = new HashMap<>();
@@ -198,6 +216,32 @@ public class ZadaciController {
 		r.setLokacijaProbnogRada(novaLokacija.getValue());
 		radRepository.save(r);
 		retVal.put(novaLokacija.getKey(), novaLokacija.getValue());
+		taskService.complete(taskId, retVal);
+		return new ResponseEntity(true, HttpStatus.OK);
+    }
+
+	@GetMapping(path = "/izborRecenzenta/{taskId}", produces = "application/json")
+    public @ResponseBody ResponseEntity<ArrayList<RecenzentDTO>> izborRecenzentaForma(@PathVariable String taskId) {
+		Task task = taskService.createTaskQuery().taskId(taskId).singleResult(); 
+		String processInstanceId = task.getProcessInstanceId(); 
+		
+		Object rec = runtimeService.getVariable(processInstanceId, "odabrani_recenzenti");
+		ArrayList<RecenzentDTO> retVal = (ArrayList<RecenzentDTO>) rec;
+		return new ResponseEntity(retVal, HttpStatus.OK);
+    }
+	@PostMapping(path = "/izborRecenzenta/{taskId}/{rok}", produces = "application/json")
+    public @ResponseBody ResponseEntity<Boolean> resenoIzborRecenzenta(@PathVariable String taskId, @PathVariable String rok, @RequestBody ArrayList<RecenzentDTO> odabrani) {
+		Task task = taskService.createTaskQuery().taskId(taskId).singleResult(); 
+		String processInstanceId = task.getProcessInstanceId(); 
+		HashMap<String, Object> retVal = new HashMap<>();
+		Recenzent rec0 = recenzentRepository.findById(odabrani.get(0).getId()).get();
+		Recenzent rec1 = recenzentRepository.findById(odabrani.get(1).getId()).get();
+		if(rec1==null || rec0==null){
+			return new ResponseEntity(false, HttpStatus.BAD_REQUEST);			
+		}
+		retVal.put("durationRecenzija", rok);
+		retVal.put("ir_recenzent1", rec0.getKorisnickoIme());
+		retVal.put("ir_recenzent2", rec1.getKorisnickoIme());
 		taskService.complete(taskId, retVal);
 		return new ResponseEntity(true, HttpStatus.OK);
     }

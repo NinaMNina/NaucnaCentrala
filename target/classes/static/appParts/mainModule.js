@@ -46,4 +46,9 @@ app.config(function($stateProvider, $urlRouterProvider) {
         templateUrl : 'appParts/uploadPDFa/uploadPDFa.html',
         controller : 'uploadPDFaController'
     })
+    .state('izborRecenzenata', {
+        url: '/izborRecenzenata/{token}',
+        templateUrl : 'appParts/izborRecenzenata/izborRecenzenata.html',
+        controller : 'izborRecenzenataController'
+    })
   });
