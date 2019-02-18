@@ -67,9 +67,21 @@ public class LoginController {
     public @ResponseBody ResponseEntity<FormFieldsCamunda> getFormFields(){
 		//provera da li korisnik sa id-jem pera postoji
 //		List<User> users = identityService.createUserQuery().userId("pera").list();
-		ProcessInstance pi = runtimeService.startProcessInstanceByKey("upravljanje_poslovnim_procesima");
-
-		Task task = taskService.createTaskQuery().processInstanceId(pi.getId()).list().get(0);
+/*		String username = tokenUtils.getUsernameFromToken(token);
+		boolean jedinstven = true;*/
+		String piId = "";
+/*		if(!taskService.createTaskQuery().taskAssignee(username).list().isEmpty()){
+			List<Task> zadaci = taskService.createTaskQuery().taskAssignee(username).list();
+			for(Task z : zadaci){
+				if(z.getName().equals("")){
+					jedinstven = false;
+					piId = z.getProcessInstanceId();
+				}
+			}
+		}
+		if(jedinstven)*/
+			piId = runtimeService.startProcessInstanceByKey("upravljanje_poslovnim_procesima").getId();
+		Task task = taskService.createTaskQuery().processInstanceId(piId).list().get(0);
 		
 		TaskFormData tfd = formService.getTaskFormData(task.getId());
 		ArrayList<FormField> properties = (ArrayList<FormField>) tfd.getFormFields();
@@ -77,7 +89,7 @@ public class LoginController {
 			System.out.println(fp.getId() + fp.getType());
 		}
 		
-        return new ResponseEntity(new FormFieldsCamunda(task.getId(),properties, pi.getId()), HttpStatus.OK);
+        return new ResponseEntity(new FormFieldsCamunda(task.getId(),properties, piId), HttpStatus.OK);
     }
 	
 	@GetMapping(path = "/registracija/{id}")

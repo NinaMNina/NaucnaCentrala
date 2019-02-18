@@ -1,6 +1,5 @@
 package com.udd.Naucna.Centrala.services.camunda;
 
-import java.util.ArrayList;
 import java.util.Properties;
 
 import javax.mail.Message;
@@ -18,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import com.udd.Naucna.Centrala.model.Korisnik;
 import com.udd.Naucna.Centrala.model.Proces;
+import com.udd.Naucna.Centrala.model.Urednik;
 import com.udd.Naucna.Centrala.repository.ProcessRepository;
 import com.udd.Naucna.Centrala.services.KorisnikService;
 
@@ -34,7 +34,15 @@ public class SlanjeMejlovaPotvrde implements JavaDelegate{
 	@Override
 	public void execute(DelegateExecution execution) throws Exception {
 		Korisnik autor = korisnikService.findByKorisnickoIme(execution.getVariable("ps_korisnickoIme").toString());
-		Korisnik urednik = korisnikService.findByKorisnickoIme(execution.getVariable("ps_odgovorniUrednik").toString());
+		Object ured = execution.getVariable("ps_odgovorniUrednik");
+		Korisnik urednik = null;
+		if(! (ured instanceof String)){
+			Proces p = procesRepository.findByAutor("ps_korisnickoIme");
+			urednik = korisnikService.findByKorisnickoIme(p.getUrednik());
+		}
+		else{
+			urednik = korisnikService.findByKorisnickoIme(ured.toString());
+		}
 		String mailAutor = autor.getEmail();
 		String mailUrednik = urednik.getEmail();
 		Properties props = System.getProperties();
