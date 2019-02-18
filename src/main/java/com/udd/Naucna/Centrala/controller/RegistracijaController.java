@@ -1,16 +1,20 @@
 package com.udd.Naucna.Centrala.controller;
 
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.camunda.bpm.engine.FormService;
+import org.camunda.bpm.engine.IdentityService;
 import org.camunda.bpm.engine.RuntimeService;
 import org.camunda.bpm.engine.TaskService;
 import org.camunda.bpm.engine.form.FormField;
 import org.camunda.bpm.engine.form.TaskFormData;
+import org.camunda.bpm.engine.identity.User;
 import org.camunda.bpm.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.geo.Point;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -25,7 +29,11 @@ import com.udd.Naucna.Centrala.dto.FormFieldsCamunda;
 import com.udd.Naucna.Centrala.dto.FormFieldsCamundaDTO;
 import com.udd.Naucna.Centrala.dto.KorisnikDTO;
 import com.udd.Naucna.Centrala.dto.RegistracijaDTO;
+import com.udd.Naucna.Centrala.model.Autor;
+import com.udd.Naucna.Centrala.model.Kupljeno;
+import com.udd.Naucna.Centrala.model.PretplataNaCasopis;
 import com.udd.Naucna.Centrala.model.Proces;
+import com.udd.Naucna.Centrala.repository.AutorRepository;
 import com.udd.Naucna.Centrala.repository.ProcessRepository;
 import com.udd.Naucna.Centrala.services.KorisnikService;
 import com.udd.Naucna.Centrala.token.TokenUtils;
@@ -51,6 +59,10 @@ public class RegistracijaController {
 	
 	@Autowired
 	private ProcessRepository procesRepository;
+	@Autowired
+	private AutorRepository autorRepository;
+	@Autowired
+	private IdentityService identityService;
 
 	@GetMapping(path = "/get/{id}", produces = "application/json")
     public @ResponseBody FormFieldsCamunda get(@PathVariable String id) {
@@ -75,19 +87,19 @@ public class RegistracijaController {
 		
 		Task task = taskService.createTaskQuery().taskId(ffc.getTaskId()).singleResult();
 		String processInstanceId = task.getProcessInstanceId();
-		String user = (String) runtimeService.getVariable(processInstanceId, "username");
-		taskService.claim(ffc.getTaskId(), user);
+	//	String user = (String) runtimeService.getVariable(processInstanceId, "username");
+	//	taskService.claim(ffc.getTaskId(), user);
 		Map<String, Object> retVal = new HashMap<>();
-		retVal.put("ime", ffc.findImeValue());
-		retVal.put("prezime", ffc.findPrezimeValue());
-		retVal.put("email", ffc.findEmailValue());
-		retVal.put("geografskaSirina", ffc.findSirinaValue());
-		retVal.put("geografskaDuzina", ffc.findDuzinaValue());
-		retVal.put("korisnickoIme", korisnik.getIme());
-		retVal.put("lozinka", korisnik.getLozinka());
+		retVal.put("ar_ime", ffc.findImeValue());
+		retVal.put("ar_prezime", ffc.findPrezimeValue());
+		retVal.put("ar_mail", ffc.findEmailValue());
+		retVal.put("ar_geografskaSirina", ffc.findSirinaValue());
+		retVal.put("ar_geografskaDuzina", ffc.findDuzinaValue());
+		retVal.put("ps_korisnickoIme", ffc.findDuzinaValue());
+		retVal.put("ps_lozinka", korisnik.getLozinka());
 		taskService.complete(ffc.getTaskId(), retVal);
 		Proces proces = new Proces(null, korisnik.getIme(), null, null, null, null, processInstanceId, ffc.getTaskId(),null);
 		
-		return new ResponseEntity("", HttpStatus.OK);	
+		return new ResponseEntity("done", HttpStatus.OK);	
 	}
 }
