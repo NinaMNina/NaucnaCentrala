@@ -48,18 +48,11 @@
                     url: 'https://localhost:8087/NaucnaCentrala/login/do',
                     data: retVal
                   }).then(function successCallback(response){
-                	  if(response.data==null || response.data==retVal){
+                	  if(response.data==null || response.data==retVal || response.data==undefined || response.data==""){
                           $scope.poruka = "Pogrešno uneseni lozinka ili ime";           		  
                 	  }
-                	  else if(response.data.lozinka!=""){
-                		  $window.localStorage.setItem('token', response.data.lozinka); 
-                		  var tokenData = jwtHelper.decodeToken($window.localStorage.getItem('token'));
-                		  var tempUser = {id: tokenData.id, 
-                				  korisnickoIme : tokenData.sub, 
-                				  uloga : tokenData.uloga[0].authority,
-                				  processId: processInstanceId
-                		  		}
-                		  $window.localStorage.setItem('processInstanceId', processInstanceId);
+                	  else if(response.data.lozinka!="" || response.data.lozinka!=undefined){
+                		  $window.localStorage.setItem('token', response.data.lozinka);            
                 		  var c = $window.localStorage.getItem('odabranCasopisId');
 	                      if(c==null || c==undefined){
 	                		  $location.path('/home');
@@ -71,7 +64,7 @@
 	                    		  taskId = "nemaga";
 	                    	  $http({
 	                              method: 'POST',
-	                              url: 'https://localhost:8087/NaucnaCentrala/casopis/odaberi/'+taskId+'/'+odabranCasopisId+'/'+processInstanceId+'/'+$window.localStorage.getItem('token')
+	                              url: 'https://localhost:8087/NaucnaCentrala/casopis/odaberiTask/'+taskId+'/'+odabranCasopisId+'/'+$window.localStorage.getItem('token')
 	                            }).then(function successCallback(response){
 	                          	  if(response.data!=null){
 	                                	$window.location.href = 'https://localhost:8087/NaucnaCentrala/#!/zadaci/'+$window.localStorage.getItem('token');

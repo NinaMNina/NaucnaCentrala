@@ -23,11 +23,12 @@
         	var odabraniZadatakTaskId = "";
         	var zad = {};
             $scope.init = function(){
+            	var token = $window.localStorage.getItem('token')
             	if($stateParams.token=="" || $stateParams.token=="{token}" || $stateParams.token==undefined || $stateParams.token==null || $stateParams.token=="null")
             		$window.location.href = 'https://localhost:8087/NaucnaCentrala/#!/login';
             	$http({
 	        		method: 'GET',
-	                url: 'https://localhost:8087/NaucnaCentrala/casopis/naucneOblasti/'+$stateParams.token
+	                url: 'https://localhost:8087/NaucnaCentrala/casopis/naucneOblasti/'+$window.localStorage.getItem('token')
 	        	}).then(function successCallback(response){
 	        		$scope.naucneOblasti = response.data;
                 },

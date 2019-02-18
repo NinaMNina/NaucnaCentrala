@@ -79,39 +79,13 @@
                     url: 'https://localhost:8087/NaucnaCentrala/registracija/do',
                     data: retVal2
                   }).then(function successCallback(response){
-                	  if(response.data!=""){
-                		  $window.localStorage.setItem('token', response.data); 
-                		  var tokenData = jwtHelper.decodeToken($window.localStorage.getItem('token'));
-                		  var tempUser = {id: tokenData.id, 
-                				  korisnickoIme : tokenData.sub, 
-                				  uloga : tokenData.uloga[0].authority,
-                				  processId: processInstanceId
-                		  		}
-                		  var c = $window.localStorage.getItem('odabranCasopisId');
-	                      if(c==null || c==undefined){
-	                		  $location.path('/home');
-	                      }
-	                      else{
-	                		  var c = $window.localStorage.getItem('odabranCasopisId');
-	                    	  var taskId = $window.localStorage.getItem('taskId');          
-	                    	  if(taskId==undefined)
-	                    		  taskId = "nemaga";
-	                    	  $http({
-	                              method: 'POST',
-	                              url: 'https://localhost:8087/NaucnaCentrala/casopis/odaberi/'+taskId+'/'+c+'/'+$window.localStorage.getItem('token')
-	                            }).then(function successCallback(response){
-	                          	  if(response.data!=null){
-	                                	$window.location.href = 'https://localhost:8087/NaucnaCentrala/#!/zadaci/'+$window.localStorage.getItem('token');
-	                          	  }
-	                            },
-	                              function errorCallback(response){
-	                                  
-	                             });
-	                      }
-                	  }          	  
+                	  if(response.data!=null){
+                          alert("Registracija uspešno obavljena");
+                          $location.path('/login');
+                	  }
                   },
                     function errorCallback(response){
-                        alert("Greska");
+                        alert("Greska u procesu registracije");
                         $location.path('/login');
                     });
             }

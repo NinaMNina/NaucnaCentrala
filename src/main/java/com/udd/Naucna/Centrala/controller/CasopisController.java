@@ -91,8 +91,8 @@ public class CasopisController {
         return new ResponseEntity(casopisService.getAll(), HttpStatus.OK);
     }
 
-	@PostMapping(path = "/odaberi/{taskId}/{casopisId}/{processInstanceId}/{token}", produces = "application/json")
-    public @ResponseBody ResponseEntity<Korisnik> odaberiCasopisProcess(@PathVariable String token, @PathVariable String taskId, @PathVariable Long casopisId, @PathVariable String  processInstanceId){	
+	@PostMapping(path = "/odaberiTask/{taskId}/{casopisId}/{token}", produces = "application/json")
+    public @ResponseBody ResponseEntity<Korisnik> odaberiCasopisProcess(@PathVariable String token, @PathVariable String taskId, @PathVariable Long casopisId){	
 		String username = tokenUtils.getUsernameFromToken(token);
 		if(username==null || casopisId==null){
 			return new ResponseEntity(null, HttpStatus.OK);
@@ -108,11 +108,16 @@ public class CasopisController {
 		Proces proces = procesRepository.findByAutor(username);
 		if(proces==null)
 			proces = new Proces();
+		String processInstanceId;
 		if(taskId.equals("nemaga")){
 			ProcessInstance pi = runtimeService.startProcessInstanceByKey("upravljanje_poslovnim_procesima");
 			Task task = taskService.createTaskQuery().processInstanceId(pi.getId()).list().get(0);
 			taskId = task.getId();
 			processInstanceId = pi.getId();
+		}
+		else{
+			Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
+			processInstanceId = task.getProcessInstanceId();
 		}
 		proces.setProcessInstanceId(processInstanceId);
 		proces.setTaskId(taskId);

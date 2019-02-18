@@ -81,7 +81,7 @@ public class RegistracijaController {
     }
 	
 	@PostMapping(path = "/do", produces = "application/json", consumes="application/json")
-    public @ResponseBody ResponseEntity<String> register(@RequestBody RegistracijaDTO reg) {		
+    public @ResponseBody ResponseEntity<KorisnikDTO> register(@RequestBody RegistracijaDTO reg) {		
 		FormFieldsCamundaDTO ffc = reg.getFormFieldsCamunda();
 		KorisnikDTO korisnik = reg.getKorisnikDTO();
 		
@@ -95,11 +95,10 @@ public class RegistracijaController {
 		retVal.put("ar_mail", ffc.findEmailValue());
 		retVal.put("ar_geografskaSirina", ffc.findSirinaValue());
 		retVal.put("ar_geografskaDuzina", ffc.findDuzinaValue());
-		retVal.put("ps_korisnickoIme", ffc.findDuzinaValue());
+		retVal.put("ps_korisnickoIme", korisnik.getIme());
 		retVal.put("ps_lozinka", korisnik.getLozinka());
 		taskService.complete(ffc.getTaskId(), retVal);
 		Proces proces = new Proces(null, korisnik.getIme(), null, null, null, null, processInstanceId, ffc.getTaskId(),null);
-		
-		return new ResponseEntity("done", HttpStatus.OK);	
+		return new ResponseEntity(new KorisnikDTO(korisnik.getIme(), korisnik.getLozinka()), HttpStatus.OK);	
 	}
 }

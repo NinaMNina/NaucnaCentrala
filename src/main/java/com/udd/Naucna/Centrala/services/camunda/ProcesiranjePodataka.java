@@ -46,6 +46,7 @@ public class ProcesiranjePodataka implements JavaDelegate{
 	//	System.out.println(input.toString());
 		Autor a = new Autor(null, korisnickoIme, lozinka, ime, prezime, email, createPoint(geografskaDuzina, geografskaSirina), new ArrayList<>(), new ArrayList<>());
 		a = autorRepository.save(a);
+		System.out.println("registrovao:" + korisnickoIme + " --- "+lozinka);
 		Boolean retVal = true;
 		if(a==null){
 			retVal =  false;
